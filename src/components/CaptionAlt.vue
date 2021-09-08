@@ -18,7 +18,9 @@
       </v-row>
     </v-col>
     <v-col>
-      <!-- displays the current edit at a given index (passed in through App) -->
+      <!-- displays the current - 
+      since App passes in the content at the given index anyway, 
+      index is not used here -->
       <div :content="edit"></div>
     </v-col>
     <v-col>
@@ -30,6 +32,7 @@
       </v-btn>
       <v-row>
       <v-btn>
+          <!-- index used here; if first Cap - display the dropdown -->
         <v-icon right class="material-icons" v-if="index == 0">
           view_list
         </v-icon>
