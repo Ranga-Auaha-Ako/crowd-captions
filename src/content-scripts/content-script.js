@@ -1,16 +1,20 @@
 import Vue from 'vue';
+import Vuex from 'vuex';
+import store from '../store/index';
 import App from './App.vue';
 
-console.log('Hello from the content-script');
+Vue.use(Vuex);
 
+// Create element to host our vue app
 const appContainer = document.createElement('div');
 appContainer.id = 'crowdcaptions-app-interface';
+
+// Inject into application to replace captions
 document.getElementById('dockedCaption').replaceChildren(appContainer);
-// .appendChild(appContainer);
-// document.getElementById('dockedCaption').textContent = 'testing';
 
 /* eslint-disable no-new */
 new Vue({
   el: appContainer,
+  store,
   render: (h) => h(App),
 });

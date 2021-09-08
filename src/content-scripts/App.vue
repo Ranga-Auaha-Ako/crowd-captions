@@ -1,18 +1,25 @@
 <template>
-  <div class="event-tab-header accented-tab" role="presentation">
-    <p>Hello, friend!</p>
+  <div class="crowdcaptions-container">
+    <div v-for="(edit, index) in currentCaption.edits"
+    :key="index">
+      <p>{{edit.text}}</p>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'App',
+  computed: {
+    currentCaption() {
+      return this.$store.getters.currentCaption;
+    },
+  },
 };
 </script>
 
-<style>
-.event-tab-header p{
+<style scoped>
+.crowdcaptions-container p{
   text-align:center;
-  height:100%;
 }
 </style>
