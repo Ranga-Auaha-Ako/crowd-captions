@@ -1,18 +1,29 @@
 <template>
-  <div class="event-tab-header accented-tab" role="presentation">
-    <p>Hello, friend!</p>
+  <div class="crowdcaptions-container">
+    <div v-for="(edit, index) in currentCaption.edits" :key="index">
+      <CaptionAlt :edit="edit" :index="index" />
+    </div>
   </div>
 </template>
 
 <script>
+import CaptionAlt from "../components/CaptionAlt.vue";
+
 export default {
-  name: 'App',
+  name: "App",
+  computed: {
+    currentCaption() {
+      return this.$store.getters.currentCaption;
+    },
+  },
+  components: {
+    CaptionAlt,
+  },
 };
 </script>
 
-<style>
-.event-tab-header p{
-  text-align:center;
-  height:100%;
+<style scoped>
+.crowdcaptions-container p {
+  text-align: center;
 }
 </style>
