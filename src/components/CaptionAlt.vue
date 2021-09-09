@@ -18,7 +18,7 @@
       since App passes in the content at the given index anyway, 
       index is not used here -->
         <!-- <div :content="edit"></div> -->
-        <p>{{ edit }}</p>
+        <p>{{ edit.text }}</p>
       </v-col>
       <v-col>
         <v-row>
