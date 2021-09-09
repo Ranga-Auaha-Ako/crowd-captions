@@ -10,7 +10,7 @@
 import CaptionAlt from "../components/CaptionAlt.vue";
 
 export default {
-  name: "App",
+  name: 'App',
   computed: {
     currentCaption() {
       return this.$store.getters.currentCaption;
