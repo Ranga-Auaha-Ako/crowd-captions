@@ -34,11 +34,9 @@
         </v-text-field>
       </v-row>
       <v-row>
-        <v-btn>
+        <v-btn v-if="index == 0">
           <!-- index used here; if first Cap - display the dropdown -->
-          <v-icon right class="material-icons" v-if="index == 0">
-            view_list
-          </v-icon>
+          <v-icon right class="material-icons"> view_list </v-icon>
         </v-btn>
       </v-row>
     </v-col>
