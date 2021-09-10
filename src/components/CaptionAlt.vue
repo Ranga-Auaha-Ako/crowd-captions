@@ -18,20 +18,20 @@
       index is not used here -->
       <!-- <div :content="edit"></div> -->
       <p>{{ edit.text }}</p>
+      <v-text-field
+        :hidden="setDisabled(true)"
+        v-model="edited"
+        :label="Regular"
+        @keydown.enter="editButton()"
+        clearable
+      >
+      </v-text-field>
     </v-col>
     <v-col>
       <v-row>
         <v-btn @click="setDisabled(false)">
           <v-icon right class="material-icons"> create </v-icon>
         </v-btn>
-        <v-text-field
-          v-model="edited"
-          :label="Regular"
-          :disabled="setDisabled(true)"
-          @keydown.enter="editButton()"
-          clearable
-        >
-        </v-text-field>
       </v-row>
       <v-row>
         <v-btn v-if="index == 0">
