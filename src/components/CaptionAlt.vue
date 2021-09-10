@@ -67,6 +67,7 @@ export default {
       const editedtext = this.edited;
       console.log(editedtext);
       // may need to add mutation this.$store.commit(mutation_meth, variable)
+      // when edit it taken, on enter hide the fields again
       this.setDisabled(true);
     },
   },
