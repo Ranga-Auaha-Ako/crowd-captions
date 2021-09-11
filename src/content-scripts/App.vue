@@ -1,7 +1,7 @@
 <template>
   <div class="crowdcaptions-container">
     <div v-for="(edit, index) in currentCaption.edits" :key="index">
-      <CaptionAlt v-if="index<=2" :edit="edit" :index="index" :showEdits="showEdits" v-on:show-edits="showEdits=!showEdits"/>
+      <CaptionAlt v-if="index<=2" :edit="edit" :index="index" :showEdits="showEdits" v-on:show-edits="toggleEdits()"/>
     </div>
   </div>
 </template>
@@ -23,6 +23,15 @@ export default {
     return{
       showEdits: false,
     };
+  },
+  methods:{
+    toggleEdits(){
+      this.showEdits = !this.showEdits;
+      // call resize event to fix captions
+      setTimeout(() => {
+        window.dispatchEvent(new Event('resize'));
+      }, 10);
+    }
   }
 };
 </script>
