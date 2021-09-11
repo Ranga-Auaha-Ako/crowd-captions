@@ -1,7 +1,7 @@
 <template>
   <div class="crowdcaptions-container">
     <div v-for="(edit, index) in currentCaption.edits" :key="index">
-      <CaptionAlt :edit="edit" :index="index" />
+      <CaptionAlt v-if="index<=2" :edit="edit" :index="index" :showEdits="showEdits" v-on:show-edits="showEdits=!showEdits"/>
     </div>
   </div>
 </template>
@@ -19,6 +19,11 @@ export default {
   components: {
     CaptionAlt,
   },
+  data(){
+    return{
+      showEdits: false,
+    };
+  }
 };
 </script>
 

@@ -53,11 +53,11 @@ export default {
   props: {
     index: Number,
     edit: Object,
+    showEdits: Boolean,
   },
   data() {
     return {
-      edited: "",
-      showEdits: false
+      edited: ""
     };
   },
   name: "CaptionAlt",
@@ -73,8 +73,8 @@ export default {
       this.setDisabled(true);
     },
     toggleShowEdits(){
-      this.showEdits = !this.showEdits;
-      console.log(this.showEdits);
+      // camelcasing doesn't work with events: https://vuejs.org/v2/guide/components-custom-events.html?fbclid=IwAR2IBgB858gqdXbRwSwGpVTtSdAO9obkiJxSz1E31jHZSl6abIjLRrP2YPQ
+      this.$emit('show-edits');
     }
   },
 };
