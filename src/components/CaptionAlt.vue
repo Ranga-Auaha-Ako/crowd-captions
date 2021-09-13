@@ -18,7 +18,7 @@
         since App passes in the content at the given index anyway, 
         index is not used here -->
         <!-- <div :content="edit"></div> -->
-        <p>{{ edit.text }}</p>
+        <p>{{ edit.body }}</p>
         <v-text-field
           :hidden="setDisabled(true)"
           v-model="edited"
