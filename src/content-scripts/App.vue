@@ -1,6 +1,6 @@
 <template>
   <div class="crowdcaptions-container">
-    <div v-for="(edit, index) in currentCaption.edits" :key="index">
+    <div v-for="(edit, index) in currentCaption.edit" :key="index">
       <CaptionAlt v-if="index<=2" :edit="edit" :index="index" :showEdits="showEdits" v-on:show-edits="toggleEdits()"/>
     </div>
   </div>
