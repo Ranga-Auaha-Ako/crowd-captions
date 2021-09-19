@@ -19,9 +19,8 @@
       <!-- <div :content="edit"></div> -->
       <p>{{ edit.text }}</p>
       <v-text-field
-        :hidden="setDisabled(true)"
+        v-show="setDisabledCall"
         v-model="edited"
-        :label="Regular"
         @keydown.enter="editButton()"
         clearable
       >
@@ -29,7 +28,7 @@
     </v-col>
     <v-col>
       <v-row>
-        <v-btn @click="setDisabled(false)">
+        <v-btn @click="disabling()">
           <v-icon right class="material-icons"> create </v-icon>
         </v-btn>
       </v-row>
@@ -44,9 +43,6 @@
 </template>
 
 <script>
-// import { mdiAccount } from "@mdi/js";
-// import App from "../content-scripts/App.vue";
-
 export default {
   props: {
     index: Number,
@@ -55,12 +51,27 @@ export default {
   data() {
     return {
       edited: "",
+      setDisabled: false,
     };
   },
   name: "CaptionAlt",
+  computed: {
+    // this function watches the setDisabled changes.
+    setDisabledCall() {
+      return this.setDisabled;
+    },
+  },
+
   methods: {
-    setDisabled(dis) {
-      return dis;
+    disabling() {
+      // sets the default text in each edit component to current captions
+      this.edited = this.edit.text;
+      // displays the field (if you click again it goes away without edit)
+      if (this.setDisabled === false) {
+        this.setDisabled = true;
+      } else {
+        this.setDisabled = false;
+      }
     },
     editButton() {
       // post to backend with edit + timestamp (and index?)
@@ -68,7 +79,7 @@ export default {
       console.log(editedtext);
       // may need to add mutation this.$store.commit(mutation_meth, variable)
       // when edit it taken, on enter hide the fields again
-      this.setDisabled(true);
+      this.setDisabled = false;
     },
   },
 };
