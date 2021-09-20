@@ -1,6 +1,6 @@
 <template>
   <v-app id="crowdcaptions-app">
-    <div class="crowdcaptions-container">
+    <div class="crowdcaptions-container" :class="{ showEdits }">
       <div>
         <v-btn v-if="showEdits" @click="showEdits = false">Close</v-btn>
         <div v-for="(edit, index) in visibleEdits" :key="index">
@@ -85,6 +85,8 @@ export default {
 
 #dockedCaption {
   margin-left: 4px;
+  position: relative;
+  z-index: 10;
 }
 </style>
 
@@ -92,5 +94,12 @@ export default {
 .crowdcaptions-container {
   text-align: center;
   padding: 0px 5px;
+}
+
+.crowdcaptions-container.showEdits {
+  position: absolute;
+  width: 100%;
+  bottom: -70px;
+  background: linear-gradient(to top, black 0%, #000a 80%, #0000);
 }
 </style>
