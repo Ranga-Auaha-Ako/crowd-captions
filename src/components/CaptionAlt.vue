@@ -1,7 +1,7 @@
 <template>
-  <v-card class="d-flex flex-row mx-3 p-1 caption">
+  <v-card class="d-flex flex-row mx-3 p-1 caption" :class="{ open }">
     <v-row align="center" class="mx-1">
-      <v-col cols="1" :class="{ hidden: !open }">
+      <v-col cols="1" id="voteButtons">
         <v-row>
           <v-btn title="Like" icon small>
             <v-icon class="material-icons"> arrow_upward </v-icon>
@@ -27,11 +27,11 @@
           :disabled="!open"
           @focus="isEditing = true"
           @blur="isEditing = false"
-          @keydown.enter="editButton()"
+          @keydown.enter="toggleEditState()"
         >
         </v-text-field>
       </v-col>
-      <v-col cols="1" class="" justify="end">
+      <v-col cols="1" id="captionActions" justify="end">
         <v-btn
           title="Show more..."
           v-if="!open && index == 0"
@@ -123,5 +123,18 @@ input#captionField {
   height: 5rem;
   padding: 0.8rem;
   margin: 1rem;
+}
+
+#captionActions,
+#voteButtons {
+  opacity: 0.1;
+  transition: 0.4s ease opacity;
+}
+
+.caption:hover #captionActions,
+.caption:hover #voteButtons,
+.caption.open #captionActions,
+.caption.open #voteButtons {
+  opacity: 1;
 }
 </style>
