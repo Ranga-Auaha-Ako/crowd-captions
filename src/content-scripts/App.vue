@@ -1,5 +1,12 @@
 <template>
-  <v-app id="crowdcaptions-app">
+  <v-app
+    id="crowdcaptions-app"
+    v-click-outside="
+      () => {
+        showEdits = false;
+      }
+    "
+  >
     <div class="crowdcaptions-container" :class="{ showEdits }">
       <div>
         <v-row id="closeButton" no-gutters align="center">
