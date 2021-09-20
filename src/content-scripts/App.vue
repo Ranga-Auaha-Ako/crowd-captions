@@ -1,35 +1,41 @@
 <template>
-  <div class="crowdcaptions-container">
+  <v-theme-provider root class="crowdcaptions-container">
     <div v-for="(edit, index) in currentCaption.edit" :key="index">
-      <CaptionAlt v-if="index<=2" :edit="edit" :index="index" :showEdits="showEdits" v-on:show-edits="toggleEdits()"/>
+      <CaptionAlt
+        v-if="index <= 2"
+        :edit="edit"
+        :index="index"
+        :showEdits="showEdits"
+        v-on:show-edits="toggleEdits()"
+      />
     </div>
-  </div>
+  </v-theme-provider>
 </template>
 
 <script>
 import CaptionAlt from "../components/CaptionAlt.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   computed: {
     currentCaption() {
       return this.$store.getters.currentCaption;
-    },
+    }
   },
   components: {
-    CaptionAlt,
+    CaptionAlt
   },
-  data(){
-    return{
-      showEdits: false,
+  data() {
+    return {
+      showEdits: false
     };
   },
-  methods:{
-    toggleEdits(){
+  methods: {
+    toggleEdits() {
       this.showEdits = !this.showEdits;
       // call resize event to fix captions
       setTimeout(() => {
-        window.dispatchEvent(new Event('resize'));
+        window.dispatchEvent(new Event("resize"));
       }, 10);
     }
   }
