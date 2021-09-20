@@ -32,7 +32,13 @@
         </v-text-field>
       </v-col>
       <v-col cols="1" class="" justify="end">
-        <v-btn title="Show more..." v-if="!open && index == 0" fab small @click="toggleShowEdits()">
+        <v-btn
+          title="Show more..."
+          v-if="!open && index == 0"
+          icon
+          small
+          @click="toggleShowEdits()"
+        >
           <!-- index used here; if first Cap - display the dropdown -->
           <v-icon class="material-icons"> view_list </v-icon>
         </v-btn>
