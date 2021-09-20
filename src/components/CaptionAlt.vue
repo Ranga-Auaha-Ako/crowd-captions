@@ -21,21 +21,20 @@
           <!-- <div :content="edit"></div> -->
           <p>{{ edit.body }}</p>
           <v-text-field
-            :hidden="setDisabled(true)"
+            v-show="setDisabledCall"
             v-model="edited"
-            :label="Regular"
             @keydown.enter="editButton()"
             clearable
           >
           </v-text-field>
         </v-col>
         <v-col class="flex-grow-0">
-          <v-btn fab color="primary" small @click="setDisabled(false)">
-            <v-icon class="material-icons"> create </v-icon>
+          <v-btn fab small @click="disabling()">
+            <v-icon right class="material-icons"> create </v-icon>
           </v-btn>
-          <v-btn fab small @click="toggleShowEdits()" v-if="index == 0">
+          <v-btn fab small v-if="index == 0">
             <!-- index used here; if first Cap - display the dropdown -->
-            <v-icon class="material-icons"> view_list </v-icon>
+            <v-icon right class="material-icons"> view_list </v-icon>
           </v-btn>
         </v-col>
       </v-row>
@@ -44,9 +43,6 @@
 </template>
 
 <script>
-// import { mdiAccount } from "@mdi/js";
-// import App from "../content-scripts/App.vue";
-
 export default {
   props: {
     index: Number,
@@ -55,20 +51,36 @@ export default {
   },
   data() {
     return {
-      edited: ""
+      edited: "",
+      setDisabled: false
     };
   },
   name: "CaptionAlt",
+  computed: {
+    // this function watches the setDisabled changes.
+    setDisabledCall() {
+      return this.setDisabled;
+    }
+  },
+
   methods: {
-    setDisabled(dis) {
-      return dis;
+    disabling() {
+      // sets the default text in each edit component to current captions
+      this.edited = this.edit.body;
+      // displays the field (if you click again it goes away without edit)
+      if (this.setDisabled === false) {
+        this.setDisabled = true;
+      } else {
+        this.setDisabled = false;
+      }
     },
     editButton() {
       // post to backend with edit + timestamp (and index?)
       const editedtext = this.edited;
       console.log(editedtext);
       // may need to add mutation this.$store.commit(mutation_meth, variable)
-      this.setDisabled(true);
+      // when edit it taken, on enter hide the fields again
+      this.setDisabled = false;
     },
     toggleShowEdits() {
       // camelcasing doesn't work with events: https://vuejs.org/v2/guide/components-custom-events.html?fbclid=IwAR2IBgB858gqdXbRwSwGpVTtSdAO9obkiJxSz1E31jHZSl6abIjLRrP2YPQ
