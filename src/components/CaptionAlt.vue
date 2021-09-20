@@ -1,14 +1,14 @@
 <template>
-  <v-card class="d-flex flex-row ma-3 pa-3">
-    <v-row align="center">
-      <v-col class="flex-grow-0 mx-3">
+  <v-card class="d-flex flex-row mx-3 p-1 caption">
+    <v-row align="center" class="mx-1">
+      <v-col cols="1" :class="{ hidden: !open }">
         <v-row>
-          <v-btn icon small>
+          <v-btn title="Like" icon small>
             <v-icon class="material-icons"> arrow_upward </v-icon>
           </v-btn>
         </v-row>
         <v-row>
-          <v-btn icon small>
+          <v-btn title="Dislike" icon small>
             <v-icon class="material-icons"> arrow_downward </v-icon>
           </v-btn>
         </v-row>
@@ -19,24 +19,31 @@
           index is not used here -->
         <!-- <div :content="edit"></div> -->
         <v-text-field
+          id="captionField"
           ref="captionField"
           hide-details="true"
           outlined
           v-model="edited"
+          :disabled="!open"
           @focus="isEditing = true"
           @blur="isEditing = false"
           @keydown.enter="editButton()"
-          clearable
-          :append-icon="'mdi-pencil'"
         >
         </v-text-field>
       </v-col>
-      <v-col class="flex-grow-0">
-        <v-btn v-if="!open && index == 0" fab small @click="toggleShowEdits()">
+      <v-col cols="1" class="" justify="end">
+        <v-btn title="Show more..." v-if="!open && index == 0" fab small @click="toggleShowEdits()">
           <!-- index used here; if first Cap - display the dropdown -->
           <v-icon class="material-icons"> view_list </v-icon>
         </v-btn>
-        <v-btn v-else fab small @click="toggleEditState()" :color="isEditing ? 'primary' : ''">
+        <v-btn
+          title="Suggest Changes"
+          v-else
+          fab
+          small
+          @click="toggleEditState()"
+          :color="isEditing ? 'primary' : ''"
+        >
           <v-icon class="material-icons" v-if="isEdited"> save </v-icon>
           <v-icon class="material-icons" v-else> create </v-icon>
         </v-btn>
@@ -88,4 +95,27 @@ export default {
   }
 };
 </script>
-<style scoped></style>
+<style>
+.v-input--is-disabled input#captionField {
+  color: white !important;
+}
+
+input#captionField {
+  text-align: center;
+  font-size: 1.3em;
+}
+</style>
+
+<style scoped>
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.caption {
+  /* Total height: 7.6rem */
+  height: 5rem;
+  padding: 0.8rem;
+  margin: 1rem;
+}
+</style>

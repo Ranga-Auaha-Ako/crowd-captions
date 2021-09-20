@@ -2,7 +2,11 @@
   <v-app id="crowdcaptions-app">
     <div class="crowdcaptions-container" :class="{ showEdits }">
       <div>
-        <v-btn v-if="showEdits" @click="showEdits = false">Close</v-btn>
+        <v-row id="closeButton" no-gutters align="center">
+          <v-col>
+            <v-btn @click="showEdits = false">Close</v-btn>
+          </v-col>
+        </v-row>
         <div v-for="(edit, index) in visibleEdits" :key="index">
           <CaptionAlt
             :edit="edit"
@@ -94,12 +98,45 @@ export default {
 .crowdcaptions-container {
   text-align: center;
   padding: 0px 5px;
+  position: relative;
+  height: 7rem;
+  overflow-y: visible;
+  transition: bottom 0.6s ease;
+  bottom: 0;
 }
 
 .crowdcaptions-container.showEdits {
+  position: relative;
+  bottom: calc(6rem * 2.5);
+}
+
+.crowdcaptions-container:before {
+  content: " ";
   position: absolute;
   width: 100%;
-  bottom: -70px;
+  left: 0;
+  bottom: 0;
+  height: calc(6rem * 2.5 + 7rem);
   background: linear-gradient(to top, black 0%, #000a 80%, #0000);
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity, bottom;
+  transition: 0.6s ease opacity, 0.6s ease bottom;
+}
+
+.crowdcaptions-container.showEdits:before {
+  opacity: 1;
+  bottom: calc(6rem * -2.5);
+}
+
+#closeButton {
+  height: 0;
+  transition: 0.6s ease height, 0.6s ease opacity;
+  opacity: 0;
+}
+
+.showEdits #closeButton {
+  height: calc(5.8rem * 0.5);
+  opacity: 1;
 }
 </style>
