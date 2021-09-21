@@ -1,82 +1,140 @@
 <template>
-  <div v-if="index == 0 || showEdits">
-    <v-row>
-      <v-col>
+  <v-card class="d-flex flex-row mx-3 p-1 caption" :class="{ open }">
+    <v-row align="center" class="mx-1">
+      <v-col cols="1" id="voteButtons">
         <v-row>
-          <v-btn>
-            <v-icon left class="material-icons"> arrow_upward </v-icon>
+          <v-btn title="Like" icon small>
+            <v-icon class="material-icons"> arrow_upward </v-icon>
           </v-btn>
         </v-row>
         <v-row>
-          <v-btn>
-            <v-icon left class="material-icons"> arrow_downward </v-icon>
+          <v-btn title="Dislike" icon small>
+            <v-icon class="material-icons"> arrow_downward </v-icon>
           </v-btn>
         </v-row>
       </v-col>
       <v-col>
         <!-- displays the current - 
-        since App passes in the content at the given index anyway, 
-        index is not used here -->
+          since App passes in the content at the given index anyway, 
+          index is not used here -->
         <!-- <div :content="edit"></div> -->
-        <p>{{ edit.body }}</p>
         <v-text-field
-          :hidden="setDisabled(true)"
+          id="captionField"
+          ref="captionField"
+          hide-details="true"
+          outlined
           v-model="edited"
-          :label="Regular"
-          @keydown.enter="editButton()"
-          clearable
+          :disabled="!open"
+          @focus="isEditing = true"
+          @blur="isEditing = false"
+          @keydown.enter="toggleEditState()"
         >
         </v-text-field>
       </v-col>
-      <v-col>
-        <v-row>
-          <v-btn @click="setDisabled(false)">
-            <v-icon right class="material-icons"> create </v-icon>
-          </v-btn>
-        </v-row>
-        <v-row>
-          <v-btn @click="toggleShowEdits()" v-if="index == 0">
-            <!-- index used here; if first Cap - display the dropdown -->
-            <v-icon right class="material-icons"> view_list </v-icon>
-          </v-btn>
-        </v-row>
+      <v-col cols="1" id="captionActions" justify="end">
+        <v-btn
+          title="Show more..."
+          v-if="!open && index == 0"
+          icon
+          small
+          @click="toggleShowEdits()"
+        >
+          <!-- index used here; if first Cap - display the dropdown -->
+          <v-icon class="material-icons"> view_list </v-icon>
+        </v-btn>
+        <v-btn
+          title="Suggest Changes"
+          v-else
+          fab
+          small
+          @click="toggleEditState()"
+          :color="isEditing ? 'primary' : ''"
+        >
+          <v-icon class="material-icons" v-if="isEdited"> save </v-icon>
+          <v-icon class="material-icons" v-else> create </v-icon>
+        </v-btn>
       </v-col>
     </v-row>
-  </div>
+  </v-card>
 </template>
 
 <script>
-// import { mdiAccount } from "@mdi/js";
-// import App from "../content-scripts/App.vue";
-
 export default {
   props: {
     index: Number,
     edit: Object,
-    showEdits: Boolean,
+    open: Boolean
   },
   data() {
     return {
-      edited: ""
+      edited: this.edit.body,
+      setDisabled: false,
+      isEditing: false
     };
   },
   name: "CaptionAlt",
-  methods: {
-    setDisabled(dis) {
-      return dis;
+  computed: {
+    // this function watches the setDisabled changes.
+    setDisabledCall() {
+      return this.setDisabled;
     },
-    editButton() {
-      // post to backend with edit + timestamp (and index?)
-      const editedtext = this.edited;
-      console.log(editedtext);
-      // may need to add mutation this.$store.commit(mutation_meth, variable)
-      this.setDisabled(true);
-    },
-    toggleShowEdits(){
-      // camelcasing doesn't work with events: https://vuejs.org/v2/guide/components-custom-events.html?fbclid=IwAR2IBgB858gqdXbRwSwGpVTtSdAO9obkiJxSz1E31jHZSl6abIjLRrP2YPQ
-      this.$emit('show-edits');
+    isEdited() {
+      return this.edited !== this.edit.body;
     }
   },
+
+  methods: {
+    toggleShowEdits() {
+      // camelcasing doesn't work with events: https://vuejs.org/v2/guide/components-custom-events.html?fbclid=IwAR2IBgB858gqdXbRwSwGpVTtSdAO9obkiJxSz1E31jHZSl6abIjLRrP2YPQ
+      this.$emit("show-edits");
+    },
+    toggleEditState() {
+      if (this.isEdited) {
+        console.log("Saving state");
+        this.$refs.captionField.blur();
+        this.$emit("save-caption", { body: this.edited });
+      } else {
+        console.log("Beggining Edit");
+        this.$refs.captionField.focus();
+      }
+    }
+  }
 };
 </script>
-<style scoped></style>
+<style>
+.v-input--is-disabled input#captionField {
+  color: white !important;
+}
+
+input#captionField {
+  text-align: center;
+  font-size: 1.3em;
+}
+</style>
+
+<style scoped>
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.caption {
+  /* Total height: 7.6rem */
+  height: 5rem;
+  padding: 0.8rem;
+  margin: 1rem;
+}
+
+#captionActions,
+#voteButtons {
+  opacity: 0.1;
+  transition: 0.4s ease opacity;
+}
+
+.caption:hover #captionActions,
+.caption:hover #voteButtons,
+.caption.open #captionActions,
+.caption.open #voteButtons {
+  opacity: 1;
+}
+</style>
