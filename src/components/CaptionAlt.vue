@@ -63,7 +63,8 @@ export default {
   props: {
     index: Number,
     edit: Object,
-    open: Boolean
+    open: Boolean,
+    textSize: Number,
   },
   data() {
     return {
@@ -102,9 +103,6 @@ export default {
 };
 </script>
 <style>
-.v-input--is-disabled input#captionField {
-  color: white !important;
-}
 
 input#captionField {
   text-align: center;

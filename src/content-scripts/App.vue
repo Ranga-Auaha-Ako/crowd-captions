@@ -1,5 +1,6 @@
 <template>
   <v-app
+
     id="crowdcaptions-app"
     v-click-outside="
       () => {
@@ -7,6 +8,7 @@
       }
     "
   >
+    <v-theme-provider :dark="theme == 'dark'" :light="theme == 'light'">
     <div class="crowdcaptions-container" :class="{ showEdits }">
       <div>
         <v-row id="closeButton" no-gutters align="center">
@@ -21,6 +23,7 @@
             @show-edits="toggleEdits()"
             :open="showEdits"
             @save-caption="saveCaption"
+            :textSize="textSize"
           />
         </div>
       </div>
@@ -34,6 +37,7 @@
         </v-btn>
       </template>
     </v-snackbar>
+    </v-theme-provider>
   </v-app>
 </template>
 
@@ -59,6 +63,8 @@ export default {
     return {
       showEdits: false,
       maxAlternatives: 3,
+      theme: "dark",
+      textSize: "1.3em",
       snackbar: {
         show: false,
         text: "",
@@ -73,12 +79,63 @@ export default {
     saveCaption(edit) {
       this.snackbar.show = true;
       this.snackbar.text = `Submitted Caption "${edit.body}"`;
+    },
+    updateTheme(e) {
+      const themeValue = e.currentTarget.dataset.value;
+      switch (themeValue) {
+        case "LightOnDark":
+          this.theme = "dark"
+          break;
+        case "DarkOnLight":
+          this.theme = "light"
+          break;
+        default:
+          // Theme not recognised, leave as is.
+          break;
+      }
+    },
+    updateSize(e){
+      const sizeValue = e.currentTarget.dataset.value;
+      switch(sizeValue){
+        case 24:
+          this.textSize = "1.3em"
+          break;
+        case 36:
+          this.textSize = "1.5em"
+          break;
+        default:
+          break;
+      }
+      console.log(this.textSize);
     }
   },
   updated() {
     this.$nextTick(() => {
       window.dispatchEvent(new Event("resize"));
     });
+  },
+  mounted () {
+    setTimeout(() =>{
+      // disable secondary visual option (hovering subtitles)
+      document.querySelector("#captionsExpander .branded-border.placement-option.Overlay").style.display = "none";
+      // get all the colour settings
+      const colourElements = document.querySelectorAll("#captionColorOptions li");
+      // disable third visual option (transparent)
+      colourElements[2].style.display = "none";
+      for (let i=0; i<colourElements.length; i+=1){
+        // remove anonymous event listener
+        // eslint-disable-next-line no-self-assign
+        colourElements[i].outerHTML = colourElements[i].outerHTML;
+        // reasign event listener -- BROKEN
+        colourElements[i].addEventListener("click", this.updateTheme);
+      }
+      // get all the size settings
+      const sizeElements = document.querySelectorAll("#captionSizeOptions li");
+      for (let i=0; i<sizeElements.length; i+=1){
+        // update size
+        sizeElements[i].addEventListener("click", this.updateSize);
+      }
+    }, 3000);
   }
 };
 </script>
@@ -94,7 +151,7 @@ export default {
   background: transparent !important;
 }
 
-#dockedCaption {
+#adjustedCaption {
   margin-left: 4px;
   position: relative;
   z-index: 10;
