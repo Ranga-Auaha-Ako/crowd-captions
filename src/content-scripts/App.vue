@@ -115,10 +115,6 @@ export default {
       // disable third visual option (transparent)
       colourElements[2].style.display = "none";
       for (let i=0; i<colourElements.length; i+=1){
-        // remove anonymous event listener
-        // eslint-disable-next-line no-self-assign
-        colourElements[i].outerHTML = colourElements[i].outerHTML;
-        // reasign event listener -- BROKEN
         colourElements[i].addEventListener("click", this.updateTheme);
       }
       // get all the size settings
