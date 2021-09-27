@@ -5,6 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    currentTime: 0,
     // used string for object names due to working with json
     // (how it will be presented from db)
     caption_file: [
@@ -145,20 +146,28 @@ export default new Vuex.Store({
         edit: []
       }
     ],
-    captionIndex: 0
+    captionIndex: 0,
+    nextStart: 0,
   },
   getters: {
     currentCaption(state) {
+      if (state.currentTime > state.nextStart){
+        this.setCaptionIndex(state.captionIndex+1)
+      }
       return state.caption_file[state.captionIndex];
     }
   },
   mutations: {
+    setTime(state, time){
+      state.currentTime = time;
+    },
     likeCaption(state, alternative) {
       // unsure if the merging of mock data has broken this function
       state.currentCaption[alternative] += 1;
     },
     setCaptionIndex(state, i) {
       state.captionIndex = i;
+      state.nextStart = state.caption_file[i+1].start;
     }
   },
   actions: {},

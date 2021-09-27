@@ -42,6 +42,32 @@ import CaptionAlt from "../components/CaptionAlt.vue";
 
 export default {
   name: "App",
+  components: {
+    CaptionAlt
+  },
+  data() {
+    return {
+      showEdits: false,
+      maxAlternatives: 3,
+      primaryVideo: null,
+      currentTime: document.getElementById("primaryVideo").currentTime,
+      snackbar: {
+        show: false,
+        text: "",
+        timeout: 2000
+      }
+    };
+  },
+  mounted: {
+    startVideo(){
+      setTimeout(() => {
+        // eslint-disable-next-line func-names
+        document.getElementById("primaryVideo").ontimeupdate = function () {
+          console.log("this");
+        }
+      }, 3000);
+    }
+  },
   computed: {
     currentCaption() {
       return this.$store.getters.currentCaption;
@@ -52,19 +78,17 @@ export default {
         : [this.currentCaption.edit[0]];
     }
   },
-  components: {
-    CaptionAlt
-  },
-  data() {
-    return {
-      showEdits: false,
-      maxAlternatives: 3,
-      snackbar: {
-        show: false,
-        text: "",
-        timeout: 2000
-      }
-    };
+  watch:{
+    currentTime (time){
+      this.currentTime = time;
+      this.setTime();
+      console.log(this.currentTime); 
+    },
+    syncCaptions() {
+      this.primaryVideo = document.getElementById("primaryVideo").currentTime
+      this.setTime();
+      console.log(this.primaryVideo.currentTime) 
+    }
   },
   methods: {
     toggleEdits() {
@@ -73,6 +97,10 @@ export default {
     saveCaption(edit) {
       this.snackbar.show = true;
       this.snackbar.text = `Submitted Caption "${edit.body}"`;
+    },
+    setTime(){
+      console.log("works");
+      // this.$store.setTime(this.primaryVideo.currentTime);
     }
   },
   updated() {
