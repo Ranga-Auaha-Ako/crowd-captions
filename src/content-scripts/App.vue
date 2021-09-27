@@ -23,7 +23,7 @@
             @show-edits="toggleEdits()"
             :open="showEdits"
             @save-caption="saveCaption"
-            :textSize="textSize"
+            :isLarge="isLarge"
           />
         </div>
       </div>
@@ -64,7 +64,7 @@ export default {
       showEdits: false,
       maxAlternatives: 3,
       theme: "dark",
-      textSize: "1.3em",
+      isLarge: false,
       snackbar: {
         show: false,
         text: "",
@@ -96,17 +96,9 @@ export default {
     },
     updateSize(e){
       const sizeValue = e.currentTarget.dataset.value;
-      switch(sizeValue){
-        case 24:
-          this.textSize = "1.3em"
-          break;
-        case 36:
-          this.textSize = "1.5em"
-          break;
-        default:
-          break;
-      }
-      console.log(this.textSize);
+      console.log(e.currentTarget.dataset.value);
+      this.isLarge = (sizeValue === '36') 
+      console.log(this.isLarge);
     }
   },
   updated() {
