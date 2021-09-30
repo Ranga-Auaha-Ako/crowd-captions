@@ -151,15 +151,33 @@ export default new Vuex.Store({
   },
   getters: {
     currentCaption(state) {
-      if (state.currentTime > state.nextStart){
-        this.setCaptionIndex(state.captionIndex+1)
-      }
+      console.log(state.caption_file[state.captionIndex]);
       return state.caption_file[state.captionIndex];
     }
   },
   mutations: {
     setTime(state, time){
+      console.log("works");
       state.currentTime = time;
+      state.nextStart = state.caption_file[state.captionIndex+1].start;
+      while (state.currentTime > state.nextStart){
+        if (state.captionIndex < state.caption_file.length){
+          state.captionIndex += 1
+          state.nextStart = state.caption_file[state.captionIndex+1].start;
+          console.log("Increase");
+        } else {
+          break;
+        }
+      }
+      while (state.currentTime < state.caption_file[state.captionIndex].start){
+        if (state.captionIndex > 0){
+          state.nextStart = state.caption_file[state.captionIndex].start;
+          state.captionIndex -= 1
+          console.log("Decrease");
+        } else {
+          break;
+        }
+      }
     },
     likeCaption(state, alternative) {
       // unsure if the merging of mock data has broken this function

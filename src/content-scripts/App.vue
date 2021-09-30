@@ -50,7 +50,6 @@ export default {
       showEdits: false,
       maxAlternatives: 3,
       primaryVideo: null,
-      currentTime: document.getElementById("primaryVideo").currentTime,
       snackbar: {
         show: false,
         text: "",
@@ -58,15 +57,11 @@ export default {
       }
     };
   },
-  mounted: {
-    startVideo(){
-      setTimeout(() => {
-        // eslint-disable-next-line func-names
-        document.getElementById("primaryVideo").ontimeupdate = function () {
-          console.log("this");
-        }
-      }, 3000);
-    }
+  mounted () {
+    setTimeout(() => {
+      // eslint-disable-next-line func-names
+      document.getElementById("primaryVideo").ontimeupdate = this.setTime;
+    }, 3000);
   },
   computed: {
     currentCaption() {
@@ -78,18 +73,6 @@ export default {
         : [this.currentCaption.edit[0]];
     }
   },
-  watch:{
-    currentTime (time){
-      this.currentTime = time;
-      this.setTime();
-      console.log(this.currentTime); 
-    },
-    syncCaptions() {
-      this.primaryVideo = document.getElementById("primaryVideo").currentTime
-      this.setTime();
-      console.log(this.primaryVideo.currentTime) 
-    }
-  },
   methods: {
     toggleEdits() {
       this.showEdits = !this.showEdits;
@@ -99,8 +82,8 @@ export default {
       this.snackbar.text = `Submitted Caption "${edit.body}"`;
     },
     setTime(){
-      console.log("works");
-      // this.$store.setTime(this.primaryVideo.currentTime);
+      console.log(document.getElementById("primaryVideo").currentTime);
+      this.$store.commit("setTime", document.getElementById("primaryVideo").currentTime);
     }
   },
   updated() {
