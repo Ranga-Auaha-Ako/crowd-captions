@@ -136,7 +136,7 @@ export default {
   background: transparent !important;
 }
 
-#adjustedCaption {
+#dockedCaption {
   margin-left: 4px;
   position: relative;
   z-index: 10;
