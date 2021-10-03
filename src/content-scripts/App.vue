@@ -1,6 +1,5 @@
 <template>
   <v-app
-
     id="crowdcaptions-app"
     v-click-outside="
       () => {
@@ -96,9 +95,7 @@ export default {
     },
     updateSize(e){
       const sizeValue = e.currentTarget.dataset.value;
-      console.log(e.currentTarget.dataset.value);
       this.isLarge = (sizeValue === '36') 
-      console.log(this.isLarge);
     }
   },
   updated() {
