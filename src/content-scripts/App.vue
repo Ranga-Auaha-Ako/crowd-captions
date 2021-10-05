@@ -68,6 +68,7 @@ export default {
       return this.$store.getters.currentCaption;
     },
     visibleEdits() {
+      console.log(this.currentCaption.edit[0]);
       return this.showEdits
         ? this.currentCaption.edit.slice(0, this.maxAlternatives)
         : [this.currentCaption.edit[0]];

@@ -157,14 +157,15 @@ export default new Vuex.Store({
   },
   mutations: {
     setTime(state, time){
-      console.log("works");
       state.currentTime = time;
-      state.nextStart = state.caption_file[state.captionIndex+1].start;
+      if (state.captionIndex + 1 < state.caption_file.length){
+        state.nextStart = state.caption_file[state.captionIndex+1].start;
+        console.log(state.captionIndex, state.caption_file.length);
+      }
       while (state.currentTime > state.nextStart){
-        if (state.captionIndex < state.caption_file.length){
+        if (state.captionIndex + 1< state.caption_file.length){
           state.captionIndex += 1
           state.nextStart = state.caption_file[state.captionIndex+1].start;
-          console.log("Increase");
         } else {
           break;
         }
