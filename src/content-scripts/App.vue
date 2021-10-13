@@ -14,7 +14,7 @@
             <v-btn @click="showEdits = false">Close</v-btn>
           </v-col>
         </v-row>
-        <div v-for="(edit, index) in visibleEdits" :key="index">
+        <div v-for="(edit, index) in visibleEdits" :key="edit.id">
           <CaptionAlt
             :edit="edit"
             :index="index"
@@ -72,6 +72,7 @@ export default {
       const allCaptions = this.currentCaption.edit.slice();
       allCaptions.push({
         body: this.currentCaption.body,
+        id: -1,
         votes: 0,
         voted: 0,
         reported: false
