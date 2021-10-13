@@ -28,6 +28,7 @@
           @focus="isEditing = true"
           @blur="isEditing = false"
           @keydown.enter="toggleEditState()"
+          :class="{largeFont:isLarge}"
         >
         </v-text-field>
       </v-col>
@@ -63,7 +64,8 @@ export default {
   props: {
     index: Number,
     edit: Object,
-    open: Boolean
+    open: Boolean,
+    isLarge: Boolean,
   },
   data() {
     return {
@@ -89,6 +91,9 @@ export default {
   },
 
   methods: {
+    getFontSize(){
+      return this.textSize;
+    },
     toggleShowEdits() {
       // camelcasing doesn't work with events: https://vuejs.org/v2/guide/components-custom-events.html?fbclid=IwAR2IBgB858gqdXbRwSwGpVTtSdAO9obkiJxSz1E31jHZSl6abIjLRrP2YPQ
       this.$emit("show-edits");
@@ -107,8 +112,9 @@ export default {
 };
 </script>
 <style>
-.v-input--is-disabled input#captionField {
-  color: white !important;
+
+.largeFont{
+  font-size:1.6em !important;
 }
 
 input#captionField {
