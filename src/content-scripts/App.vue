@@ -42,16 +42,6 @@ import CaptionAlt from "../components/CaptionAlt.vue";
 
 export default {
   name: "App",
-  computed: {
-    currentCaption() {
-      return this.$store.getters.currentCaption;
-    },
-    visibleEdits() {
-      return this.showEdits
-        ? this.currentCaption.edit.slice(0, this.maxAlternatives)
-        : [this.currentCaption.edit[0]];
-    }
-  },
   components: {
     CaptionAlt
   },
@@ -59,12 +49,44 @@ export default {
     return {
       showEdits: false,
       maxAlternatives: 3,
+      primaryVideo: null,
       snackbar: {
         show: false,
         text: "",
         timeout: 2000
       }
     };
+  },
+  mounted() {
+    setTimeout(() => {
+      // eslint-disable-next-line func-names
+      document.getElementById("primaryVideo").ontimeupdate = this.setTime;
+    }, 3000);
+  },
+  computed: {
+    currentCaption() {
+      return this.$store.getters.currentCaption;
+    },
+    visibleEdits() {
+      // Append default caption as fake "edit" to end of list of all captions
+      const allCaptions = this.currentCaption.edit.slice();
+      allCaptions.push({
+        body: this.currentCaption.body,
+        votes: 0,
+        voted: 0,
+        reported: false
+      });
+      console.log("XXXXXXXXXXXXXXX");
+      console.log(allCaptions[0]);
+      if (this.showEdits) {
+        // Show all edits, with a limit
+        return allCaptions.length > this.maxAlternatives
+          ? allCaptions.slice(0, this.maxAlternatives)
+          : allCaptions;
+      }
+      // Only show most liked
+      return [allCaptions[0]];
+    }
   },
   methods: {
     toggleEdits() {
@@ -73,6 +95,10 @@ export default {
     saveCaption(edit) {
       this.snackbar.show = true;
       this.snackbar.text = `Submitted Caption "${edit.body}"`;
+    },
+    setTime() {
+      console.log(document.getElementById("primaryVideo").currentTime);
+      this.$store.commit("setTime", document.getElementById("primaryVideo").currentTime);
     }
   },
   updated() {
