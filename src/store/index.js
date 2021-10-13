@@ -5,7 +5,6 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    currentTime: 0,
     // used string for object names due to working with json
     // (how it will be presented from db)
     caption_file: [
@@ -21,7 +20,8 @@ export default new Vuex.Store({
             body: "technologies Handmade",
             votes: 37,
             voted: 0,
-            timestamp: "Sun Dec 13 2020 12:58:09 GMT+1300 (New Zealand Daylight Time)",
+            timestamp:
+              "Sun Dec 13 2020 12:58:09 GMT+1300 (New Zealand Daylight Time)",
             reports: 0,
             reported: false
           },
@@ -31,7 +31,8 @@ export default new Vuex.Store({
             body: "Global Account",
             votes: -2,
             voted: -1,
-            timestamp: "Fri Jul 09 2021 19:00:56 GMT+1200 (New Zealand Standard Time)",
+            timestamp:
+              "Fri Jul 09 2021 19:00:56 GMT+1200 (New Zealand Standard Time)",
             reports: 3,
             reported: true
           },
@@ -41,7 +42,8 @@ export default new Vuex.Store({
             body: "Loan next-generation",
             votes: 20,
             voted: 1,
-            timestamp: "Fri Dec 25 2020 21:25:45 GMT+1300 (New Zealand Daylight Time)",
+            timestamp:
+              "Fri Dec 25 2020 21:25:45 GMT+1300 (New Zealand Daylight Time)",
             reports: 1,
             reported: false
           },
@@ -51,7 +53,8 @@ export default new Vuex.Store({
             body: "up leverage",
             votes: 12,
             voted: 0,
-            timestamp: "Thu Jan 21 2021 11:49:29 GMT+1300 (New Zealand Daylight Time)",
+            timestamp:
+              "Thu Jan 21 2021 11:49:29 GMT+1300 (New Zealand Daylight Time)",
             reports: 0,
             reported: false
           }
@@ -76,7 +79,8 @@ export default new Vuex.Store({
             body: "Plains",
             votes: 3,
             voted: 1,
-            timestamp: "Thu Jul 01 2021 01:44:18 GMT+1200 (New Zealand Standard Time)",
+            timestamp:
+              "Thu Jul 01 2021 01:44:18 GMT+1200 (New Zealand Standard Time)",
             reports: 0,
             reported: false
           },
@@ -86,7 +90,8 @@ export default new Vuex.Store({
             body: "Loan",
             votes: 0,
             voted: 0,
-            timestamp: "Tue Aug 17 2021 09:22:04 GMT+1200 (New Zealand Standard Time)",
+            timestamp:
+              "Tue Aug 17 2021 09:22:04 GMT+1200 (New Zealand Standard Time)",
             reports: 1,
             reported: true
           }
@@ -132,7 +137,8 @@ export default new Vuex.Store({
             body: "connect payment PNG",
             votes: 6,
             voted: 0,
-            timestamp: "Tue Mar 23 2021 12:32:03 GMT+1300 (New Zealand Daylight Time)",
+            timestamp:
+              "Tue Mar 23 2021 12:32:03 GMT+1300 (New Zealand Daylight Time)",
             reports: 0,
             reported: false
           }
@@ -147,7 +153,7 @@ export default new Vuex.Store({
       }
     ],
     captionIndex: 0,
-    nextStart: 0,
+    nextStart: 0
   },
   getters: {
     currentCaption(state) {
@@ -156,29 +162,39 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    setTime(state, time){
-      state.currentTime = time;
-      if (state.captionIndex + 1 < state.caption_file.length){
-        state.nextStart = state.caption_file[state.captionIndex+1].start;
-        console.log(state.captionIndex, state.caption_file.length);
+    setTime(state, time) {
+      // Use local variables here to prevent needlessly updating state
+      const currentTime = time;
+      let { captionIndex } = state;
+
+      function getNextStart(currentCaptionIndex) {
+        // Get the "end time" of the current aption (aka the next caption start time)
+        //  - Sanity check if on last caption, there is no next caption so nextStart is infinity
+        if (currentCaptionIndex + 1 >= state.caption_file.length) {
+          return Number.MAX_SAFE_INTEGER;
+        }
+        return state.caption_file[currentCaptionIndex + 1].start;
       }
-      while (state.currentTime > state.nextStart){
-        if (state.captionIndex + 1< state.caption_file.length){
-          state.captionIndex += 1
-          state.nextStart = state.caption_file[state.captionIndex+1].start;
+      let nextStart = getNextStart(captionIndex);
+
+      // Work forwards to find the next caption for our timestamp
+      while (currentTime > nextStart) {
+        captionIndex += 1;
+        nextStart = getNextStart(captionIndex);
+      }
+      // Work backwards to find the caption for our timestamp
+      while (currentTime < state.caption_file[captionIndex].start) {
+        if (captionIndex > 0) {
+          captionIndex -= 1;
+          nextStart = getNextStart(captionIndex);
         } else {
+          // We have reached the first caption
           break;
         }
       }
-      while (state.currentTime < state.caption_file[state.captionIndex].start){
-        if (state.captionIndex > 0){
-          state.nextStart = state.caption_file[state.captionIndex].start;
-          state.captionIndex -= 1
-          console.log("Decrease");
-        } else {
-          break;
-        }
-      }
+      // Update state
+      state.nextStart = nextStart;
+      state.captionIndex = captionIndex;
     },
     likeCaption(state, alternative) {
       // unsure if the merging of mock data has broken this function
@@ -186,7 +202,7 @@ export default new Vuex.Store({
     },
     setCaptionIndex(state, i) {
       state.captionIndex = i;
-      state.nextStart = state.caption_file[i+1].start;
+      state.nextStart = state.caption_file[i + 1].start;
     }
   },
   actions: {},

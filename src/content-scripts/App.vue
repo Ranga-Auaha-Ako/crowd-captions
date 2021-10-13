@@ -57,7 +57,7 @@ export default {
       }
     };
   },
-  mounted () {
+  mounted() {
     setTimeout(() => {
       // eslint-disable-next-line func-names
       document.getElementById("primaryVideo").ontimeupdate = this.setTime;
@@ -68,10 +68,24 @@ export default {
       return this.$store.getters.currentCaption;
     },
     visibleEdits() {
-      console.log(this.currentCaption.edit[0]);
-      return this.showEdits
-        ? this.currentCaption.edit.slice(0, this.maxAlternatives)
-        : [this.currentCaption.edit[0]];
+      // Append default caption as fake "edit" to end of list of all captions
+      const allCaptions = this.currentCaption.edit.slice();
+      allCaptions.push({
+        body: this.currentCaption.body,
+        votes: 0,
+        voted: 0,
+        reported: false
+      });
+      console.log("XXXXXXXXXXXXXXX");
+      console.log(allCaptions[0]);
+      if (this.showEdits) {
+        // Show all edits, with a limit
+        return allCaptions.length > this.maxAlternatives
+          ? allCaptions.slice(0, this.maxAlternatives)
+          : allCaptions;
+      }
+      // Only show most liked
+      return [allCaptions[0]];
     }
   },
   methods: {
@@ -82,7 +96,7 @@ export default {
       this.snackbar.show = true;
       this.snackbar.text = `Submitted Caption "${edit.body}"`;
     },
-    setTime(){
+    setTime() {
       console.log(document.getElementById("primaryVideo").currentTime);
       this.$store.commit("setTime", document.getElementById("primaryVideo").currentTime);
     }

@@ -17,7 +17,7 @@
         <!-- displays the current - 
           since App passes in the content at the given index anyway, 
           index is not used here -->
-        <!-- <div :content="edit"></div> -->
+        <!-- <div>{{ edit }}</div> -->
         <v-text-field
           id="captionField"
           ref="captionField"
@@ -80,6 +80,11 @@ export default {
     },
     isEdited() {
       return this.edited !== this.edit.body;
+    }
+  },
+  watch: {
+    edit(val) {
+      this.edited = val.body;
     }
   },
 
