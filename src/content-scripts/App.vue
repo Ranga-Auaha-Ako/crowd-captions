@@ -8,20 +8,20 @@
     "
   >
     <v-theme-provider :dark="theme == 'dark'" :light="theme == 'light'">
-    <div class="crowdcaptions-container" :class="{ showEdits }">
-      <div>
+      <div class="crowdcaptions-container" :class="{ showEdits }">
+        <div>
           <v-row id="closeButton" no-gutters align="center">
             <v-col>
               <v-btn @click="showEdits = false">Close</v-btn>
             </v-col>
           </v-row>
-        <div v-for="(edit, index) in visibleEdits" :key="edit.id">
-          <CaptionAlt
-            :edit="edit"
-            :index="index"
-            @show-edits="toggleEdits()"
-            :open="showEdits"
-            @save-caption="saveCaption"
+          <div v-for="(edit, index) in visibleEdits" :key="edit.id">
+            <CaptionAlt
+              :edit="edit"
+              :index="index"
+              @show-edits="toggleEdits()"
+              :open="showEdits"
+              @save-caption="saveCaption"
               :isLarge="isLarge"
             />
           </div>
@@ -66,6 +66,23 @@ export default {
     setTimeout(() => {
       // eslint-disable-next-line func-names
       document.getElementById("primaryVideo").ontimeupdate = this.setTime;
+      // disable secondary visual option (hovering subtitles)
+      document.querySelector(
+        "#captionsExpander .branded-border.placement-option.Overlay"
+      ).style.display = "none";
+      // get all the colour settings
+      const colourElements = document.querySelectorAll("#captionColorOptions li");
+      // disable third visual option (transparent)
+      colourElements[2].style.display = "none";
+      for (let i = 0; i < colourElements.length; i += 1) {
+        colourElements[i].addEventListener("click", this.updateTheme);
+      }
+      // get all the size settings
+      const sizeElements = document.querySelectorAll("#captionSizeOptions li");
+      for (let i = 0; i < sizeElements.length; i += 1) {
+        // update size
+        sizeElements[i].addEventListener("click", this.updateSize);
+      }
     }, 3000);
   },
   computed: {
@@ -129,27 +146,6 @@ export default {
     this.$nextTick(() => {
       window.dispatchEvent(new Event("resize"));
     });
-  },
-  mounted() {
-    setTimeout(() => {
-      // disable secondary visual option (hovering subtitles)
-      document.querySelector(
-        "#captionsExpander .branded-border.placement-option.Overlay"
-      ).style.display = "none";
-      // get all the colour settings
-      const colourElements = document.querySelectorAll("#captionColorOptions li");
-      // disable third visual option (transparent)
-      colourElements[2].style.display = "none";
-      for (let i = 0; i < colourElements.length; i += 1) {
-        colourElements[i].addEventListener("click", this.updateTheme);
-      }
-      // get all the size settings
-      const sizeElements = document.querySelectorAll("#captionSizeOptions li");
-      for (let i = 0; i < sizeElements.length; i += 1) {
-        // update size
-        sizeElements[i].addEventListener("click", this.updateSize);
-      }
-    }, 3000);
   }
 };
 </script>
