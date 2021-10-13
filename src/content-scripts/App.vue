@@ -8,34 +8,34 @@
     "
   >
     <v-theme-provider :dark="theme == 'dark'" :light="theme == 'light'">
-    <div class="crowdcaptions-container" :class="{ showEdits }">
-      <div>
-        <v-row id="closeButton" no-gutters align="center">
-          <v-col>
-            <v-btn @click="showEdits = false">Close</v-btn>
-          </v-col>
-        </v-row>
-        <div v-for="(edit, index) in visibleEdits" :key="index">
-          <CaptionAlt
-            :edit="edit"
-            :index="index"
-            @show-edits="toggleEdits()"
-            :open="showEdits"
-            @save-caption="saveCaption"
-            :isLarge="isLarge"
-          />
+      <div class="crowdcaptions-container" :class="{ showEdits }">
+        <div>
+          <v-row id="closeButton" no-gutters align="center">
+            <v-col>
+              <v-btn @click="showEdits = false">Close</v-btn>
+            </v-col>
+          </v-row>
+          <div v-for="(edit, index) in visibleEdits" :key="index">
+            <CaptionAlt
+              :edit="edit"
+              :index="index"
+              @show-edits="toggleEdits()"
+              :open="showEdits"
+              @save-caption="saveCaption"
+              :isLarge="isLarge"
+            />
+          </div>
         </div>
       </div>
-    </div>
-    <v-snackbar v-model="snackbar.show" :timeout="snackbar.timeout" color="light-green darken-4">
-      {{ snackbar.text }}
+      <v-snackbar v-model="snackbar.show" :timeout="snackbar.timeout" color="light-green darken-4">
+        {{ snackbar.text }}
 
-      <template v-slot:action="{ attrs }">
-        <v-btn text v-bind="attrs" @click="snackbar.show = false">
-          Close
-        </v-btn>
-      </template>
-    </v-snackbar>
+        <template v-slot:action="{ attrs }">
+          <v-btn text v-bind="attrs" @click="snackbar.show = false">
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-theme-provider>
   </v-app>
 </template>
@@ -83,19 +83,19 @@ export default {
       const themeValue = e.currentTarget.dataset.value;
       switch (themeValue) {
         case "LightOnDark":
-          this.theme = "dark"
+          this.theme = "dark";
           break;
         case "DarkOnLight":
-          this.theme = "light"
+          this.theme = "light";
           break;
         default:
           // Theme not recognised, leave as is.
           break;
       }
     },
-    updateSize(e){
+    updateSize(e) {
       const sizeValue = e.currentTarget.dataset.value;
-      this.isLarge = (sizeValue === '36') 
+      this.isLarge = sizeValue === "36";
     }
   },
   updated() {
@@ -103,20 +103,22 @@ export default {
       window.dispatchEvent(new Event("resize"));
     });
   },
-  mounted () {
-    setTimeout(() =>{
+  mounted() {
+    setTimeout(() => {
       // disable secondary visual option (hovering subtitles)
-      document.querySelector("#captionsExpander .branded-border.placement-option.Overlay").style.display = "none";
+      document.querySelector(
+        "#captionsExpander .branded-border.placement-option.Overlay"
+      ).style.display = "none";
       // get all the colour settings
       const colourElements = document.querySelectorAll("#captionColorOptions li");
       // disable third visual option (transparent)
       colourElements[2].style.display = "none";
-      for (let i=0; i<colourElements.length; i+=1){
+      for (let i = 0; i < colourElements.length; i += 1) {
         colourElements[i].addEventListener("click", this.updateTheme);
       }
       // get all the size settings
       const sizeElements = document.querySelectorAll("#captionSizeOptions li");
-      for (let i=0; i<sizeElements.length; i+=1){
+      for (let i = 0; i < sizeElements.length; i += 1) {
         // update size
         sizeElements[i].addEventListener("click", this.updateSize);
       }
@@ -140,6 +142,14 @@ export default {
   margin-left: 4px;
   position: relative;
   z-index: 10;
+  background-color: black !important;
+}
+
+.theme--dark.v-input--is-disabled input {
+  color: white !important;
+}
+.theme--light.v-input--is-disabled input {
+  color: black !important;
 }
 </style>
 
