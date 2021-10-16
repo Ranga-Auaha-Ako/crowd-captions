@@ -12,7 +12,7 @@ export default new Vuex.Store({
         id: 72456,
         position: 1,
         start: 0,
-        body: "Cannot connect the crowd captions backend. Please try again later. We are sorry for the inconvenience",
+        body: "Cannot connect to the Crowd Caption servers, please try again later",
         edit: []
       }
     ],
@@ -69,10 +69,7 @@ export default new Vuex.Store({
     },
     async loadCaptions(state, url){
       function setCaptions (captionFile){
-        console.log("works");
         state.caption_file = captionFile;
-        console.log("works 2.0");
-        console.log(state.caption_file);
       }
       await fetch(`http://localhost:8000/captions/${url}`, {
         method:'GET',
