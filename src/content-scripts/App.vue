@@ -84,6 +84,7 @@ export default {
         sizeElements[i].addEventListener("click", this.updateSize);
       }
     }, 3000);
+    this.$store.commit("loadCaptions", window.location.href.split('?id=')[1]);
   },
   computed: {
     currentCaption() {
