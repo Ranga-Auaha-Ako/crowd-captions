@@ -99,8 +99,6 @@ export default {
         voted: 0,
         reported: false
       });
-      console.log("XXXXXXXXXXXXXXX");
-      console.log(allCaptions[0]);
       if (this.showEdits) {
         // Show all edits, with a limit
         return allCaptions.length > this.maxAlternatives
@@ -120,7 +118,6 @@ export default {
       this.snackbar.text = `Submitted Caption "${edit.body}"`;
     },
     setTime() {
-      console.log(document.getElementById("primaryVideo").currentTime);
       this.$store.commit("setTime", document.getElementById("primaryVideo").currentTime);
     },
     updateTheme(e) {

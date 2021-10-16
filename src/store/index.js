@@ -157,7 +157,6 @@ export default new Vuex.Store({
   },
   getters: {
     currentCaption(state) {
-      console.log(state.caption_file[state.captionIndex]);
       return state.caption_file[state.captionIndex];
     }
   },
