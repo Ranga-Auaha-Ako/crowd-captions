@@ -7,12 +7,12 @@ export default new Vuex.Store({
   state: {
     // used string for object names due to working with json
     // (how it will be presented from db)
-    caption_file: [
+    Caption_file: [
       {
         id: 72456,
         position: 1,
         start: 0,
-        body: "Cannot connect to the Crowd Caption servers, please try again later",
+        captionSentenceData: "Cannot connect to the Crowd Caption servers, please try again later",
         edit: []
       }
     ],
@@ -21,7 +21,7 @@ export default new Vuex.Store({
   },
   getters: {
     currentCaption(state) {
-      return state.caption_file[state.captionIndex];
+      return state.Caption_file[state.captionIndex];
     }
   },
   mutations: {
@@ -33,10 +33,10 @@ export default new Vuex.Store({
       function getNextStart(currentCaptionIndex) {
         // Get the "end time" of the current aption (aka the next caption start time)
         //  - Sanity check if on last caption, there is no next caption so nextStart is infinity
-        if (currentCaptionIndex + 1 >= state.caption_file.length) {
+        if (currentCaptionIndex + 1 >= state.Caption_file.length) {
           return Number.MAX_SAFE_INTEGER;
         }
-        return state.caption_file[currentCaptionIndex + 1].start;
+        return state.Caption_file[currentCaptionIndex + 1].start;
       }
       let nextStart = getNextStart(captionIndex);
 
@@ -46,7 +46,7 @@ export default new Vuex.Store({
         nextStart = getNextStart(captionIndex);
       }
       // Work backwards to find the caption for our timestamp
-      while (currentTime < state.caption_file[captionIndex].start) {
+      while (currentTime < state.Caption_file[captionIndex].start) {
         if (captionIndex > 0) {
           captionIndex -= 1;
           nextStart = getNextStart(captionIndex);
@@ -65,11 +65,12 @@ export default new Vuex.Store({
     },
     setCaptionIndex(state, i) {
       state.captionIndex = i;
-      state.nextStart = state.caption_file[i + 1].start;
+      state.nextStart = state.Caption_file[i + 1].start;
     },
     async loadCaptions(state, url){
       function setCaptions (captionFile){
-        state.caption_file = captionFile;
+        state.Caption_file = captionFile;
+        console.log(url);
       }
       await fetch(`http://localhost:8000/captions/${url}`, {
         method:'GET',
