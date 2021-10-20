@@ -98,7 +98,7 @@ export default {
       }
       allCaptions.push({
         body: this.currentCaption.body,
-        id: -1,
+        id: this.currentCaption.id,
         votes: 0,
         voted: 0,
         reported: false
@@ -116,6 +116,7 @@ export default {
   methods: {
     toggleEdits() {
       this.showEdits = !this.showEdits;
+      this.$store.commit("loadEdits", this.currentCaption.id);
     },
     saveCaption(edit) {
       this.snackbar.show = true;

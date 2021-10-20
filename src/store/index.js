@@ -62,6 +62,17 @@ export default new Vuex.Store({
       // unsure if the merging of mock data has broken this function
       state.currentCaption[alternative] += 1;
     },
+    async loadEdits (state, id){
+      function loadEdits(edits){
+        state.Caption_file[state.captionIndex].edits = edits;
+      }
+      await fetch(`http://localhost:8000/edits/${id}`, {
+        method:'GET',
+        mode:'cors'
+      })
+      .then(response => response.json())
+      .then(data => (loadEdits(data)));
+    },
     setCaptionIndex(state, i) {
       state.captionIndex = i;
       state.nextStart = state.Caption_file[i + 1].start;
