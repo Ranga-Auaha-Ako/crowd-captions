@@ -120,6 +120,7 @@ export default {
     },
     saveCaption(edit) {
       this.snackbar.show = true;
+      this.$store.commit("createEdit", edit);
       this.snackbar.text = `Submitted Caption "${edit.body}"`;
     },
     setTime() {

@@ -24,6 +24,23 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    async createEdit(state, edit){
+      console.log("part 1");
+      const editObject = {
+        "sentenceId": state.Caption_file[state.captionIndex].id,
+        "body": edit.body,
+        "upi": "plz"
+      }
+      console.log(JSON.stringify(editObject));
+      await fetch(`http://localhost:8000/edit`, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify(editObject)
+      }).then(response => console.log(response));
+      console.log("part 2");
+    },
     setTime(state, time) {
       // Use local variables here to prevent needlessly updating state
       const currentTime = time * 1000;
