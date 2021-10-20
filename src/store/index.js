@@ -10,10 +10,9 @@ export default new Vuex.Store({
     Caption_file: [
       {
         id: 72456,
-        position: 1,
         start: 0,
-        captionSentenceData: "Cannot connect to the Crowd Caption servers, please try again later",
-        edit: []
+        body: "Cannot connect to the Crowd Caption servers, please try again later",
+        edits: []
       }
     ],
     captionIndex: 0,
@@ -27,7 +26,7 @@ export default new Vuex.Store({
   mutations: {
     setTime(state, time) {
       // Use local variables here to prevent needlessly updating state
-      const currentTime = time;
+      const currentTime = time * 1000;
       let { captionIndex } = state;
 
       function getNextStart(currentCaptionIndex) {
@@ -69,8 +68,7 @@ export default new Vuex.Store({
     },
     async loadCaptions(state, url){
       function setCaptions (captionFile){
-        state.Caption_file = captionFile;
-        console.log(url);
+        state.Caption_file = captionFile.Caption_file;
       }
       await fetch(`http://localhost:8000/captions/${url}`, {
         method:'GET',

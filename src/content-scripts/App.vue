@@ -92,9 +92,12 @@ export default {
     },
     visibleEdits() {
       // Append default caption as fake "edit" to end of list of all captions
-      const allCaptions = this.currentCaption.edit.slice();
+      let allCaptions = [];
+      if (this.currentCaption.edits !== [])  {
+        allCaptions = this.currentCaption.edits.slice();
+      }
       allCaptions.push({
-        body: this.currentCaption.captionSentenceData,
+        body: this.currentCaption.body,
         id: -1,
         votes: 0,
         voted: 0,
