@@ -117,6 +117,9 @@ export default {
   methods: {
     toggleEdits() {
       this.showEdits = !this.showEdits;
+      this.reloadEdits()
+    },
+    reloadEdits(){
       this.$store.commit("loadEdits", this.currentCaption.id);
     },
     saveCaption(edit) {
@@ -125,8 +128,11 @@ export default {
       this.snackbar.text = `Submitted Caption "${edit.body}"`;
     },
     setVote(vote){
-      if (vote.edit.CaptionSentenceId !== null){
+      if (vote.edit.CaptionSentenceId != null){
         this.$store.commit("setVote", vote);
+        setTimeout(() => {
+          this.reloadEdits();
+        }, 500);
       } else {
         this.snackbar.text = `Can't vote on panopto's original caption`;
       };
