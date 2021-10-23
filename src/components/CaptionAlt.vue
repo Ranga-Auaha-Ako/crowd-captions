@@ -4,15 +4,17 @@
       <v-col cols="1" id="voteButtons">
         <v-row>
           <v-btn title="Like" icon small @click="vote('upvote')">
-            <v-icon class="material-icons"> arrow_upward </v-icon>
+            <v-icon v-bind:class="{upVoted:edit.upvoted}" class="material-icons"> arrow_upward </v-icon>
           </v-btn>
         </v-row>
         <v-row>
+          <!-- Need to refresh once the user votes -->
           <div id="votes">{{edit.votes}}</div>
         </v-row>
         <v-row>
           <v-btn title="Dislike" icon small @click="vote('downvote')">
-            <v-icon class="material-icons"> arrow_downward </v-icon>
+            <!-- edit.upvoted can be null so need to check if false, not just !edit.upvoted -->
+            <v-icon v-bind:class="{downVoted:edit.upvoted==false}" class="material-icons"> arrow_downward </v-icon>
           </v-btn>
         </v-row>
       </v-col>
@@ -131,6 +133,14 @@ input#captionField {
 </style>
 
 <style scoped>
+.upVoted {
+  color:red !important;
+}
+
+.downVoted{
+  color:blue !important;
+}
+
 .hidden {
   visibility: hidden;
   opacity: 0;
