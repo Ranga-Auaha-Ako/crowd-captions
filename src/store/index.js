@@ -16,7 +16,8 @@ export default new Vuex.Store({
       }
     ],
     captionIndex: 0,
-    nextStart: 0
+    nextStart: 0,
+    upi: 'csmi299'
   },
   getters: {
     currentCaption(state) {
@@ -24,23 +25,6 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    async createEdit(state, edit){
-      console.log("part 1");
-      const editObject = {
-        "sentenceId": state.Caption_file[state.captionIndex].id,
-        "body": edit.body,
-        "upi": "plz"
-      }
-      console.log(JSON.stringify(editObject));
-      await fetch(`http://localhost:8000/edit`, {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify(editObject)
-      }).then(response => console.log(response));
-      console.log("part 2");
-    },
     setTime(state, time) {
       // Use local variables here to prevent needlessly updating state
       const currentTime = time * 1000;
@@ -75,15 +59,41 @@ export default new Vuex.Store({
       state.nextStart = nextStart;
       state.captionIndex = captionIndex;
     },
-    likeCaption(state, alternative) {
-      // unsure if the merging of mock data has broken this function
-      state.currentCaption[alternative] += 1;
+    async createEdit(state, edit){
+      const editObject = {
+        "sentenceId": state.Caption_file[state.captionIndex].id,
+        "body": edit.body,
+        "upi": state.upi,
+      };
+      await fetch(`http://localhost:8000/edit`, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        mode: 'cors',
+        body: JSON.stringify(editObject)
+      }).then(response => console.log(response));
+    },
+    async setVote (state, params){
+      const voteObject = {
+        "upvoted": (params.vote === 'upvote'),
+        "EditId": params.edit.id,
+        "upi": state.upi,
+      };
+      await fetch(`http://localhost:8000/vote`, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        mode: 'cors',
+        body: JSON.stringify(voteObject)
+      }).then(response => console.log(response));
     },
     async loadEdits (state, id){
       function loadEdits(edits){
         state.Caption_file[state.captionIndex].edits = edits;
       }
-      await fetch(`http://localhost:8000/edits/${id}`, {
+      await fetch(`http://localhost:8000/edits/${id}/${state.upi}`, {
         method:'GET',
         mode:'cors'
       })

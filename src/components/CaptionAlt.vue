@@ -3,12 +3,12 @@
     <v-row align="center" class="mx-1">
       <v-col cols="1" id="voteButtons">
         <v-row>
-          <v-btn title="Like" icon small>
+          <v-btn title="Like" icon small @click="vote('upvote')">
             <v-icon class="material-icons"> arrow_upward </v-icon>
           </v-btn>
         </v-row>
         <v-row>
-          <v-btn title="Dislike" icon small>
+          <v-btn title="Dislike" icon small @click="vote('downvote')">
             <v-icon class="material-icons"> arrow_downward </v-icon>
           </v-btn>
         </v-row>
@@ -91,6 +91,9 @@ export default {
   },
 
   methods: {
+    vote(voteMethod){
+      this.$emit('set-vote', {edit: this.edit, vote: voteMethod});
+    },
     getFontSize(){
       return this.textSize;
     },
@@ -100,11 +103,9 @@ export default {
     },
     toggleEditState() {
       if (this.isEdited) {
-        console.log("Saving state");
         this.$refs.captionField.blur();
         this.$emit("save-caption", { body: this.edited });
       } else {
-        console.log("Beggining Edit");
         this.$refs.captionField.focus();
       }
     }

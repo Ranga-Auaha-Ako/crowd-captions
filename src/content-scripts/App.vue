@@ -20,6 +20,7 @@
               :edit="edit"
               :index="index"
               @show-edits="toggleEdits()"
+              @set-vote="setVote"
               :open="showEdits"
               @save-caption="saveCaption"
               :isLarge="isLarge"
@@ -123,6 +124,13 @@ export default {
       this.$store.commit("createEdit", edit);
       this.snackbar.text = `Submitted Caption "${edit.body}"`;
     },
+    setVote(vote){
+      if (vote.edit.CaptionSentenceId !== null){
+        this.$store.commit("setVote", vote);
+      } else {
+        this.snackbar.text = `Can't vote on panopto's original caption`;
+      };
+    },
     setTime() {
       this.$store.commit("setTime", document.getElementById("primaryVideo").currentTime);
     },
@@ -165,7 +173,6 @@ export default {
 }
 
 #dockedCaption {
-  margin-left: 4px;
   position: relative;
   z-index: 10;
   background-color: black !important;
