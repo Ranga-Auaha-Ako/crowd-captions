@@ -8,6 +8,9 @@
           </v-btn>
         </v-row>
         <v-row>
+          <div id="votes">{{edit.votes}}</div>
+        </v-row>
+        <v-row>
           <v-btn title="Dislike" icon small @click="vote('downvote')">
             <v-icon class="material-icons"> arrow_downward </v-icon>
           </v-btn>
@@ -113,6 +116,9 @@ export default {
 };
 </script>
 <style>
+#votes{
+  margin-left:0.6rem;
+}
 
 .largeFont{
   font-size:1.6em !important;
