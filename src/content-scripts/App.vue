@@ -67,6 +67,13 @@ export default {
     setTimeout(() => {
       // eslint-disable-next-line func-names
       document.getElementById("primaryVideo").ontimeupdate = this.setTime;
+      // stop space bar from playing video when typing -- broken
+      document.onkeydown = (e) => {
+        if(e.key === " " && e.target === document.body) {
+          // eslint-disable-next-line no-unused-expressions
+          e.preventDefault;
+        }
+      }
       // disable secondary visual option (hovering subtitles)
       document.querySelector(
         "#captionsExpander .branded-border.placement-option.Overlay"
@@ -126,6 +133,9 @@ export default {
       this.snackbar.show = true;
       this.$store.commit("createEdit", edit);
       this.snackbar.text = `Submitted Caption "${edit.body}"`;
+      setTimeout(() => {
+          this.reloadEdits();
+        }, 500);
     },
     setVote(vote){
       if (vote.edit.CaptionSentenceId != null){
