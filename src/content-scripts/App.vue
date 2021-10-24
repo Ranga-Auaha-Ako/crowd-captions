@@ -101,8 +101,9 @@ export default {
     visibleEdits() {
       // Append default caption as fake "edit" to end of list of all captions
       let allCaptions = [];
-      if (this.currentCaption.edits !== [])  {
-        allCaptions = this.currentCaption.edits.slice();
+      if (this.currentCaption.edits.sort !== [])  {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        allCaptions = this.currentCaption.edits.sort((a, b)=> (b.votes - a.votes)).slice();
       }
       allCaptions.push({
         body: this.currentCaption.body,
