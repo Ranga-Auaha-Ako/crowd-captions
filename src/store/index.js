@@ -108,7 +108,7 @@ export default new Vuex.Store({
       function setCaptions (captionFile){
         state.Caption_file = captionFile.Caption_file;
       }
-      await fetch(`http://localhost:8000/captions/${url}`, {
+      await fetch(`http://localhost:8000/captions/${url}/${state.upi}`, {
         method:'GET',
         mode:'cors'
       })
