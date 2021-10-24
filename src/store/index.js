@@ -7,173 +7,36 @@ export default new Vuex.Store({
   state: {
     // used string for object names due to working with json
     // (how it will be presented from db)
-    caption_file: [
+    Caption_file: [
       {
         id: 72456,
-        position: 1,
         start: 0,
-        body: "redefine Louisiana transmitter",
-        edit: [
-          {
-            approved: true,
-            id: 76579,
-            body: "technologies Handmade",
-            votes: 37,
-            voted: 0,
-            timestamp:
-              "Sun Dec 13 2020 12:58:09 GMT+1300 (New Zealand Daylight Time)",
-            reports: 0,
-            reported: false
-          },
-          {
-            approved: false,
-            id: 88686,
-            body: "Global Account",
-            votes: -2,
-            voted: -1,
-            timestamp:
-              "Fri Jul 09 2021 19:00:56 GMT+1200 (New Zealand Standard Time)",
-            reports: 3,
-            reported: true
-          },
-          {
-            approved: false,
-            id: 97331,
-            body: "Loan next-generation",
-            votes: 20,
-            voted: 1,
-            timestamp:
-              "Fri Dec 25 2020 21:25:45 GMT+1300 (New Zealand Daylight Time)",
-            reports: 1,
-            reported: false
-          },
-          {
-            approved: false,
-            id: 65054,
-            body: "up leverage",
-            votes: 12,
-            voted: 0,
-            timestamp:
-              "Thu Jan 21 2021 11:49:29 GMT+1300 (New Zealand Daylight Time)",
-            reports: 0,
-            reported: false
-          }
-        ]
-      },
-      {
-        id: 13586,
-        position: 2,
-        start: 10,
-        body: "directional Response Sterling",
-        edit: []
-      },
-      {
-        id: 44230,
-        position: 3,
-        start: 22,
-        body: "Granite Mobility",
-        edit: [
-          {
-            approved: false,
-            id: 6625,
-            body: "Plains",
-            votes: 3,
-            voted: 1,
-            timestamp:
-              "Thu Jul 01 2021 01:44:18 GMT+1200 (New Zealand Standard Time)",
-            reports: 0,
-            reported: false
-          },
-          {
-            approved: false,
-            id: 76306,
-            body: "Loan",
-            votes: 0,
-            voted: 0,
-            timestamp:
-              "Tue Aug 17 2021 09:22:04 GMT+1200 (New Zealand Standard Time)",
-            reports: 1,
-            reported: true
-          }
-        ]
-      },
-      {
-        id: 60722,
-        position: 4,
-        start: 30,
-        body: "Auto Forint",
-        edit: []
-      },
-      {
-        id: 44215,
-        position: 5,
-        start: 38,
-        body: "Soft Profound Pants",
-        edit: []
-      },
-      {
-        id: 93904,
-        position: 6,
-        start: 46,
-        body: "inventore qui quibusdam",
-        edit: []
-      },
-      {
-        id: 95898,
-        position: 7,
-        start: 54,
-        body: "Investor Awesome Ferry",
-        edit: []
-      },
-      {
-        id: 48458,
-        position: 8,
-        start: 60,
-        body: "gold",
-        edit: [
-          {
-            approved: true,
-            id: 61551,
-            body: "connect payment PNG",
-            votes: 6,
-            voted: 0,
-            timestamp:
-              "Tue Mar 23 2021 12:32:03 GMT+1300 (New Zealand Daylight Time)",
-            reports: 0,
-            reported: false
-          }
-        ]
-      },
-      {
-        id: 22143,
-        position: 9,
-        start: 68,
-        body: "productivity interactive",
-        edit: []
+        body: "Cannot connect to the Crowd Caption servers, please try again later",
+        edits: []
       }
     ],
     captionIndex: 0,
-    nextStart: 0
+    nextStart: 0,
+    upi: 'csmi299'
   },
   getters: {
     currentCaption(state) {
-      console.log(state.caption_file[state.captionIndex]);
-      return state.caption_file[state.captionIndex];
+      return state.Caption_file[state.captionIndex];
     }
   },
   mutations: {
     setTime(state, time) {
       // Use local variables here to prevent needlessly updating state
-      const currentTime = time;
+      const currentTime = time * 1000;
       let { captionIndex } = state;
 
       function getNextStart(currentCaptionIndex) {
         // Get the "end time" of the current aption (aka the next caption start time)
         //  - Sanity check if on last caption, there is no next caption so nextStart is infinity
-        if (currentCaptionIndex + 1 >= state.caption_file.length) {
+        if (currentCaptionIndex + 1 >= state.Caption_file.length) {
           return Number.MAX_SAFE_INTEGER;
         }
-        return state.caption_file[currentCaptionIndex + 1].start;
+        return state.Caption_file[currentCaptionIndex + 1].start;
       }
       let nextStart = getNextStart(captionIndex);
 
@@ -183,7 +46,7 @@ export default new Vuex.Store({
         nextStart = getNextStart(captionIndex);
       }
       // Work backwards to find the caption for our timestamp
-      while (currentTime < state.caption_file[captionIndex].start) {
+      while (currentTime < state.Caption_file[captionIndex].start) {
         if (captionIndex > 0) {
           captionIndex -= 1;
           nextStart = getNextStart(captionIndex);
@@ -196,13 +59,61 @@ export default new Vuex.Store({
       state.nextStart = nextStart;
       state.captionIndex = captionIndex;
     },
-    likeCaption(state, alternative) {
-      // unsure if the merging of mock data has broken this function
-      state.currentCaption[alternative] += 1;
+    async createEdit(state, edit){
+      const editObject = {
+        "sentenceId": state.Caption_file[state.captionIndex].id,
+        "body": edit.body,
+        "upi": state.upi,
+      };
+      await fetch(`http://localhost:8000/edit`, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        mode: 'cors',
+        body: JSON.stringify(editObject)
+      }).then(response => console.log(response));
+    },
+    async setVote (state, params){
+      const voteObject = {
+        "upvoted": (params.vote === 'upvote'),
+        "EditId": params.edit.id,
+        "upi": state.upi,
+      };
+      await fetch(`http://localhost:8000/vote`, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        mode: 'cors',
+        body: JSON.stringify(voteObject)
+      }).then(response => console.log(response));
+    },
+    async loadEdits (state, id){
+      function loadEdits(edits){
+        state.Caption_file[state.captionIndex].edits = edits;
+      }
+      await fetch(`http://localhost:8000/edits/${id}/${state.upi}`, {
+        method:'GET',
+        mode:'cors'
+      })
+      .then(response => response.json())
+      .then(data => (loadEdits(data)));
     },
     setCaptionIndex(state, i) {
       state.captionIndex = i;
-      state.nextStart = state.caption_file[i + 1].start;
+      state.nextStart = state.Caption_file[i + 1].start;
+    },
+    async loadCaptions(state, url){
+      function setCaptions (captionFile){
+        state.Caption_file = captionFile.Caption_file;
+      }
+      await fetch(`http://localhost:8000/captions/${url}/${state.upi}`, {
+        method:'GET',
+        mode:'cors'
+      })
+      .then(response => response.json())
+      .then(data => (setCaptions(data)));
     }
   },
   actions: {},

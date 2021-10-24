@@ -20,6 +20,7 @@
               :edit="edit"
               :index="index"
               @show-edits="toggleEdits()"
+              @set-vote="setVote"
               :open="showEdits"
               @save-caption="saveCaption"
               :isLarge="isLarge"
@@ -66,6 +67,13 @@ export default {
     setTimeout(() => {
       // eslint-disable-next-line func-names
       document.getElementById("primaryVideo").ontimeupdate = this.setTime;
+      // stop space bar from playing video when typing -- broken
+      document.onkeydown = (e) => {
+        if(e.key === " " && e.target === document.body) {
+          // eslint-disable-next-line no-unused-expressions
+          e.preventDefault;
+        }
+      }
       // disable secondary visual option (hovering subtitles)
       document.querySelector(
         "#captionsExpander .branded-border.placement-option.Overlay"
@@ -84,6 +92,7 @@ export default {
         sizeElements[i].addEventListener("click", this.updateSize);
       }
     }, 3000);
+    this.$store.commit("loadCaptions", window.location.href.split('?id=')[1]);
   },
   computed: {
     currentCaption() {
@@ -91,16 +100,18 @@ export default {
     },
     visibleEdits() {
       // Append default caption as fake "edit" to end of list of all captions
-      const allCaptions = this.currentCaption.edit.slice();
+      let allCaptions = [];
+      if (this.currentCaption.edits.sort !== [])  {
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        allCaptions = this.currentCaption.edits.sort((a, b)=> (b.votes - a.votes)).slice();
+      }
       allCaptions.push({
         body: this.currentCaption.body,
-        id: -1,
+        id: this.currentCaption.id,
         votes: 0,
         voted: 0,
         reported: false
       });
-      console.log("XXXXXXXXXXXXXXX");
-      console.log(allCaptions[0]);
       if (this.showEdits) {
         // Show all edits, with a limit
         return allCaptions.length > this.maxAlternatives
@@ -114,13 +125,30 @@ export default {
   methods: {
     toggleEdits() {
       this.showEdits = !this.showEdits;
+      this.reloadEdits()
+    },
+    reloadEdits(){
+      this.$store.commit("loadEdits", this.currentCaption.id);
     },
     saveCaption(edit) {
       this.snackbar.show = true;
+      this.$store.commit("createEdit", edit);
       this.snackbar.text = `Submitted Caption "${edit.body}"`;
+      setTimeout(() => {
+          this.reloadEdits();
+        }, 500);
+    },
+    setVote(vote){
+      if (vote.edit.CaptionSentenceId != null){
+        this.$store.commit("setVote", vote);
+        setTimeout(() => {
+          this.reloadEdits();
+        }, 500);
+      } else {
+        this.snackbar.text = `Can't vote on panopto's original caption`;
+      };
     },
     setTime() {
-      console.log(document.getElementById("primaryVideo").currentTime);
       this.$store.commit("setTime", document.getElementById("primaryVideo").currentTime);
     },
     updateTheme(e) {
@@ -162,7 +190,6 @@ export default {
 }
 
 #dockedCaption {
-  margin-left: 4px;
   position: relative;
   z-index: 10;
   background-color: black !important;
