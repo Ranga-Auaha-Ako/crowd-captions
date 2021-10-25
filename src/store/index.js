@@ -19,7 +19,7 @@ export default new Vuex.Store({
     ],
     captionIndex: 0,
     nextStart: 0,
-    upi: 'csmi299'
+    upi: 'anon'
   },
   getters: {
     currentCaption(state) {
@@ -93,7 +93,7 @@ export default new Vuex.Store({
     },
     async loadEdits (state, id){
       function loadEdits(edits){
-        state.Caption_file[state.captionIndex].edits = edits;
+        Vue.set(state.Caption_file[state.captionIndex], "edits", edits);
       }
       await fetch(`${backendHost}/edits/${id}/${state.upi}`, {
         method:'GET',

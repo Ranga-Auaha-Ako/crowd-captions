@@ -27,16 +27,16 @@
             />
           </div>
         </div>
-      </div>
-      <v-snackbar v-model="snackbar.show" :timeout="snackbar.timeout" color="light-green darken-4">
-        {{ snackbar.text }}
+        <v-snackbar v-model="snackbar.show" :timeout="snackbar.timeout" color="blue-grey darken-4">
+          {{ snackbar.text }}
 
-        <template v-slot:action="{ attrs }">
-          <v-btn text v-bind="attrs" @click="snackbar.show = false">
-            Close
-          </v-btn>
-        </template>
-      </v-snackbar>
+          <template v-slot:action="{ attrs }">
+            <v-btn text v-bind="attrs" @click="snackbar.show = false">
+              Close
+            </v-btn>
+          </template>
+        </v-snackbar>
+      </div>
     </v-theme-provider>
   </v-app>
 </template>
@@ -152,6 +152,7 @@ export default {
       if (vote.edit.CaptionSentenceId != null) {
         this.$store.commit("setVote", vote);
         setTimeout(() => {
+          this.showEdits = false;
           this.reloadEdits();
         }, 500);
       } else {
