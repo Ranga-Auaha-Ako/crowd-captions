@@ -68,6 +68,10 @@ Backend is running on [AWS](https://aws.amazon.com) server with [Docker](https:/
 - Alternate colours of components for each caption edit
 - Highlight words different from the original caption
 
+### Technology
+
+- Implementing webSocket technology for faster and more rebost content delivery
+
 # Acknowledgements
 
 The Skrrt Skrrt team would like to thank Ranga Auaha Ako's outstanding support, especially Steve Leichtweis for identifying the requirements for this project. Many thanks to Gemma Sinclair for her insight into Panopto's rollout within the university and Andrew Cho for helping us implement this project within the university's processes. Finally, thank you to Asma for an excellent semester and for all of her support despite the onslaught of challenges that COVID has provided.
