@@ -33,7 +33,7 @@ This site is generated using [GitHub Pages](https://pages.github.com/), which us
 
 ## Frontend
 
-Frontend uses [Vue.js](https://vuejs.org/), with the [Vue CLI](https://cli.vuejs.org/) and the [Vue Web Extention plugin](https://github.com/Kocal/vue-web-extension). This allows rapid development of the extention, with live reload and compilation as well as all the nice features of [Webpack](https://webpack.js.org/) and Vue.
+Frontend uses [Vue.js](https://vuejs.org/), with the [Vue CLI](https://cli.vuejs.org/) and the [Vue Web Extention plugin](https://vue-web-extension.netlify.app/). This allows rapid development of the extention, with live reload and compilation as well as all the nice features of [Webpack](https://webpack.js.org/) and Vue.
 
 [Axios](https://axios-http.com/) is used for interacting with the backend APIs, and [Vuex](https://vuex.vuejs.org/) is used to manage state within the UI. The codebase is linted using [ESLint](https://eslint.org/).
 

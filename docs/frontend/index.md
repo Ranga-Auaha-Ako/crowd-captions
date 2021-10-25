@@ -1,10 +1,7 @@
-# crowd-captions
+[← Return to homepage](../)
+# Crowd Captions - Frontend Documentation
 
-Team Skrrt Skrrt's implementation of crowdsourced caption corrections for Panopto
-
-Project managment software: **Notion**
-
-Documentation of preset scaffolding: https://vue-web-extension.netlify.app/
+If you'd like to develop on Frontend, follow the instructions below. By default, you'll also need to set up Backend to run at the same time, as the development version of the chrome extention will look for the API at http://localhost:8000/
 
 # Get Started
 
@@ -20,4 +17,4 @@ Next, start up the server:
 Finally, install the chrome extention:
 
 - Go to chrome://extensions/ and click "Load unpacked extension", then select the `dist` folder within this project to install it.
-- Visit a [Panopto Recording](https://auckland.au.panopto.com/Panopto/Pages/Viewer.aspx?id=c7010578-d42e-4282-9d0a-ad76016438bf) to test it out
+- Visit a [Panopto Recording](https://aucklandtest.au.panopto.com/Panopto/Pages/Viewer.aspx?id=17f5f2e4-3252-44e5-a32e-adcc002772d7) to test it out
