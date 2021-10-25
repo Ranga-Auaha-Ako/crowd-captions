@@ -36,6 +36,7 @@
           :disabled="!open"
           @focus="isEditing = true"
           @blur="isEditing = false"
+          @keydown.space="handleSpace"
           @keydown.enter="toggleEditState()"
           :class="{ largeFont: isLarge }"
           rows="1"
@@ -120,6 +121,10 @@ export default {
       } else {
         this.$refs.captionField.focus();
       }
+    },
+    handleSpace(event) {
+      // Prevent propagating up to the video player (which would cause play/pause)
+      event.stopPropagation();
     }
   }
 };
