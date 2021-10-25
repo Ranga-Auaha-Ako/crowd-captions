@@ -1,3 +1,15 @@
+Welcome to Crowd Captions. This project is split up into two repositories. The frontend code, which is compiled down in to the chrome extention downloadable above, can be accessed [here](https://github.com/uoa-compsci399-s2-2021/crowd-captions). The backend code, which is hosted locally or on AWS, is available [here](https://github.com/uoa-compsci399-s2-2021/team10-backend). To learn more about the project, choose a codebase you would like to view documentation for.
+
+
+<a href="frontend/" class="btn">View frontend documentation</a>
+<a href="backend/" class="btn">View backend documentation</a>
+
+| First Header  | Second Header |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
+
+<!-- 
 ## Welcome to GitHub Pages
 
 You can use the [editor on GitHub](https://github.com/uoa-compsci399-s2-2021/crowd-captions/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
@@ -34,4 +46,4 @@ Your Pages site will use the layout and styles from the Jekyll theme you have se
 
 ### Support or Contact
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out. -->
