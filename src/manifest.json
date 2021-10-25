@@ -15,9 +15,7 @@
     "128": "icons/128.png"
   },
   "background": {
-    "scripts": [
-      "js/background.js"
-    ],
+    "scripts": ["js/background.js"],
     "persistent": false
   },
   "browser_action": {
@@ -34,9 +32,8 @@
         "https://auckland.au.panopto.com/Panopto/Pages/Viewer.aspx*",
         "https://aucklandtest.au.panopto.com/Panopto/Pages/Viewer.aspx*"
       ],
-      "js": [
-        "js/content-script.js"
-      ]
+      "js": ["js/content-script.js"],
+      "css": ["css/content-script.css"]
     }
   ]
 }

@@ -6,7 +6,7 @@ module.exports = {
       title: 'Popup',
     },
   },
-
+  filenameHashing: false,
   pluginOptions: {
     browserExtension: {
       componentOptions: {
@@ -21,6 +21,12 @@ module.exports = {
           },
         },
       },
+      manifestTransformer: (manifest) => {
+        if (process.env.NODE_ENV === "development") {
+          manifest.content_scripts[1].css.pop();
+        }
+        return manifest;
+      }      
     },
   },
 
