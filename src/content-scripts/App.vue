@@ -130,6 +130,10 @@ export default {
   },
   methods: {
     toggleEdits() {
+      // Pause video if it's not already paused
+      const playButton = document.querySelector("#playButton[title=Pause]")
+      if(playButton) playButton.click();
+      // Show edits and reload
       this.showEdits = !this.showEdits;
       this.reloadEdits();
     },
