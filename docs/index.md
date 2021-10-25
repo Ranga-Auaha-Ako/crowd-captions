@@ -40,7 +40,10 @@ Building for release is managed automatically using [GitHub Actions](https://git
 
 ## Backend
 
-TODO
+Backend uses [Express.js](http://expressjs.com) to connect the frontend with database and uses [Sequlize](https://sequelize.org) to access the database.
+We also uses [Mocha.js](https://mochajs.org) for automation testing on both the program and the database.
+Backend is running on [AWS](https://aws.amazon.com) server with [Docker](https://www.docker.com) to allow easy deploy and upgrade, stable running environment and quick access.
+
 
 # Future work
 
