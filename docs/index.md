@@ -2,6 +2,7 @@ Welcome to Crowd Captions. This project was developed over the course of one sem
 
 # Quick Links
  - [Project management board](https://skrrt-skrrt.notion.site/85524848f7ba48efb8597a03217c0332?v=ef166ebcb83d4e4cadb663dfee409e9a)
+ - [Backend API - Swagger Documentation](https://app.swaggerhub.com/apis-docs/Team-10-Skrtt-Skrtt/CrowdCaptions/)
  - [Documentation & Installation instructions](#documentation)
  - [Technology Stack](#technology)
 
