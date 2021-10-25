@@ -65,7 +65,7 @@ TODO
 
 - Use a default colour scheme for the original captions 
 - Alternate colours of components for each caption edit
-- Highlight different words from the original caption
+- Highlight words different from the original caption
 
 # Acknowledgements
 
