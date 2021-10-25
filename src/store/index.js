@@ -3,7 +3,7 @@ import Vuex from "vuex";
 
 Vue.use(Vuex);
 
-const backendHost = process.env.BACKEND_HOST ?? "http://localhost:8000"
+const backendHost = process.env.VUE_APP_BACKEND_HOST ?? "http://localhost:8000"
 
 export default new Vuex.Store({
   state: {
