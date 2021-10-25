@@ -17,15 +17,13 @@ If you'd just like to give this project a go, click the download button above, u
 This project is split up into two repositories. The frontend code, which is compiled down in to the chrome extention downloadable above, can be accessed [here](https://github.com/uoa-compsci399-s2-2021/crowd-captions). The backend code, which is hosted locally or on AWS, is available [here](https://github.com/uoa-compsci399-s2-2021/team10-backend). To learn more about the project, choose a codebase you would like to view documentation for.
 
 <br/>
-<br/>
-<br/>
 
 <div style="text-align: center;">
 <a href="frontend/" class="btn btn-dark">View frontend documentation</a>
+<br/>
 <a href="backend/" class="btn btn-dark">View backend documentation</a>
 </div>
 
-<br/>
 <br/>
 
 # Technologies
