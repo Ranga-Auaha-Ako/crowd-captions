@@ -3,6 +3,8 @@ import Vuex from "vuex";
 
 Vue.use(Vuex);
 
+const backendHost = process.env.BACKEND_HOST ?? "http://localhost:8000"
+
 export default new Vuex.Store({
   state: {
     // used string for object names due to working with json
@@ -65,7 +67,7 @@ export default new Vuex.Store({
         "body": edit.body,
         "upi": state.upi,
       };
-      await fetch(`http://localhost:8000/edit`, {
+      await fetch(`${backendHost}/edit`, {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -80,7 +82,7 @@ export default new Vuex.Store({
         "EditId": params.edit.id,
         "upi": state.upi,
       };
-      await fetch(`http://localhost:8000/vote`, {
+      await fetch(`${backendHost}/vote`, {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -93,7 +95,7 @@ export default new Vuex.Store({
       function loadEdits(edits){
         state.Caption_file[state.captionIndex].edits = edits;
       }
-      await fetch(`http://localhost:8000/edits/${id}/${state.upi}`, {
+      await fetch(`${backendHost}/edits/${id}/${state.upi}`, {
         method:'GET',
         mode:'cors'
       })
@@ -108,7 +110,7 @@ export default new Vuex.Store({
       function setCaptions (captionFile){
         state.Caption_file = captionFile.Caption_file;
       }
-      await fetch(`http://localhost:8000/captions/${url}/${state.upi}`, {
+      await fetch(`${backendHost}/captions/${url}/${state.upi}`, {
         method:'GET',
         mode:'cors'
       })
