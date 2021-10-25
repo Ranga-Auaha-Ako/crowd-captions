@@ -1,14 +1,9 @@
 Welcome to Crowd Captions. This project is split up into two repositories. The frontend code, which is compiled down in to the chrome extention downloadable above, can be accessed [here](https://github.com/uoa-compsci399-s2-2021/crowd-captions). The backend code, which is hosted locally or on AWS, is available [here](https://github.com/uoa-compsci399-s2-2021/team10-backend). To learn more about the project, choose a codebase you would like to view documentation for.
 
-
-<a href="frontend/" class="btn">View frontend documentation</a>
-<a href="backend/" class="btn">View backend documentation</a>
-
-| First Header  | Second Header |
-| ------------- | ------------- |
-| Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  |
-
+<div style="text-align: center;">
+<a href="frontend/" class="btn btn-dark">View frontend documentation</a>
+<a href="backend/" class="btn btn-dark">View backend documentation</a>
+</div>
 <!-- 
 ## Welcome to GitHub Pages
 
