@@ -78,7 +78,7 @@ export default new Vuex.Store({
     },
     async setVote (state, params){
       const voteObject = {
-        "upvoted": (params.vote === 'upvote'),
+        "upvoted": (params.vote === 'upvote').toString(),
         "EditId": params.edit.id,
         "upi": state.upi,
       };
