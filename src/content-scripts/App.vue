@@ -8,7 +8,7 @@
     "
   >
     <v-theme-provider :dark="theme == 'dark'" :light="theme == 'light'">
-      <div class="crowdcaptions-container" :class="{ showEdits }">
+      <div class="crowdcaptions-container" :class="{ showEdits }" :style="'--num-edits: ' + visibleEdits.length">
         <div>
           <v-row id="closeButton" no-gutters align="center">
             <v-col>
@@ -227,7 +227,7 @@ export default {
 
 .crowdcaptions-container.showEdits {
   position: relative;
-  bottom: calc(6rem * 2.5);
+  bottom: calc(6rem * ( var(--num-edits) - 0.5 ));
 }
 
 .crowdcaptions-container:before {
@@ -236,7 +236,7 @@ export default {
   width: 100%;
   left: 0;
   bottom: 0;
-  height: calc(6rem * 2.5 + 7rem);
+  height: calc(6rem * ( var(--num-edits) - 0.5 ) + 7rem);
   background: linear-gradient(to top, black 0%, #000a 80%, #0000);
   pointer-events: none;
   opacity: 0;
@@ -246,7 +246,7 @@ export default {
 
 .crowdcaptions-container.showEdits:before {
   opacity: 1;
-  bottom: calc(6rem * -2.5);
+  bottom: calc(6rem * ( var(--num-edits) - 0.5 ) * -1);
 }
 
 #closeButton {
