@@ -23,10 +23,6 @@
         </v-row>
       </v-col>
       <v-col class="captionText">
-        <!-- displays the current - 
-          since App passes in the content at the given index anyway, 
-          index is not used here -->
-        <!-- <div>{{ edit }}</div> -->
         <v-textarea
           id="captionField"
           ref="captionField"
@@ -36,10 +32,14 @@
           :disabled="!open"
           @focus="isEditing = true"
           @blur="isEditing = false"
-          @keydown.space="handleSpace"
+          @keydown.space="handleBubble"
+          @keydown.left="handleBubble"
+          @keydown.right="handleBubble"
+          @keydown.up="handleBubble"
+          @keydown.down="handleBubble"
           @keydown.enter="toggleEditState()"
           :class="{ largeFont: isLarge }"
-          rows="1"
+          :rows="edited.length > 110 ? 2 : 1"
           :no-resize="true"
           :auto-grow="true"
         >
@@ -122,8 +122,8 @@ export default {
         this.$refs.captionField.focus();
       }
     },
-    handleSpace(event) {
-      // Prevent propagating up to the video player (which would cause play/pause)
+    handleBubble(event) {
+      // Prevent propagating up to the video player (which would cause play/pause or skipping)
       event.stopPropagation();
     }
   }
