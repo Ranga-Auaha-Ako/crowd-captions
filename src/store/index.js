@@ -18,8 +18,7 @@ export default new Vuex.Store({
       }
     ],
     captionIndex: 0,
-    nextStart: 0,
-    upi: 'anon'
+    nextStart: 0
   },
   getters: {
     currentCaption(state) {
@@ -65,7 +64,8 @@ export default new Vuex.Store({
       const editObject = {
         "sentenceId": state.Caption_file[state.captionIndex].id,
         "body": edit.body,
-        "upi": state.upi,
+        // eslint-disable-next-line no-undef,no-underscore-dangle
+        "upi": window.PanoptoUser.userId,
       };
       await fetch(`${backendHost}/edit`, {
         headers: {
@@ -80,7 +80,8 @@ export default new Vuex.Store({
       const voteObject = {
         "upvoted": (params.vote === 'upvote').toString(),
         "EditId": params.edit.id,
-        "upi": state.upi,
+        // eslint-disable-next-line no-undef,no-underscore-dangle
+        "upi": window.PanoptoUser.userId,
       };
       await fetch(`${backendHost}/vote`, {
         headers: {
@@ -95,7 +96,8 @@ export default new Vuex.Store({
       function loadEdits(edits){
         Vue.set(state.Caption_file[state.captionIndex], "edits", edits);
       }
-      await fetch(`${backendHost}/edits/${id}/${state.upi}`, {
+      // eslint-disable-next-line no-undef,no-underscore-dangle
+      await fetch(`${backendHost}/edits/${id}/${window.PanoptoUser.userId}`, {
         method:'GET',
         mode:'cors'
       })
@@ -110,7 +112,8 @@ export default new Vuex.Store({
       function setCaptions (captionFile){
         state.Caption_file = captionFile.Caption_file;
       }
-      await fetch(`${backendHost}/captions/${url}/${state.upi}`, {
+      // eslint-disable-next-line no-undef,no-underscore-dangle
+      await fetch(`${backendHost}/captions/${url}/${window.PanoptoUser.userId}`, {
         method:'GET',
         mode:'cors'
       })
