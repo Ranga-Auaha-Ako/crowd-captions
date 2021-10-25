@@ -70,7 +70,7 @@ Backend is running on [AWS](https://aws.amazon.com) server with [Docker](https:/
 
 ### Technology
 
-- Implementing webSocket technology for faster and more rebost content delivery
+- Implementing webSocket technology for faster and more robust content delivery
 
 # Acknowledgements
 
