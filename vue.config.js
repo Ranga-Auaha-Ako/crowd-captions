@@ -23,7 +23,7 @@ module.exports = {
       },
       manifestTransformer: (manifest) => {
         if (process.env.NODE_ENV === "development") {
-          manifest.content_scripts[1].css.pop();
+          manifest.content_scripts[0].css.pop();
         }
         return manifest;
       }      
