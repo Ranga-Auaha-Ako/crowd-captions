@@ -68,12 +68,12 @@ export default {
       // eslint-disable-next-line func-names
       document.getElementById("primaryVideo").ontimeupdate = this.setTime;
       // stop space bar from playing video when typing -- broken
-      document.onkeydown = (e) => {
-        if(e.key === " " && e.target === document.body) {
+      document.onkeydown = e => {
+        if (e.key === " " && e.target === document.body) {
           // eslint-disable-next-line no-unused-expressions
           e.preventDefault;
         }
-      }
+      };
       // disable secondary visual option (hovering subtitles)
       document.querySelector(
         "#captionsExpander .branded-border.placement-option.Overlay"
@@ -92,19 +92,25 @@ export default {
         sizeElements[i].addEventListener("click", this.updateSize);
       }
     }, 3000);
-    this.$store.commit("loadCaptions", window.location.href.split('?id=')[1]);
+    this.$store.commit("loadCaptions", window.location.href.split("?id=")[1]);
   },
   computed: {
     currentCaption() {
       return this.$store.getters.currentCaption;
     },
     visibleEdits() {
-      // Append default caption as fake "edit" to end of list of all captions
       let allCaptions = [];
-      if (this.currentCaption.edits.sort !== [])  {
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        allCaptions = this.currentCaption.edits.sort((a, b)=> (b.votes - a.votes)).slice();
+      // AllCaptions will be the full array of edits if we have that
+      if (this.currentCaption.edits) {
+        if (this.currentCaption.edits.sort !== []) {
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+          allCaptions = this.currentCaption.edits.sort((a, b) => b.votes - a.votes).slice();
+        }
+      } else if (this.currentCaption.bestEdit.body) {
+        // Otherwise, it will be just the best edit if we have that
+        allCaptions = [this.currentCaption.bestEdit];
       }
+      // Append default caption as fake "edit" to end of list of all captions. This will show up by default if there's no best edit or full list of edits
       allCaptions.push({
         body: this.currentCaption.body,
         id: this.currentCaption.id,
@@ -125,9 +131,9 @@ export default {
   methods: {
     toggleEdits() {
       this.showEdits = !this.showEdits;
-      this.reloadEdits()
+      this.reloadEdits();
     },
-    reloadEdits(){
+    reloadEdits() {
       this.$store.commit("loadEdits", this.currentCaption.id);
     },
     saveCaption(edit) {
@@ -135,18 +141,18 @@ export default {
       this.$store.commit("createEdit", edit);
       this.snackbar.text = `Submitted Caption "${edit.body}"`;
       setTimeout(() => {
-          this.reloadEdits();
-        }, 500);
+        this.reloadEdits();
+      }, 500);
     },
-    setVote(vote){
-      if (vote.edit.CaptionSentenceId != null){
+    setVote(vote) {
+      if (vote.edit.CaptionSentenceId != null) {
         this.$store.commit("setVote", vote);
         setTimeout(() => {
           this.reloadEdits();
         }, 500);
       } else {
         this.snackbar.text = `Can't vote on panopto's original caption`;
-      };
+      }
     },
     setTime() {
       this.$store.commit("setTime", document.getElementById("primaryVideo").currentTime);

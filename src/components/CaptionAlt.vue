@@ -4,26 +4,30 @@
       <v-col cols="1" id="voteButtons">
         <v-row>
           <v-btn title="Like" icon small @click="vote('upvote')">
-            <v-icon v-bind:class="{voted:edit.upvoted}" class="material-icons"> arrow_upward </v-icon>
+            <v-icon v-bind:class="{ voted: edit.upvoted }" class="material-icons">
+              arrow_upward
+            </v-icon>
           </v-btn>
         </v-row>
         <v-row>
           <!-- Need to refresh once the user votes -->
-          <div id="votes">{{edit.votes}}</div>
+          <div id="votes">{{ edit.votes }}</div>
         </v-row>
         <v-row>
           <v-btn title="Dislike" icon small @click="vote('downvote')">
             <!-- edit.upvoted can be null so need to check if false, not just !edit.upvoted -->
-            <v-icon v-bind:class="{voted:edit.upvoted==false}" class="material-icons"> arrow_downward </v-icon>
+            <v-icon v-bind:class="{ voted: edit.upvoted == false }" class="material-icons">
+              arrow_downward
+            </v-icon>
           </v-btn>
         </v-row>
       </v-col>
-      <v-col>
+      <v-col class="captionText">
         <!-- displays the current - 
           since App passes in the content at the given index anyway, 
           index is not used here -->
         <!-- <div>{{ edit }}</div> -->
-        <v-text-field
+        <v-textarea
           id="captionField"
           ref="captionField"
           hide-details="true"
@@ -33,9 +37,12 @@
           @focus="isEditing = true"
           @blur="isEditing = false"
           @keydown.enter="toggleEditState()"
-          :class="{largeFont:isLarge}"
+          :class="{ largeFont: isLarge }"
+          rows="1"
+          :no-resize="true"
+          :auto-grow="true"
         >
-        </v-text-field>
+        </v-textarea>
       </v-col>
       <v-col cols="1" id="captionActions" justify="end">
         <v-btn
@@ -70,7 +77,7 @@ export default {
     index: Number,
     edit: Object,
     open: Boolean,
-    isLarge: Boolean,
+    isLarge: Boolean
   },
   data() {
     return {
@@ -96,10 +103,10 @@ export default {
   },
 
   methods: {
-    vote(voteMethod){
-      this.$emit('set-vote', {edit: this.edit, vote: voteMethod});
+    vote(voteMethod) {
+      this.$emit("set-vote", { edit: this.edit, vote: voteMethod });
     },
-    getFontSize(){
+    getFontSize() {
       return this.textSize;
     },
     toggleShowEdits() {
@@ -118,23 +125,37 @@ export default {
 };
 </script>
 <style>
-#votes{
-  margin-left:0.6rem;
+#votes {
+  margin-left: 0.6rem;
 }
 
-.largeFont{
-  font-size:1.6em !important;
+.largeFont {
+  font-size: 1.6em !important;
 }
 
-input#captionField {
+.captionText .theme--dark.v-input--is-disabled textarea {
+  color: #fff !important;
+}
+
+.captionText .theme--light.v-input--is-disabled textarea {
+  color: #000 !important;
+}
+
+.captionText .v-text-field > .v-input__control > .v-input__slot > .v-text-field__slot {
+  flex-wrap: wrap;
+  align-content: center;
+}
+
+textarea#captionField {
   text-align: center;
   font-size: 1.3em;
+  margin-top: 0;
 }
 </style>
 
 <style scoped>
-.voted{
-  color:#F0C933 !important;
+.voted {
+  color: #f0c933 !important;
 }
 
 .hidden {
