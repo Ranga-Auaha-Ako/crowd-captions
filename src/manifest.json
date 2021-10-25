@@ -1,12 +1,11 @@
 {
   "manifest_version": 2,
   "name": "__MSG_extName__",
-  "homepage_url": "https://auckland.au.panopto.com/",
+  "homepage_url": "https://uoa-compsci399-s2-2021.github.io/crowd-captions/",
   "description": "Crowdsourced Captions editor for Panopto",
   "default_locale": "en",
   "permissions": [
     "activeTab",
-    "https://auckland.au.panopto.com/Panopto/Pages/Viewer.aspx",
     "https://aucklandtest.au.panopto.com/Panopto/Pages/Viewer.aspx"
   ],
   "icons": {
@@ -29,7 +28,6 @@
   "content_scripts": [
     {
       "matches": [
-        "https://auckland.au.panopto.com/Panopto/Pages/Viewer.aspx*",
         "https://aucklandtest.au.panopto.com/Panopto/Pages/Viewer.aspx*"
       ],
       "js": ["js/content-script.js"],
