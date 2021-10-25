@@ -42,9 +42,30 @@ Building for release is managed automatically using [GitHub Actions](https://git
 
 ## Backend
 
-Backend uses [Express.js](http://expressjs.com) to connect the frontend with database and uses [Sequlize](https://sequelize.org) to access the database.
-We also uses [Mocha.js](https://mochajs.org) for automation testing on both the program and the database.
-Backend is running on [AWS](https://aws.amazon.com) server with [Docker](https://www.docker.com) to allow easy deploy and upgrade, stable running environment and quick access.
+TODO
+
+# Future work
+
+### Moderation
+
+- Have an administrative view with unique moderation features for lecturers and moderators
+- Allow access to moderators to be able to view the entire caption transcript including the edits to flag and remove any incorrect or inappropriate caption edits
+- Allow for the moderators to endorse a caption they found most accurate and give this caption edit a unique badge
+
+### Displaying all caption edits
+ 
+- Implementation of a scroll bar to show all caption edits and their votes
+
+### Expanded customisation of the caption's view components
+
+- Implement multiple views of the caption component 
+- Allow for different caption size, caption colour and caption background colour for greater accessability and customisation
+
+### Display differences in caption edits
+
+- Use a default colour scheme for the original captions 
+- Alternate colours of components for each caption edit
+- Highlight different words from the original caption
 
 # Acknowledgements
 
