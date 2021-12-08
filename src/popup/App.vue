@@ -47,7 +47,7 @@
             <iframe
               style="border: none; border-radius: 0.4em; height: 950px; width: 100%;"
               :src="
-                `https://auckland.au1.qualtrics.com/jfe/form/SV_eCJsZ80IJVxD0to?upi=${user.upi}`
+                `https://auckland.au1.qualtrics.com/jfe/form/SV_eCJsZ80IJVxD0to?upi=${user.upi}&version=${version}`
               "
             ></iframe>
           </v-dialog>
@@ -58,10 +58,16 @@
         </div>
       </v-container>
     </v-main>
-    <v-footer app>
-      <v-btn plain small href="https://www.auckland.ac.nz/en/copyright.html" target="_blank"
-        >Copyright &copy; University of Auckland {{ new Date().getFullYear() }}</v-btn
-      >
+    <v-footer app class="d-flex justify-space-around text--secondary text-center">
+      <div>Crowd Captions v{{ version }}</div>
+      <div>
+        <a
+          href="https://www.auckland.ac.nz/en/copyright.html"
+          class="text-decoration-none"
+          style="color: inherit"
+          >Copyright &copy; University of Auckland {{ new Date().getFullYear() }}</a
+        >
+      </div>
     </v-footer>
   </v-app>
 </template>
@@ -74,7 +80,8 @@ export default {
       user: {
         name: "Zac",
         upi: "zmil425"
-      }
+      },
+      version: process.env.PACKAGE_VERSION || "0"
     };
   }
 };
