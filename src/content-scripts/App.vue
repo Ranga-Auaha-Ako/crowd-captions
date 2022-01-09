@@ -51,6 +51,7 @@ export default {
   },
   data() {
     return {
+      token: "",
       showEdits: false,
       maxAlternatives: 3,
       theme: "dark",
@@ -63,7 +64,9 @@ export default {
       }
     };
   },
-  mounted() {
+  async mounted() {
+    // Initiate SSO
+    await this.initiateSSO();
     setTimeout(() => {
       // eslint-disable-next-line func-names
       document.getElementById("primaryVideo").ontimeupdate = this.setTime;
@@ -129,6 +132,33 @@ export default {
     }
   },
   methods: {
+    async initiateSSO() {
+      const tokenData = await this.$vlf.getItem("crowdcaptions-panopto-token");
+      if(tokenData && tokenData.accessToken && tokenData.expiresIn > Date.now()) {
+        // We already have a valid token
+        this.token=tokenData.accessToken
+      } else {
+        // We need to trigger a sign-in
+        // D6tzleY9ZMtcuBsiTFHTa2dcbwBdrXCPARso7IrPu8o=
+        // const clientID = "6a0aa27c-8eeb-4aae-b134-adf2002ad875";
+        // const url = `https://${window.location.host}/Panopto/oauth2/connect/authorize?client_id=${clientID}&scope=OpenID,API&redirect_uri=&`
+        console.log("Sending message")
+        chrome.runtime.sendMessage({message: "login"}, async (response) => {
+        console.log(response);
+        this.token={
+          'accessToken': response.token.access_token,
+          'expiresIn': Date.now() + response.token.access_token
+        };
+        const userDataFetch = await fetch(`https://${window.location.host}/Panopto/oauth2/connect/userinfo`, {method:'GET', 
+headers: {'Authorization': `Bearer ${this.token.accessToken}`}}
+          
+          );
+        const userData = await userDataFetch.text();
+        this.snackbar.text = `Got a token! You're signed in. ${this.token.accessToken.substring(0,3)}`;
+        this.snackbar.show = true;
+      });
+      }
+    },
     toggleEdits() {
       // Pause video if it's not already paused
       const playButton = document.querySelector("#playButton[title=Pause]")

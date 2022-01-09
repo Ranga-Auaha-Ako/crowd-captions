@@ -1,5 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import Vlf from 'vlf'
+import localforage from 'localforage'
 import store from "../store/index";
 import App from "./App.vue";
 import vuetify from "@/plugins/vuetify";
@@ -30,6 +32,7 @@ function getPanoptoUser(){
 window.PanoptoUser = getPanoptoUser()
 if(window.PanoptoUser.isAuthenticated) {
   Vue.use(Vuex);
+  Vue.use(Vlf, localforage)
   Vue.prototype.$user = window.PanoptoUser;
   
   // Create element to host our vue app
