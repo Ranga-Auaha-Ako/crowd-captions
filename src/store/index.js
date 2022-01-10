@@ -3,7 +3,7 @@ import Vuex from "vuex";
 
 Vue.use(Vuex);
 
-const backendHost = process.env.VUE_APP_BACKEND_HOST ?? "http://localhost:8000"
+const backendHost = process.env.VUE_APP_BACKEND_HOST ?? "http://localhost:8000";
 
 export default new Vuex.Store({
   state: {
@@ -14,16 +14,16 @@ export default new Vuex.Store({
         id: 72456,
         start: 0,
         body: "Cannot connect to the Crowd Caption servers, please try again later",
-        edits: []
-      }
+        edits: [],
+      },
     ],
     captionIndex: 0,
-    nextStart: 0
+    nextStart: 0,
   },
   getters: {
     currentCaption(state) {
       return state.Caption_file[state.captionIndex];
-    }
+    },
   },
   mutations: {
     setTime(state, time) {
@@ -60,67 +60,67 @@ export default new Vuex.Store({
       state.nextStart = nextStart;
       state.captionIndex = captionIndex;
     },
-    async createEdit(state, edit){
+    async createEdit(state, edit) {
       const editObject = {
-        "sentenceId": state.Caption_file[state.captionIndex].id,
-        "body": edit.body,
+        sentenceId: state.Caption_file[state.captionIndex].id,
+        body: edit.body,
         // eslint-disable-next-line no-undef,no-underscore-dangle
-        "upi": window.PanoptoUser.userId,
+        upi: window.PanoptoUser.userId,
       };
-      await fetch(`${backendHost}/edit`, {
+      await fetch(`${backendHost}/api/edit`, {
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        method: 'POST',
-        mode: 'cors',
-        body: JSON.stringify(editObject)
-      }).then(response => console.log(response));
+        method: "POST",
+        mode: "cors",
+        body: JSON.stringify(editObject),
+      }).then((response) => console.log(response));
     },
-    async setVote (state, params){
+    async setVote(state, params) {
       const voteObject = {
-        "upvoted": (params.vote === 'upvote').toString(),
-        "EditId": params.edit.id,
+        upvoted: (params.vote === "upvote").toString(),
+        EditId: params.edit.id,
         // eslint-disable-next-line no-undef,no-underscore-dangle
-        "upi": window.PanoptoUser.userId,
+        upi: window.PanoptoUser.userId,
       };
-      await fetch(`${backendHost}/vote`, {
+      await fetch(`${backendHost}/api/vote`, {
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        method: 'POST',
-        mode: 'cors',
-        body: JSON.stringify(voteObject)
-      }).then(response => console.log(response));
+        method: "POST",
+        mode: "cors",
+        body: JSON.stringify(voteObject),
+      }).then((response) => console.log(response));
     },
-    async loadEdits (state, id){
-      function loadEdits(edits){
+    async loadEdits(state, id) {
+      function loadEdits(edits) {
         Vue.set(state.Caption_file[state.captionIndex], "edits", edits);
       }
       // eslint-disable-next-line no-undef,no-underscore-dangle
-      await fetch(`${backendHost}/edits/${id}/${window.PanoptoUser.userId}`, {
-        method:'GET',
-        mode:'cors'
+      await fetch(`${backendHost}/api/edits/${id}/${window.PanoptoUser.userId}`, {
+        method: "GET",
+        mode: "cors",
       })
-      .then(response => response.json())
-      .then(data => (loadEdits(data)));
+        .then((response) => response.json())
+        .then((data) => loadEdits(data));
     },
     setCaptionIndex(state, i) {
       state.captionIndex = i;
       state.nextStart = state.Caption_file[i + 1].start;
     },
-    async loadCaptions(state, url){
-      function setCaptions (captionFile){
+    async loadCaptions(state, url) {
+      function setCaptions(captionFile) {
         state.Caption_file = captionFile.Caption_file;
       }
       // eslint-disable-next-line no-undef,no-underscore-dangle
-      await fetch(`${backendHost}/captions/${url}/${window.PanoptoUser.userId}`, {
-        method:'GET',
-        mode:'cors'
+      await fetch(`${backendHost}/api/captions/${url}/${window.PanoptoUser.userId}`, {
+        method: "GET",
+        mode: "cors",
       })
-      .then(response => response.json())
-      .then(data => (setCaptions(data)));
-    }
+        .then((response) => response.json())
+        .then((data) => setCaptions(data));
+    },
   },
   actions: {},
-  modules: {}
+  modules: {},
 });

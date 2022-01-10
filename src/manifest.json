@@ -8,12 +8,11 @@
     "activeTab",
     "identity",
     "cookies",
-    "https://aucklandtest.au.panopto.com/Panopto/Pages/Viewer.aspx"
+    "https://aucklandtest.au.panopto.com/Panopto/Pages/Viewer.aspx",
+    "*://localhost/*",
+    "*://api.crowdcaptions.raa.amazon.auckland.ac.nz/*"
   ],
-  "host_permissions": [
-    "*://*localhost",
-    "*://*api.crowdcaptions.raa.amazon.auckland.ac.nz"
-  ],
+  "optional_permissions": [],
   "icons": {
     "16": "icons/16.png",
     "48": "icons/48.png",
