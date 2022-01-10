@@ -6,12 +6,22 @@
   "default_locale": "en",
   "permissions": [
     "activeTab",
-    "https://aucklandtest.au.panopto.com/Panopto/Pages/Viewer.aspx"
+    "identity",
+    "cookies",
+    "https://aucklandtest.au.panopto.com/Panopto/Pages/Viewer.aspx",
+    "https://aucklandtest.au.panopto.com/Panopto/oauth2/connect/authorize",
+    "https://aucklandtest.au.panopto.com/Panopto/oauth2/connect/token",
+    "https://cfkigfjjdakjlpenafephohfpoknfkjm.chromiumapp.org/provider_cb"
   ],
+  "host_permissions": [
+    "*://*localhost",
+    "*://*api.crowdcaptions.raa.amazon.auckland.ac.nz"
+  ],
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAo9J/KZnhzez/OV2HrqxwcJzlKlvohs5X/IrqKXuo69IxZKaEImEDBCxeeV4aQVcgoJNpQeAx3co7HWf5S232VORAtowt/qWQLqV1KEYMP8hq6u1UBPN+ZiAIZIt6UHTd1JPj/Q1a5Pu0zVxnwmrUK7oz14qd++TsIrOYBB/UeS1oR/HCit98jkX2xTJfqR86Th2sreWEkynFSHjNyLgUVhyh9MhghYErw8/uIztYHxEIe4IZQNbGqOe+yYr58SEwPHUVRED487jztMZtuzgSDKlLyBfeUB4x29Qpwv2K2B3eGnduqjIWBHLWdfIoS8zNomiNw2x4NU/X/2c0psWAXQIDAQAB",
   "icons": {
-    "16": "icons/16.png",
-    "48": "icons/48.png",
-    "128": "icons/128.png"
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
   },
   "background": {
     "scripts": ["js/background.js"],
@@ -21,8 +31,8 @@
     "default_popup": "popup.html",
     "default_title": "__MSG_extName__",
     "default_icon": {
-      "19": "icons/19.png",
-      "38": "icons/38.png"
+      "19": "icons/icon-19.png",
+      "38": "icons/icon-38.png"
     }
   },
   "content_scripts": [
