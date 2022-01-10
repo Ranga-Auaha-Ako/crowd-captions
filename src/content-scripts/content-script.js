@@ -4,6 +4,8 @@ import store from "../store/index";
 import App from "./App.vue";
 import vuetify from "@/plugins/vuetify";
 
+const backendURL = "http://localhost:8000/"
+
 
 // https://stackoverflow.com/a/56365464
 function getPanoptoUser(){
@@ -28,7 +30,20 @@ function getPanoptoUser(){
 // Check if we are logged in
 // eslint-disable-next-line no-undef
 window.PanoptoUser = getPanoptoUser()
-if(window.PanoptoUser.isAuthenticated) {
+
+// Get JWT
+chrome.cookies.get({details: {
+  name: "jwt-auth",
+  url: "http://localhost:8000/auth/jwt"
+}}).then(cookie => {
+  // Found the JWT token! We can get details and launch the extention
+  const token = {}
+}).catch( e => {
+  // No JWT token! We need to get the user to log in
+  // TODO: LOGIN IMPLEMENTATION
+})
+
+const launchCrowdCaptions = (token) => {
   Vue.use(Vuex);
   Vue.prototype.$user = window.PanoptoUser;
   
@@ -46,6 +61,4 @@ if(window.PanoptoUser.isAuthenticated) {
     store,
     render: h => h(App)
   });
-} else {
-  console.log("Crowd Captions will wait for user to be authenticated before continuing.");
 }
