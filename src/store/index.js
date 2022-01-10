@@ -65,13 +65,13 @@ export default new Vuex.Store({
         sentenceId: state.Caption_file[state.captionIndex].id,
         body: edit.body,
         // eslint-disable-next-line no-undef,no-underscore-dangle
-        upi: window.PanoptoUser.userId,
+        upi: window.PanoptoUser.userData.upi,
       };
       await fetch(`${backendHost}/api/edit`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${window.PanoptoUser.token}`,
+        },
         mode: "cors",
         body: JSON.stringify(editObject),
       }).then((response) => console.log(response));
@@ -81,13 +81,13 @@ export default new Vuex.Store({
         upvoted: (params.vote === "upvote").toString(),
         EditId: params.edit.id,
         // eslint-disable-next-line no-undef,no-underscore-dangle
-        upi: window.PanoptoUser.userId,
+        upi: window.PanoptoUser.userData.upi,
       };
       await fetch(`${backendHost}/api/vote`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${window.PanoptoUser.token}`,
+        },
         mode: "cors",
         body: JSON.stringify(voteObject),
       }).then((response) => console.log(response));
@@ -97,8 +97,11 @@ export default new Vuex.Store({
         Vue.set(state.Caption_file[state.captionIndex], "edits", edits);
       }
       // eslint-disable-next-line no-undef,no-underscore-dangle
-      await fetch(`${backendHost}/api/edits/${id}/${window.PanoptoUser.userId}`, {
+      await fetch(`${backendHost}/api/edits/${id}`, {
         method: "GET",
+        headers: {
+          Authorization: `Bearer ${window.PanoptoUser.token}`,
+        },
         mode: "cors",
       })
         .then((response) => response.json())
@@ -113,8 +116,11 @@ export default new Vuex.Store({
         state.Caption_file = captionFile.Caption_file;
       }
       // eslint-disable-next-line no-undef,no-underscore-dangle
-      await fetch(`${backendHost}/api/captions/${url}/${window.PanoptoUser.userId}`, {
+      await fetch(`${backendHost}/api/captions/${url}`, {
         method: "GET",
+        headers: {
+          Authorization: `Bearer ${window.PanoptoUser.token}`,
+        },
         mode: "cors",
       })
         .then((response) => response.json())
