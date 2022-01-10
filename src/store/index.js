@@ -70,6 +70,8 @@ export default new Vuex.Store({
       await fetch(`${backendHost}/api/edit`, {
         method: "POST",
         headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
           Authorization: `Bearer ${window.PanoptoUser.token}`,
         },
         mode: "cors",
@@ -86,6 +88,8 @@ export default new Vuex.Store({
       await fetch(`${backendHost}/api/vote`, {
         method: "POST",
         headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
           Authorization: `Bearer ${window.PanoptoUser.token}`,
         },
         mode: "cors",
