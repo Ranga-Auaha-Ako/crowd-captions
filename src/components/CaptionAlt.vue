@@ -32,11 +32,7 @@
           :disabled="!open"
           @focus="isEditing = true"
           @blur="isEditing = false"
-          @keydown.space="handleBubble"
-          @keydown.left="handleBubble"
-          @keydown.right="handleBubble"
-          @keydown.up="handleBubble"
-          @keydown.down="handleBubble"
+          @keydown="handleBubble"
           @keydown.enter="toggleEditState()"
           :class="{ largeFont: isLarge }"
           :rows="edited.length > 110 ? 2 : 1"
@@ -44,6 +40,11 @@
           :auto-grow="true"
         >
         </v-textarea>
+        <!-- @keydown.space="handleBubble"
+          @keydown.left="handleBubble"
+          @keydown.right="handleBubble"
+          @keydown.up="handleBubble"
+          @keydown.down="handleBubble" -->
       </v-col>
       <v-col cols="1" id="captionActions" justify="end">
         <v-btn
@@ -78,13 +79,13 @@ export default {
     index: Number,
     edit: Object,
     open: Boolean,
-    isLarge: Boolean
+    isLarge: Boolean,
   },
   data() {
     return {
       edited: this.edit.body,
       setDisabled: false,
-      isEditing: false
+      isEditing: false,
     };
   },
   name: "CaptionAlt",
@@ -95,12 +96,12 @@ export default {
     },
     isEdited() {
       return this.edited !== this.edit.body;
-    }
+    },
   },
   watch: {
     edit(val) {
       this.edited = val.body;
-    }
+    },
   },
 
   methods: {
@@ -123,10 +124,11 @@ export default {
       }
     },
     handleBubble(event) {
+      console.log("Attempting prevention of propogration");
       // Prevent propagating up to the video player (which would cause play/pause or skipping)
       event.stopPropagation();
-    }
-  }
+    },
+  },
 };
 </script>
 <style>
