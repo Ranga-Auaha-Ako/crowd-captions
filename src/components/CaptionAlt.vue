@@ -22,7 +22,7 @@
           </v-btn>
         </v-row>
       </v-col>
-      <v-col class="captionText">
+      <v-col class="captionText" @click="!open && toggleShowEdits()">
         <v-textarea
           id="captionField"
           ref="captionField"
