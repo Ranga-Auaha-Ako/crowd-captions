@@ -8,7 +8,7 @@
     "activeTab",
     "identity",
     "cookies",
-    "https://aucklandtest.au.panopto.com/Panopto/Pages/Viewer.aspx",
+    "https://auckland.au.panopto.com/Panopto/Pages/Viewer.aspx",
     "*://localhost/*",
     "*://api.crowdcaptions.raa.amazon.auckland.ac.nz/*"
   ],
@@ -33,7 +33,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://aucklandtest.au.panopto.com/Panopto/Pages/Viewer.aspx*"
+        "https://auckland.au.panopto.com/Panopto/Pages/Viewer.aspx*"
       ],
       "js": ["js/content-script.js"],
       "css": ["css/content-script.css"]

@@ -78,8 +78,10 @@ export default {
   data() {
     return {
       user: {
-        name: "Zac",
-        upi: "zmil425"
+        // eslint-disable-next-line no-undef
+        name: PanoptoUser.userData.name.split(/\s/)[0],
+        // eslint-disable-next-line no-undef
+        upi: PanoptoUser.userData.username
       },
       version: process.env.PACKAGE_VERSION || "0"
     };

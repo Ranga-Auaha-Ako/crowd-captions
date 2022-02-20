@@ -8,7 +8,11 @@
     "
   >
     <v-theme-provider :dark="theme == 'dark'" :light="theme == 'light'">
-      <div class="crowdcaptions-container" :class="{ showEdits }" :style="'--num-edits: ' + visibleEdits.length">
+      <div
+        class="crowdcaptions-container"
+        :class="{ showEdits }"
+        :style="'--num-edits: ' + visibleEdits.length"
+      >
         <div>
           <v-row id="closeButton" no-gutters align="center">
             <v-col>
@@ -60,6 +64,12 @@ export default {
         show: false,
         text: "",
         timeout: 2000
+      },
+      user: {
+        // eslint-disable-next-line no-undef
+        firstName: PanoptoUser.userData.name.split(/\s/)[0] || "",
+        // eslint-disable-next-line no-undef
+        upi: PanoptoUser.userData.username
       }
     };
   },
@@ -131,8 +141,8 @@ export default {
   methods: {
     toggleEdits() {
       // Pause video if it's not already paused
-      const playButton = document.querySelector("#playButton[title=Pause]")
-      if(playButton) playButton.click();
+      const playButton = document.querySelector("#playButton[title=Pause]");
+      if (playButton) playButton.click();
       // Show edits and reload
       this.showEdits = !this.showEdits;
       this.reloadEdits();
@@ -143,7 +153,7 @@ export default {
     saveCaption(edit) {
       this.snackbar.show = true;
       this.$store.commit("createEdit", edit);
-      this.snackbar.text = `Submitted Caption "${edit.body}"`;
+      this.snackbar.text = `Thanks for your suggestion ${this.user.firstName} "${edit.body}"`;
       setTimeout(() => {
         this.reloadEdits();
       }, 500);
@@ -227,7 +237,7 @@ export default {
 
 .crowdcaptions-container.showEdits {
   position: relative;
-  bottom: calc(6rem * ( var(--num-edits) - 0.5 ));
+  bottom: calc(6rem * (var(--num-edits) - 0.5));
 }
 
 .crowdcaptions-container:before {
@@ -236,7 +246,7 @@ export default {
   width: 100%;
   left: 0;
   bottom: 0;
-  height: calc(6rem * ( var(--num-edits) - 0.5 ) + 7rem);
+  height: calc(6rem * (var(--num-edits) - 0.5) + 7rem);
   background: linear-gradient(to top, black 0%, #000a 80%, #0000);
   pointer-events: none;
   opacity: 0;
@@ -246,7 +256,7 @@ export default {
 
 .crowdcaptions-container.showEdits:before {
   opacity: 1;
-  bottom: calc(6rem * ( var(--num-edits) - 0.5 ) * -1);
+  bottom: calc(6rem * (var(--num-edits) - 0.5) * -1);
 }
 
 #closeButton {
