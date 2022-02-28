@@ -25,6 +25,7 @@
               :index="index"
               @show-edits="toggleEdits()"
               @set-vote="setVote"
+              @set-report="setReport"
               :open="showEdits"
               @save-caption="saveCaption"
               :isLarge="isLarge"
@@ -167,6 +168,20 @@ export default {
         }, 500);
       } else {
         this.snackbar.text = `Can't vote on panopto's original caption`;
+      }
+    },
+    setReport(report) {
+      if (report.edit.CaptionSentenceId != null) {
+        this.$store.commit("setReport", report);
+        if (report.report) {
+          this.$store.commit("setVote", { ...report, vote: "downvote" });
+        }
+        setTimeout(() => {
+          this.showEdits = false;
+          this.reloadEdits();
+        }, 500);
+      } else {
+        this.snackbar.text = `Can't report panopto's original caption`;
       }
     },
     setTime() {

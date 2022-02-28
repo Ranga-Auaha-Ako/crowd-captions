@@ -96,6 +96,24 @@ export default new Vuex.Store({
         body: JSON.stringify(voteObject)
       }).then(response => console.log(response));
     },
+    async setReport(state, params) {
+      const reportObject = {
+        upvoted: (params.vote === "upvote").toString(),
+        EditId: params.edit.id,
+        // eslint-disable-next-line no-undef,no-underscore-dangle
+        upi: window.PanoptoUser.userData.upi
+      };
+      await fetch(`${backendHost}/api/report`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${window.PanoptoUser.token}`
+        },
+        mode: "cors",
+        body: JSON.stringify(reportObject)
+      }).then(response => console.log(response));
+    },
     async loadEdits(state, id) {
       function loadEdits(edits) {
         Vue.set(state.Caption_file[state.captionIndex], "edits", edits);
