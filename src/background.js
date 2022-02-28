@@ -77,11 +77,14 @@ const getUser = () => {
 };
 
 // Takes message, sender, sendResponse
-chrome.runtime.onMessage.addListener(async (message, _, sendResponse) => {
-  console.log("Hello from the background");
-  console.log(message);
-  if (message?.content === "getUser") {
-    const response = await getUser();
-    sendResponse(response);
-  }
+chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
+  (async () => {
+    console.log("Hello from the background");
+    console.log(message);
+    if (message?.content === "getUser") {
+      const response = await getUser();
+      sendResponse(response);
+    }
+  })();
+  return true;
 });
