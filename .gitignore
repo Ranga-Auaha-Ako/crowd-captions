@@ -30,3 +30,4 @@ pnpm-debug.log*
 
 # Jekyll Build Artifacts
 docs/_site
+.env

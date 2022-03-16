@@ -14,16 +14,16 @@ export default new Vuex.Store({
         id: 72456,
         start: 0,
         body: "Cannot connect to the Crowd Caption servers, please try again later",
-        edits: []
-      }
+        edits: [],
+      },
     ],
     captionIndex: 0,
-    nextStart: 0
+    nextStart: 0,
   },
   getters: {
     currentCaption(state) {
       return state.Caption_file[state.captionIndex];
-    }
+    },
   },
   mutations: {
     setTime(state, time) {
@@ -65,54 +65,54 @@ export default new Vuex.Store({
         sentenceId: state.Caption_file[state.captionIndex].id,
         body: edit.body,
         // eslint-disable-next-line no-undef,no-underscore-dangle
-        upi: window.PanoptoUser.userData.upi
+        upi: window.PanoptoUser.userData.upi,
       };
       await fetch(`${backendHost}/api/edit`, {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: `Bearer ${window.PanoptoUser.token}`
+          Authorization: `Bearer ${window.PanoptoUser.token}`,
         },
         mode: "cors",
-        body: JSON.stringify(editObject)
-      }).then(response => console.log(response));
+        body: JSON.stringify(editObject),
+      }).then((response) => console.log(response));
     },
     async setVote(state, params) {
       const voteObject = {
         upvoted: (params.vote === "upvote").toString(),
         EditId: params.edit.id,
         // eslint-disable-next-line no-undef,no-underscore-dangle
-        upi: window.PanoptoUser.userData.upi
+        upi: window.PanoptoUser.userData.upi,
       };
       await fetch(`${backendHost}/api/vote`, {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: `Bearer ${window.PanoptoUser.token}`
+          Authorization: `Bearer ${window.PanoptoUser.token}`,
         },
         mode: "cors",
-        body: JSON.stringify(voteObject)
-      }).then(response => console.log(response));
+        body: JSON.stringify(voteObject),
+      }).then((response) => console.log(response));
     },
     async setReport(state, params) {
       const reportObject = {
-        upvoted: (params.vote === "upvote").toString(),
+        reported: params.report,
         EditId: params.edit.id,
         // eslint-disable-next-line no-undef,no-underscore-dangle
-        upi: window.PanoptoUser.userData.upi
+        upi: window.PanoptoUser.userData.upi,
       };
       await fetch(`${backendHost}/api/report`, {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: `Bearer ${window.PanoptoUser.token}`
+          Authorization: `Bearer ${window.PanoptoUser.token}`,
         },
         mode: "cors",
-        body: JSON.stringify(reportObject)
-      }).then(response => console.log(response));
+        body: JSON.stringify(reportObject),
+      }).then((response) => console.log(response));
     },
     async loadEdits(state, id) {
       function loadEdits(edits) {
@@ -122,12 +122,12 @@ export default new Vuex.Store({
       await fetch(`${backendHost}/api/edits/${id}`, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${window.PanoptoUser.token}`
+          Authorization: `Bearer ${window.PanoptoUser.token}`,
         },
-        mode: "cors"
+        mode: "cors",
       })
-        .then(response => response.json())
-        .then(data => loadEdits(data));
+        .then((response) => response.json())
+        .then((data) => loadEdits(data));
     },
     setCaptionIndex(state, i) {
       state.captionIndex = i;
@@ -141,14 +141,14 @@ export default new Vuex.Store({
       await fetch(`${backendHost}/api/captions/${url}`, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${window.PanoptoUser.token}`
+          Authorization: `Bearer ${window.PanoptoUser.token}`,
         },
-        mode: "cors"
+        mode: "cors",
       })
-        .then(response => response.json())
-        .then(data => setCaptions(data));
-    }
+        .then((response) => response.json())
+        .then((data) => setCaptions(data));
+    },
   },
   actions: {},
-  modules: {}
+  modules: {},
 });

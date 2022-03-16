@@ -36,9 +36,7 @@
           {{ snackbar.text }}
 
           <template v-slot:action="{ attrs }">
-            <v-btn text v-bind="attrs" @click="snackbar.show = false">
-              Close
-            </v-btn>
+            <v-btn text v-bind="attrs" @click="snackbar.show = false"> Close </v-btn>
           </template>
         </v-snackbar>
       </div>
@@ -52,7 +50,7 @@ import CaptionAlt from "../components/CaptionAlt.vue";
 export default {
   name: "App",
   components: {
-    CaptionAlt
+    CaptionAlt,
   },
   data() {
     return {
@@ -64,14 +62,14 @@ export default {
       snackbar: {
         show: false,
         text: "",
-        timeout: 2000
+        timeout: 2000,
       },
       user: {
         // eslint-disable-next-line no-undef
         firstName: PanoptoUser.userData.name.split(/\s/)[0] || "",
         // eslint-disable-next-line no-undef
-        upi: PanoptoUser.userData.username
-      }
+        upi: PanoptoUser.userData.username,
+      },
     };
   },
   mounted() {
@@ -79,7 +77,7 @@ export default {
       // eslint-disable-next-line func-names
       document.getElementById("primaryVideo").ontimeupdate = this.setTime;
       // stop space bar from playing video when typing -- broken
-      document.onkeydown = e => {
+      document.onkeydown = (e) => {
         if (e.key === " " && e.target === document.body) {
           // eslint-disable-next-line no-unused-expressions
           e.preventDefault;
@@ -114,8 +112,7 @@ export default {
       // AllCaptions will be the full array of edits if we have that
       if (this.currentCaption.edits) {
         if (this.currentCaption.edits.sort !== []) {
-          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-          allCaptions = this.currentCaption.edits.sort((a, b) => b.votes - a.votes).slice();
+          allCaptions = this.currentCaption.edits;
         }
       } else if (this.currentCaption.bestEdit.body) {
         // Otherwise, it will be just the best edit if we have that
@@ -127,8 +124,11 @@ export default {
         id: this.currentCaption.id,
         votes: 0,
         voted: 0,
-        reported: false
+        reported: false,
       });
+      // Sort the list to place Caption element
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      allCaptions.sort((a, b) => b.votes - a.votes).slice();
       if (this.showEdits) {
         // Show all edits, with a limit
         return allCaptions.length > this.maxAlternatives
@@ -137,7 +137,7 @@ export default {
       }
       // Only show most liked
       return [allCaptions[0]];
-    }
+    },
   },
   methods: {
     toggleEdits() {
@@ -171,17 +171,16 @@ export default {
       }
     },
     setReport(report) {
-      if (report.edit.CaptionSentenceId != null) {
+      console.log("REPORT", report);
+      if (report.edit?.CaptionSentenceId) {
         this.$store.commit("setReport", report);
-        if (report.report) {
-          this.$store.commit("setVote", { ...report, vote: "downvote" });
-        }
         setTimeout(() => {
           this.showEdits = false;
           this.reloadEdits();
         }, 500);
       } else {
         this.snackbar.text = `Can't report panopto's original caption`;
+        this.snackbar.show = true;
       }
     },
     setTime() {
@@ -204,13 +203,13 @@ export default {
     updateSize(e) {
       const sizeValue = e.currentTarget.dataset.value;
       this.isLarge = sizeValue === "36";
-    }
+    },
   },
   updated() {
     this.$nextTick(() => {
       window.dispatchEvent(new Event("resize"));
     });
-  }
+  },
 };
 </script>
 

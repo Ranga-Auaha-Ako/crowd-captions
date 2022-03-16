@@ -16,7 +16,7 @@
         <v-row>
           <v-btn title="Dislike" icon small @click="vote('downvote')">
             <!-- edit.upvoted can be null so need to check if false, not just !edit.upvoted -->
-            <v-icon v-bind:class="{ iconHighlight: edit.upvoted == false }" class="material-icons">
+            <v-icon v-bind:class="{ iconHighlight: edit.upvoted === false }" class="material-icons">
               arrow_downward
             </v-icon>
           </v-btn>
@@ -84,13 +84,13 @@ export default {
     index: Number,
     edit: Object,
     open: Boolean,
-    isLarge: Boolean
+    isLarge: Boolean,
   },
   data() {
     return {
       edited: this.edit.body,
       setDisabled: false,
-      isEditing: false
+      isEditing: false,
     };
   },
   name: "CaptionAlt",
@@ -101,12 +101,12 @@ export default {
     },
     isEdited() {
       return this.edited !== this.edit.body;
-    }
+    },
   },
   watch: {
     edit(val) {
       this.edited = val.body;
-    }
+    },
   },
 
   methods: {
@@ -135,8 +135,8 @@ export default {
       console.log("Attempting prevention of propogration");
       // Prevent propagating up to the video player (which would cause play/pause or skipping)
       event.stopPropagation();
-    }
-  }
+    },
+  },
 };
 </script>
 <style>
