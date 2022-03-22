@@ -45,7 +45,7 @@
             class=""
             >View the tutorial</v-btn
           >
-          <v-dialog v-model="dialog" width="500">
+          <v-dialog width="500">
             <template v-slot:activator="{ on, attrs }">
               <v-btn color="secondary" v-bind="attrs" v-on="on" class="">Give Feedback</v-btn>
             </template>

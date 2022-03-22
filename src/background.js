@@ -3,23 +3,23 @@ let loginTab = -1;
 const backendHost = process.env.VUE_APP_BACKEND_HOST ?? "http://localhost:8000";
 
 const showLogin = ({ focus = true }) => {
-  const loginResult = new Promise(resolve => {
-    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+  const loginResult = new Promise((resolve) => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       // debugger;
       const { index } = tabs[0];
       chrome.tabs.create(
         {
           url: `${backendHost}/login`,
           index: index + 1,
-          active: focus
+          active: focus,
         },
-        tab => {
+        (tab) => {
           // Tab contains the newly opened tab
           loginTab = tab.id;
         }
       );
     });
-    chrome.tabs.onRemoved.addListener(tabid => {
+    chrome.tabs.onRemoved.addListener((tabid) => {
       // chrome.runtime.sendMessage({ content: `${tabid} was closed! We're waiting for ${loginTab}` });
       // Tab was closed, check if it's our tab
       if (loginTab === tabid) {
@@ -34,14 +34,14 @@ const showLogin = ({ focus = true }) => {
 let attempts = 0;
 
 const getUser = () => {
-  const user = new Promise(resolve => {
+  const user = new Promise((resolve) => {
     // Get JWT
     chrome.cookies.get(
       {
         name: "jwt-auth",
-        url: `${backendHost}/auth/jwt`
+        url: `${backendHost}/auth/jwt`,
       },
-      async cookie => {
+      async (cookie) => {
         if (!cookie?.value) {
           console.log("Cookie not found!");
           // No JWT token! We need to get the user to log in. Focus on the tab so that they can action if needed!
@@ -63,8 +63,8 @@ const getUser = () => {
           const userDataReq = await fetch(`${backendHost}/api/status`, {
             headers: {
               "Content-type": "application/json",
-              Authorization: `Bearer ${token}` // notice the Bearer before your token
-            }
+              Authorization: `Bearer ${token}`, // notice the Bearer before your token
+            },
           });
           const userData = await userDataReq.json();
           console.log(userData, token);

@@ -1,13 +1,11 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "__MSG_extName__",
   "homepage_url": "https://uoa-compsci399-s2-2021.github.io/crowd-captions/",
   "description": "Crowdsourced Captions editor for Panopto",
   "default_locale": "en",
-  "permissions": [
-    "activeTab",
-    "identity",
-    "cookies",
+  "permissions": ["activeTab", "cookies"],
+  "host_permissions": [
     "https://aucklandtest.au.panopto.com/Panopto/Pages/Viewer.aspx",
     "https://auckland.au.panopto.com/Panopto/Pages/Viewer.aspx",
     "*://crowdcaptions.test.raa.amazon.auckland.ac.nz/*"
@@ -19,10 +17,12 @@
     "128": "icons/128.png"
   },
   "background": {
-    "scripts": ["js/background.js"],
-    "persistent": false
+    "service_worker": "js/background.js"
   },
-  "browser_action": {
+  "content_security_policy": {
+    "extension_pages": "default-src 'self'; style-src 'self' 'unsafe-inline'; frame-src https://auckland.au1.qualtrics.com/"
+  },
+  "action": {
     "default_popup": "popup.html",
     "default_title": "__MSG_extName__",
     "default_icon": {

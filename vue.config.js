@@ -12,6 +12,7 @@ module.exports = {
         },
       }),
     ],
+    devtool: "source-map",
   },
   pages: {
     popup: {
@@ -36,7 +37,20 @@ module.exports = {
       manifestTransformer: (manifest) => {
         if (process.env.NODE_ENV === "development") {
           manifest.content_scripts[0].css.pop();
-          manifest.permissions.push("http://localhost:8000/*");
+          manifest.host_permissions.push("http://localhost:8000/*");
+          manifest.host_permissions.push("ws://localhost:9090/*");
+          // // eslint-disable-next-line no-param-reassign
+          // manifest.content_security_policy.extension_pages.replace(
+          //   "connect-src ws://localhost:9090/",
+          //   "; connect-src ws://localhost:9090/ http://localhost:8000/ crowdcaptions.test.raa.amazon.auckland.ac.nz"
+          // );
+          // eslint-disable-next-line no-param-reassign
+          manifest.content_security_policy.extension_pages +=
+            "; connect-src ws://localhost:9090/ http://localhost:8000/ crowdcaptions.test.raa.amazon.auckland.ac.nz";
+        } else {
+          // eslint-disable-next-line no-param-reassign
+          manifest.content_security_policy.extension_pages +=
+            "; connect-src https://crowdcaptions.test.raa.amazon.auckland.ac.nz/";
         }
         console.log(manifest);
         return manifest;
