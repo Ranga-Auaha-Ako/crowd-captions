@@ -40,6 +40,11 @@
           :auto-grow="true"
         >
         </v-textarea>
+        <div class="submitHint" v-if="isEditing">
+          <div class="card">
+            Submitting as {{ user.firstName }} ({{ user.upi }}) - anonymous to classmates
+          </div>
+        </div>
         <!-- @keydown.space="handleBubble"
           @keydown.left="handleBubble"
           @keydown.right="handleBubble"
@@ -85,6 +90,7 @@ export default {
     edit: Object,
     open: Boolean,
     isLarge: Boolean,
+    user: Object,
   },
   data() {
     return {
@@ -196,5 +202,24 @@ textarea#captionField {
 .caption.open #captionActions,
 .caption.open #voteButtons {
   opacity: 1;
+}
+
+.submitHint {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  display: block;
+  z-index: 10;
+  transform: translateY(-50%);
+  user-select: none;
+  pointer-events: none;
+}
+
+.submitHint .card {
+  background: #30733f;
+  border-radius: 3px;
+  display: inline-block;
+  padding: 0 0.5rem;
 }
 </style>

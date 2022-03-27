@@ -23,6 +23,7 @@
             <CaptionAlt
               :edit="edit"
               :index="index"
+              :user="user"
               @show-edits="toggleEdits()"
               @set-vote="setVote"
               @set-report="setReport"
