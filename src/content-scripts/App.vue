@@ -102,7 +102,12 @@ export default {
         sizeElements[i].addEventListener("click", this.updateSize);
       }
     }, 3000);
-    this.$store.commit("loadCaptions", window.location.href.split("?id=")[1]);
+    this.$store.commit(
+      "loadCaptions",
+      window.location.href.match(
+        /(?:.+&|\?)id=([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/
+      )[1]
+    );
   },
   computed: {
     currentCaption() {

@@ -20,6 +20,12 @@ module.exports = {
       entry: "./src/popup/main.js",
       title: "Popup",
     },
+    standalone: {
+      template: "public/browser-extension.html",
+      entry: "./src/standalone/main.js",
+      title: "Standalone",
+      filename: "index.html",
+    },
   },
   filenameHashing: false,
   pluginOptions: {

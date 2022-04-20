@@ -12,6 +12,7 @@
     "@mdi/font": "^6.5.95",
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
+    "javascript-time-ago": "^2.3.13",
     "patch-package": "^6.4.7",
     "postinstall-postinstall": "^2.1.0",
     "vue": "^2.6.11",

@@ -1,0 +1,239 @@
+<template>
+  <div>
+    <v-text-field
+      v-model="searchQuery"
+      append-icon="mdi-magnify"
+      label="Search"
+      single-line
+      hide-details
+    ></v-text-field>
+
+    <v-data-table
+      :headers="reportHeaders"
+      :items="reportBody"
+      :items-per-page="10"
+      :sort-by="'lastReported'"
+      :sort-desc="true"
+      :search="searchQuery"
+      item-key="reportID"
+      class="elevation-1"
+      @click:row="showReport"
+    >
+      <template v-slot:item.actions="{ item }">
+        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+      </template>
+    </v-data-table>
+    <v-dialog v-model="showDetails" width="900">
+      <v-card v-if="showDetails && selectedReport">
+        <v-card-title>
+          <span class="text-h5">Report details</span>
+        </v-card-title>
+        <v-card-text>
+          <v-card dark>
+            <v-card-text class="text-center text-h5 font-weight-black white--text">
+              &ldquo;{{ selectedReport.reportedText }}&rdquo;
+            </v-card-text>
+          </v-card>
+          <br />
+          <v-row>
+            <v-col cols="9">
+              <h3>Panopto-Generated Caption:</h3>
+              <blockquote class="blockquote">
+                &ldquo;{{ selectedReport.detail.CaptionSentence.body }}&rdquo;
+              </blockquote>
+            </v-col>
+            <v-col cols="3">
+              <v-btn
+                block
+                color="primary"
+                target="_blank"
+                :href="`https://aucklandtest.au.panopto.com/Panopto/Pages/Viewer.aspx?id=${
+                  selectedReport.detail.CaptionSentence.CaptionFileLectureId
+                }&start=${Math.floor(selectedReport.detail.CaptionSentence.start / 1000)}`"
+                >View Lecture</v-btn
+              >
+              <br />
+              <h3>Report Time</h3>
+              <p :title="selectedReport.reports[0].createdAt">
+                {{ selectedReport.lastReported }} ({{ selectedReport.dateReported }})
+              </p>
+
+              <!-- Can't embed iframe due to Panopto content security policy blocking iframes on chrome-extension urls -->
+              <!-- <iframe
+                :src="`https://aucklandtest.au.panopto.com/Panopto/Pages/Embed.aspx?id=${selectedReport.detail.Edit.CaptionSentence.CaptionFileLectureId}&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&interactivity=all`"
+                height="405"
+                width="720"
+                style="border: 1px solid #464646"
+                allowfullscreen
+                allow="autoplay"
+              ></iframe> -->
+            </v-col>
+          </v-row>
+          <p>
+            This page allows you to approve or reject this caption suggestion. If you believe that
+            this caption is innapropriate or offensive, you may wish to record the user who
+            submitted it for further action.
+          </p>
+
+          <v-row>
+            <v-col cols="6">
+              <v-card dark>
+                <v-card-title class="text-h5"> Reported By </v-card-title>
+                <v-expansion-panels flat>
+                  <v-expansion-panel v-for="report in selectedReport.reports" :key="report.id">
+                    <v-expansion-panel-header>
+                      {{ report.Reporter.name }}
+                    </v-expansion-panel-header>
+                    <v-expansion-panel-content>
+                      <v-row>
+                        <v-col>
+                          <v-list-item dense two-line>
+                            <v-list-item-content>
+                              <v-list-item-title>Name</v-list-item-title>
+                              <v-list-item-subtitle>{{
+                                report.Reporter.name
+                              }}</v-list-item-subtitle>
+                            </v-list-item-content>
+                          </v-list-item>
+                        </v-col>
+                        <v-col>
+                          <v-list-item dense two-line>
+                            <v-list-item-content>
+                              <v-list-item-title>UPI</v-list-item-title>
+                              <v-list-item-subtitle>{{
+                                report.Reporter.username
+                              }}</v-list-item-subtitle>
+                            </v-list-item-content>
+                          </v-list-item>
+                        </v-col>
+                        <v-col>
+                          <v-list-item dense two-line>
+                            <v-list-item-content>
+                              <v-list-item-title>Email</v-list-item-title>
+                              <v-list-item-subtitle>{{
+                                report.Reporter.email
+                              }}</v-list-item-subtitle>
+                            </v-list-item-content>
+                          </v-list-item>
+                        </v-col>
+                      </v-row>
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+                </v-expansion-panels>
+              </v-card>
+            </v-col>
+            <v-col cols="6">
+              <v-card dark>
+                <v-card-title class="text-h5"> Submitted By </v-card-title>
+                <v-row>
+                  <v-col>
+                    <v-list-item dense two-line>
+                      <v-list-item-content>
+                        <v-list-item-title>Name</v-list-item-title>
+                        <v-list-item-subtitle>{{
+                          selectedReport.detail.User.name
+                        }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-col>
+                  <v-col>
+                    <v-list-item dense two-line>
+                      <v-list-item-content>
+                        <v-list-item-title>UPI</v-list-item-title>
+                        <v-list-item-subtitle>{{
+                          selectedReport.detail.User.username
+                        }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-col>
+                  <v-col>
+                    <v-list-item dense two-line>
+                      <v-list-item-content>
+                        <v-list-item-title>Email</v-list-item-title>
+                        <v-list-item-subtitle>{{
+                          selectedReport.detail.User.email
+                        }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-col>
+                </v-row>
+
+                <v-card-actions>
+                  <v-btn text :href="`mailto:${selectedReport.detail.User.email}`">
+                    Send Email
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-col>
+          </v-row>
+          <!-- Original JSON for reference -->
+          <!-- <pre>
+          {{ JSON.stringify(selectedReport, null, 2) }}
+          </pre> -->
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn text color="green darken-4" @click="approveReport">Archive Report</v-btn>
+          <v-btn text color="red darken-4" @click="rejectReport">Delete Suggestion</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
+</template>
+
+<script>
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en.json";
+
+TimeAgo.addDefaultLocale(en);
+
+// Create formatter (English).
+const timeAgo = new TimeAgo("en-US");
+
+export default {
+  props: {
+    edits: Array,
+  },
+  data() {
+    return {
+      reportHeaders: [
+        { text: "Suggestion", value: "reportedText" },
+        { text: "Author", value: "author" },
+        { text: "Last Reported", value: "lastReported" },
+        { text: "Number of Reports", value: "numReports" },
+        { text: "", value: "actions", sortable: false },
+      ],
+      showDetails: false,
+      selectedReport: {},
+      searchQuery: "",
+    };
+  },
+  computed: {
+    reportBody() {
+      return this.edits.map((edit) => {
+        const sortedReports = edit.Reports.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        return {
+          reportedText: edit.body,
+          author: edit.User.username,
+          lastReported: timeAgo.format(Date.parse(sortedReports[0].createdAt)),
+          dateReported: new Date(sortedReports[0].createdAt).toLocaleDateString("en-NZ"),
+          reportID: edit.id,
+          reports: sortedReports,
+          numReports: sortedReports.length,
+          detail: edit,
+        };
+      });
+    },
+  },
+  methods: {
+    showReport(item) {
+      this.showDetails = true;
+      this.selectedReport = item;
+    },
+  },
+  name: "ReportTable",
+};
+</script>
