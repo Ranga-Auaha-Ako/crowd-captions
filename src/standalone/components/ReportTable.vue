@@ -16,12 +16,27 @@
       :sort-desc="true"
       :search="searchQuery"
       item-key="reportID"
+      :group-by="showStatus ? 'isDeleted' : []"
       class="elevation-1"
       @click:row="showReport"
     >
-      <template v-slot:item.actions="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+      <template v-slot:group.header="{ headers, isOpen, toggle, group }">
+        <td :colspan="headers.length" class="text-start" @click="toggle">
+          <v-btn icon small class="ma-0">
+            <v-icon>{{ isOpen ? "mdi-chevron-up" : "mdi-chevron-down" }} </v-icon>
+          </v-btn>
+          {{ group }}
+        </td>
+      </template>
+
+      <template v-slot:item.actions>
+        <!-- <template v-slot:item.actions="{ item }"> -->
+        <!-- <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
+        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon> -->
+        <!-- Button to link to details page -->
+        <v-btn small icon color="primary">
+          <v-icon small> mdi-eye </v-icon>
+        </v-btn>
       </template>
     </v-data-table>
     <v-dialog v-model="showDetails" width="900">
@@ -168,15 +183,10 @@
             </v-col>
           </v-row>
           <!-- Original JSON for reference -->
-          <!-- <pre>
+          <pre>
           {{ JSON.stringify(selectedReport, null, 2) }}
-          </pre> -->
+          </pre>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn text color="green darken-4" @click="approveReport">Archive Report</v-btn>
-          <v-btn text color="red darken-4" @click="rejectReport">Delete Suggestion</v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
   </div>
@@ -194,6 +204,7 @@ const timeAgo = new TimeAgo("en-US");
 export default {
   props: {
     edits: Array,
+    showStatus: Boolean,
   },
   data() {
     return {
@@ -215,6 +226,11 @@ export default {
         const sortedReports = edit.Reports.sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
+        let isDeleted = edit.blocked ? "Deleted" : "";
+        if (!isDeleted && edit.approved) {
+          isDeleted = "Archived";
+        }
+
         return {
           reportedText: edit.body,
           author: edit.User.username,
@@ -223,6 +239,7 @@ export default {
           reportID: edit.id,
           reports: sortedReports,
           numReports: sortedReports.length,
+          isDeleted,
           detail: edit,
         };
       });

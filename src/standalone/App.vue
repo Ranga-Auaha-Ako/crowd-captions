@@ -9,30 +9,41 @@
                 <v-col cols="auto"> Reports </v-col>
                 <v-col>
                   <!-- Count of reports -->
-                  <v-chip color="orange" text-color="white" v-if="newEdits.length > 0">
+                  <v-chip small color="orange" text-color="white" v-if="newEdits.length > 0">
                     {{ newEdits.length }}
                   </v-chip>
                 </v-col>
               </v-row>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
-              <ReportTable :edits="newEdits" v-if="newEdits" />
+              <ReportTable
+                @archiveReport="archiveReport($event)"
+                @deleteSuggestion="deleteSuggestion($event)"
+                :edits="newEdits"
+                v-if="newEdits"
+              />
             </v-expansion-panel-content>
           </v-expansion-panel>
-          <v-expansion-panel>
+          <v-expansion-panel :disabled="archivedEdits.length == 0">
             <v-expansion-panel-header>
               <v-row align="center">
                 <v-col cols="auto"> Archive </v-col>
                 <v-col>
                   <!-- Count of reports -->
-                  <v-chip color="primary" text-color="white" v-if="archivedEdits.length > 0">
+                  <v-chip small color="secondary" outlined v-if="archivedEdits.length > 0">
                     {{ archivedEdits.length }}
                   </v-chip>
                 </v-col>
               </v-row>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
-              <ReportTable :edits="archivedEdits" v-if="archivedEdits" />
+              <ReportTable
+                @archiveReport="archiveReport($event)"
+                @deleteSuggestion="deleteSuggestion($event)"
+                :showStatus="true"
+                :edits="archivedEdits"
+                v-if="archivedEdits"
+              />
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
@@ -117,49 +128,54 @@ export default {
       return this.edits.filter((edit) => !edit.approved && !edit.blocked);
     },
   },
-  async mounted() {
-    const reportData = await fetch(`${this.$backendHost}/api/getReport`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${this.$user.token}`,
-      },
-      mode: "cors",
-    }).then((response) => response.json());
-    // Transform list of reports JSON into list of reports per suggestion
-    const edits = {};
-    reportData.forEach((report) => {
-      // If the edit has not already been reported, create it
-      const edit = edits[report.Edit.id] || report.Edit;
-      // Add the report to the edit
-      edit.Reports = edit.Reports || [];
-      edit.Reports.push({
-        id: report.id,
-        createdAt: report.createdAt,
-        Reporter: report.User,
-      });
-      // Store the edit in the list of edits
-      edits[report.Edit.id] = edit;
-    });
-    console.log(edits);
-    this.edits = Object.values(edits);
-
-    // Generate exportable version of the report list
-    this.rawReports = reportData
-      .map((report) => ({
-        id: report.id,
-        createdAt: report.createdAt,
-        Reporter: report.User.username,
-        EditID: report.Edit.id,
-        EditBody: report.Edit.body,
-        OriginalCaption: report.Edit.CaptionSentence.body,
-        EditApproved: report.Edit.approved,
-        EditBlocked: report.Edit.blocked,
-        SessionID: report.Edit.CaptionSentence.CaptionFileLectureId,
-        CaptionStartTime: report.Edit.CaptionSentence.start,
-      }))
-      .sort((a, b) => a.createdAt - b.createdAt);
+  mounted() {
+    this.fetchData();
   },
   methods: {
+    async fetchData() {
+      const reportData = await fetch(`${this.$backendHost}/api/getReport`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.$user.token}`,
+        },
+        mode: "cors",
+      }).then((response) => response.json());
+      // Transform list of reports JSON into list of reports per suggestion
+      const edits = {};
+      reportData.forEach((report) => {
+        // If the edit has not already been reported, create it
+        const edit = edits[report.Edit.id] || report.Edit;
+        // Add the report to the edit
+        edit.Reports = edit.Reports || [];
+        edit.Reports.push({
+          id: report.id,
+          createdAt: report.createdAt,
+          Reporter: report.User,
+        });
+        // Store the edit in the list of edits
+        edits[report.Edit.id] = edit;
+      });
+      console.log(edits);
+      this.edits = Object.values(edits);
+
+      // Generate exportable version of the report list
+      this.rawReports = reportData
+        .map((report) => ({
+          id: report.id,
+          createdAt: report.createdAt,
+          Reporter: report.User.username,
+          EditID: report.Edit.id,
+          EditBody: report.Edit.body,
+          OriginalCaption: report.Edit.CaptionSentence.body,
+          EditApproved: report.Edit.approved,
+          EditBlocked: report.Edit.blocked,
+          SessionID: report.Edit.CaptionSentence.CaptionFileLectureId,
+          CaptionStartTime: report.Edit.CaptionSentence.start,
+        }))
+        .sort((a, b) => a.createdAt - b.createdAt);
+    },
     exportReports() {
       const csvExporter = new ExportToCsv({
         filename: "crowdcaptions-report.csv",
@@ -179,6 +195,62 @@ export default {
         ],
       });
       csvExporter.generateCsv(this.rawReports);
+    },
+    async archiveReport(editID) {
+      await fetch(`${this.$backendHost}/api/approvals`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.$user.token}`,
+        },
+        body: JSON.stringify({
+          approved: true,
+          id: editID,
+        }),
+      });
+      // If the suggestion was previously deleted, unblock it
+      if (this.edits.find((edit) => edit.id === editID).blocked) {
+        await fetch(`${this.$backendHost}/api/block`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${this.$user.token}`,
+          },
+          body: JSON.stringify({
+            blocked: false,
+            id: editID,
+          }),
+        });
+      }
+      this.fetchData();
+    },
+    async deleteSuggestion(editID) {
+      await fetch(`${this.$backendHost}/api/block`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.$user.token}`,
+        },
+        body: JSON.stringify({
+          blocked: true,
+          id: editID,
+        }),
+      });
+      // If the suggestion was previously approved, unapprove it
+      if (this.edits.find((edit) => edit.id === editID).approved) {
+        await fetch(`${this.$backendHost}/api/approvals`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${this.$user.token}`,
+          },
+          body: JSON.stringify({
+            approved: false,
+            id: editID,
+          }),
+        });
+      }
+      this.fetchData();
     },
   },
   name: "App",
