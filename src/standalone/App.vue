@@ -89,6 +89,12 @@
               </div>
             </v-card-title>
           </v-card>
+          <br />
+          <!-- Export Content button -->
+          <v-btn block class="export-button" color="primary" @click="exportReports">
+            <v-icon>mdi-download</v-icon>
+            Export All Reports
+          </v-btn>
         </v-container>
       </v-col>
     </v-row>
@@ -96,6 +102,7 @@
 </template>
 
 <script>
+import { ExportToCsv } from "export-to-csv";
 import ReportTable from "./components/ReportTable.vue";
 
 export default {
@@ -135,6 +142,44 @@ export default {
     });
     console.log(edits);
     this.edits = Object.values(edits);
+
+    // Generate exportable version of the report list
+    this.rawReports = reportData
+      .map((report) => ({
+        id: report.id,
+        createdAt: report.createdAt,
+        Reporter: report.User.username,
+        EditID: report.Edit.id,
+        EditBody: report.Edit.body,
+        OriginalCaption: report.Edit.CaptionSentence.body,
+        EditApproved: report.Edit.approved,
+        EditBlocked: report.Edit.blocked,
+        SessionID: report.Edit.CaptionSentence.CaptionFileLectureId,
+        CaptionStartTime: report.Edit.CaptionSentence.start,
+      }))
+      .sort((a, b) => a.createdAt - b.createdAt);
+  },
+  methods: {
+    exportReports() {
+      const csvExporter = new ExportToCsv({
+        filename: "crowdcaptions-report.csv",
+        columnDelimiter: ",",
+        showLabels: true,
+        headers: [
+          "Report ID",
+          "Report Created At",
+          "Reporter",
+          "Edit ID",
+          "Edit Body",
+          "Original Caption",
+          "Edit Approved",
+          "Edit Blocked",
+          "Video ID",
+          "Caption Start Time",
+        ],
+      });
+      csvExporter.generateCsv(this.rawReports);
+    },
   },
   name: "App",
   components: { ReportTable },
