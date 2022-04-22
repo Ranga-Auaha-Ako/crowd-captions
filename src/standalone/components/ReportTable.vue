@@ -80,13 +80,13 @@
           </v-card>
           <br />
           <v-row>
-            <v-col cols="9">
+            <v-col cols="12" md="8" sm="7">
               <h3>Panopto-Generated Caption:</h3>
               <blockquote class="blockquote">
                 &ldquo;{{ selectedReport.detail.CaptionSentence.body }}&rdquo;
               </blockquote>
             </v-col>
-            <v-col cols="3">
+            <v-col cols="12" md="4" sm="5">
               <v-btn
                 block
                 color="primary"
@@ -100,6 +100,25 @@
               <h3>Report Time</h3>
               <p :title="selectedReport.reports[0].createdAt">
                 {{ selectedReport.lastReported }} ({{ selectedReport.dateReported }})
+              </p>
+              <h3>Votes</h3>
+              <p>
+                <v-progress-linear
+                  background-color="red"
+                  color="green"
+                  :value="
+                    (selectedReport.upvotes / (selectedReport.downvotes + selectedReport.upvotes)) *
+                    100
+                  "
+                ></v-progress-linear>
+                <v-row>
+                  <v-col>
+                    <span>{{ selectedReport.upvotes }} Upvotes</span>
+                  </v-col>
+                  <v-col cols="auto">
+                    <span>{{ selectedReport.downvotes }} Downvotes.</span>
+                  </v-col>
+                </v-row>
               </p>
 
               <!-- Can't embed iframe due to Panopto content security policy blocking iframes on chrome-extension urls -->
@@ -120,7 +139,7 @@
           </p>
 
           <v-row>
-            <v-col cols="6">
+            <v-col cols="12" sm="6">
               <v-card dark>
                 <v-card-title class="text-h5"> Reported By </v-card-title>
                 <v-expansion-panels flat>
@@ -166,7 +185,7 @@
                 </v-expansion-panels>
               </v-card>
             </v-col>
-            <v-col cols="6">
+            <v-col cols="12" sm="6">
               <v-card dark>
                 <v-card-title class="text-h5"> Submitted By </v-card-title>
                 <v-row>
@@ -239,6 +258,7 @@ export default {
       reportHeaders: [
         { text: "Suggestion", value: "reportedText" },
         { text: "Author", value: "author" },
+        { text: "Score (upvotes/downvotes)", value: "votesFormatted" },
         { text: "Last Reported", value: "lastReported" },
         { text: "Number of Reports", value: "numReports" },
         { text: "", value: "actions", sortable: false },
@@ -267,6 +287,11 @@ export default {
           reportID: edit.id,
           reports: sortedReports,
           numReports: sortedReports.length,
+          upvotes: edit.upvotes,
+          downvotes: edit.downvotes,
+          votesFormatted: `${edit.upvotes + -1 * edit.downvotes} (${edit.upvotes}/${
+            edit.downvotes
+          })`,
           isDeleted,
           detail: edit,
         };

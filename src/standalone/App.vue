@@ -1,7 +1,7 @@
 <template>
   <v-app id="app">
     <v-row id="app-row">
-      <v-col cols="12" lg="8" order="last" order-lg="first" class="fill-height">
+      <v-col cols="12" lg="8" order="last" order-lg="first">
         <v-expansion-panels mandatory :value="openPanels">
           <v-expansion-panel :disabled="newEdits.length == 0">
             <v-expansion-panel-header>
@@ -51,73 +51,77 @@
         </v-expansion-panels>
       </v-col>
       <v-col cols="12" lg="4">
-        <v-container class="app-info">
-          <h1 class="text-h4 brand">
-            Crowd Captions
-            <img class="brand-logo" :src="require('../assets/crowdcaptions-white.svg')" />
-          </h1>
-          <p>
-            Crowd Captions is a collaborative student-driven resource for improving the quality of
-            Panopto’s automatic captions. Students can submit manual corrections to the captions as
-            they watch the video, and other students may vote on the most correct interpretation of
-            what has been spoken.
-          </p>
-          <p>
-            If a student abuses this system, others can report them. Reported captions, along with
-            the original submitter’s UPI and the reporter’s information, is visible through this
-            tool. We reccomend checking this once a week for any new reports. This will depend on
-            the number of students in your course.
-          </p>
-          <v-card>
-            <v-card-title>
-              <div class="d-flex align-center usercard">
-                <div class="flex-grow-1">
-                  <span> {{ $user.userData.name }} </span><br />
-                  <v-chip small>
-                    <v-icon left small> mdi-email-outline </v-icon>
-                    {{ $user.userData.email }}
-                  </v-chip>
+        <v-container class="app-info d-flex flex-column align-stretch">
+          <div>
+            <h1 class="text-h4 brand">
+              Crowd Captions
+              <img class="brand-logo" :src="require('../assets/crowdcaptions-white.svg')" />
+            </h1>
+            <p>
+              Crowd Captions is a collaborative student-driven resource for improving the quality of
+              Panopto’s automatic captions. Students can submit manual corrections to the captions
+              as they watch the video, and other students may vote on the most correct
+              interpretation of what has been spoken.
+            </p>
+            <p>
+              If a student abuses this system, others can report them. Reported captions, along with
+              the original submitter’s UPI and the reporter’s information, is visible through this
+              tool. We reccomend checking this once a week for any new reports. This will depend on
+              the number of students in your course.
+            </p>
+          </div>
+          <div>
+            <v-card>
+              <v-card-title>
+                <div class="d-flex align-center usercard">
+                  <div class="flex-grow-1">
+                    <span> {{ $user.userData.name }} </span><br />
+                    <v-chip small>
+                      <v-icon left small> mdi-email-outline </v-icon>
+                      {{ $user.userData.email }}
+                    </v-chip>
+                  </div>
+                  <div>
+                    <v-menu offset-y>
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn color="primary" icon v-bind="attrs" v-on="on">
+                          <v-icon>mdi-dots-vertical</v-icon>
+                        </v-btn>
+                      </template>
+                      <v-list>
+                        <v-list-item link>
+                          <v-list-item-title> Logout </v-list-item-title>
+                        </v-list-item>
+                        <v-list-item
+                          v-if="$user.userData.access == 2"
+                          :href="$backendHost + '/admin'"
+                          target="admin"
+                        >
+                          <v-list-item-title> View Administration Panel </v-list-item-title>
+                        </v-list-item>
+                      </v-list>
+                    </v-menu>
+                  </div>
                 </div>
-                <div>
-                  <v-menu offset-y>
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn color="primary" icon v-bind="attrs" v-on="on">
-                        <v-icon>mdi-dots-vertical</v-icon>
-                      </v-btn>
-                    </template>
-                    <v-list>
-                      <v-list-item link>
-                        <v-list-item-title> Logout </v-list-item-title>
-                      </v-list-item>
-                      <v-list-item
-                        v-if="$user.userData.access == 2"
-                        :href="$backendHost + '/admin'"
-                        target="admin"
-                      >
-                        <v-list-item-title> View Administration Panel </v-list-item-title>
-                      </v-list-item>
-                    </v-list>
-                  </v-menu>
-                </div>
-              </div>
-            </v-card-title>
-          </v-card>
-          <br />
-          <!-- Export Content button -->
-          <v-btn block class="export-button mb-2" color="primary" @click="exportReports">
-            <v-icon small>mdi-download</v-icon>
-            Export All Reports
-          </v-btn>
-          <v-btn
-            block
-            class="export-button mb-2"
-            color="yellow"
-            href="mailto:raa.dev.uoa@gmail.com"
-            target="_blank"
-          >
-            <v-icon small>mdi-email-outline</v-icon>
-            Get help
-          </v-btn>
+              </v-card-title>
+            </v-card>
+            <br />
+            <!-- Export Content button -->
+            <v-btn block class="export-button mb-2" color="primary" @click="exportReports">
+              <v-icon small>mdi-download</v-icon>
+              Export All Reports
+            </v-btn>
+            <v-btn
+              block
+              class="export-button mb-2"
+              color="yellow"
+              href="mailto:raa.dev.uoa@gmail.com"
+              target="_blank"
+            >
+              <v-icon small>mdi-email-outline</v-icon>
+              Get help
+            </v-btn>
+          </div>
         </v-container>
       </v-col>
     </v-row>
@@ -145,7 +149,6 @@ export default {
   },
   watch: {
     newEdits(state) {
-      console.log(state.length);
       if (state.length === 0) {
         // Remove the panel if there are no archived edits
         this.openPanels = this.openPanels.filter((f) => f !== 0);
@@ -154,7 +157,6 @@ export default {
       }
     },
     archivedEdits(state) {
-      console.log(state.length);
       if (state.length === 0) {
         // Remove the panel if there are no archived edits
         this.openPanels = this.openPanels.filter((f) => f !== 1);
@@ -178,7 +180,17 @@ export default {
       const edits = {};
       reportData.forEach((report) => {
         // If the edit has not already been reported, create it
-        const edit = edits[report.Edit.id] || report.Edit;
+        let edit;
+        if (!edits[report.Edit.id]) {
+          // Calculate upvotes & downvotes
+          edit = report.Edit;
+          edit.upvotes =
+            parseInt(report.Edit.Votes.find((vote) => vote.upvoted === true)?.votes, 10) || 0;
+          edit.downvotes =
+            parseInt(report.Edit.Votes.find((vote) => vote.upvoted === false)?.votes, 10) || 0;
+        } else {
+          edit = edits[report.Edit.id];
+        }
         // Add the report to the edit
         edit.Reports = edit.Reports || [];
         edit.Reports.push({
@@ -186,8 +198,9 @@ export default {
           createdAt: report.createdAt,
           Reporter: report.User,
         });
+
         // Store the edit in the list of edits
-        edits[report.Edit.id] = edit;
+        edits[edit.id] = edit;
       });
       this.edits = Object.values(edits);
 
@@ -204,6 +217,8 @@ export default {
           EditBlocked: report.Edit.blocked,
           SessionID: report.Edit.CaptionSentence.CaptionFileLectureId,
           CaptionStartTime: report.Edit.CaptionSentence.start,
+          upvotes: edits[report.Edit.id].upvotes,
+          downvotes: edits[report.Edit.id].downvotes,
         }))
         .sort((a, b) => a.createdAt - b.createdAt);
     },
@@ -223,6 +238,8 @@ export default {
           "Edit Blocked",
           "Video ID",
           "Caption Start Time",
+          "Upvotes",
+          "Downvotes",
         ],
       });
       csvExporter.generateCsv(this.rawReports);
@@ -334,6 +351,7 @@ export default {
   background-image: url("../assets/crowdcaptions.jpg");
   background-size: cover;
   background-position: center;
+  background-attachment: fixed;
 }
 
 #app-row {
@@ -343,10 +361,14 @@ export default {
     // Give each item padding
     padding: 1.5rem;
   }
+  @media only screen and (max-width: 500px) {
+    margin: 0rem;
+  }
 }
 
 .app-info {
   color: white;
+  height: 100%;
 }
 
 .brand {
