@@ -20,12 +20,15 @@
       class="elevation-1"
       @click:row="showReport"
     >
-      <template v-slot:group.header="{ headers, isOpen, toggle, group }">
+      <template v-slot:group.header="{ headers, isOpen, toggle, group, items }">
         <td :colspan="headers.length" class="text-start" @click="toggle">
           <v-btn icon small class="ma-0">
             <v-icon>{{ isOpen ? "mdi-chevron-up" : "mdi-chevron-down" }} </v-icon>
           </v-btn>
           {{ group }}
+          <v-chip small class="mr-2" v-if="items.length > 0">
+            {{ items.length }}
+          </v-chip>
         </td>
       </template>
 
@@ -43,6 +46,31 @@
       <v-card v-if="showDetails && selectedReport">
         <v-card-title>
           <span class="text-h5">Report details</span>
+          <v-spacer></v-spacer>
+          <div v-if="!selectedReport.detail.blocked && !selectedReport.detail.approved">
+            <v-btn
+              :text="!selectedReport.detail.approved"
+              dark
+              color="green darken-4"
+              @click="$emit('archiveReport', selectedReport.detail.id)"
+              >Archive Report</v-btn
+            >
+            <v-btn
+              :text="!selectedReport.detail.blocked"
+              dark
+              color="red darken-4"
+              @click="$emit('deleteSuggestion', selectedReport.detail.id)"
+              >Delete Suggestion</v-btn
+            >
+          </div>
+          <div v-else>
+            <v-btn
+              dark
+              color="green darken-4"
+              @click="$emit('restoreReport', selectedReport.detail.id)"
+              >Unarchive Report</v-btn
+            >
+          </div>
         </v-card-title>
         <v-card-text>
           <v-card dark>
@@ -216,7 +244,7 @@ export default {
         { text: "", value: "actions", sortable: false },
       ],
       showDetails: false,
-      selectedReport: {},
+      selectedReportID: null,
       searchQuery: "",
     };
   },
@@ -244,11 +272,23 @@ export default {
         };
       });
     },
+    selectedReport() {
+      return this.reportBody.find((edit) => edit.reportID === this.selectedReportID);
+    },
   },
+  watch: {
+    selectedReport(foundReport) {
+      console.log(foundReport);
+      if (!foundReport) {
+        this.showDetails = false;
+      }
+    },
+  },
+
   methods: {
     showReport(item) {
       this.showDetails = true;
-      this.selectedReport = item;
+      this.selectedReportID = item.reportID;
     },
   },
   name: "ReportTable",

@@ -2,8 +2,8 @@
   <v-app id="app">
     <v-row id="app-row">
       <v-col cols="12" lg="8" order="last" order-lg="first" class="fill-height">
-        <v-expansion-panels mandatory>
-          <v-expansion-panel>
+        <v-expansion-panels mandatory :value="openPanels">
+          <v-expansion-panel :disabled="newEdits.length == 0">
             <v-expansion-panel-header>
               <v-row align="center">
                 <v-col cols="auto"> Reports </v-col>
@@ -19,6 +19,7 @@
               <ReportTable
                 @archiveReport="archiveReport($event)"
                 @deleteSuggestion="deleteSuggestion($event)"
+                @restoreReport="restoreReport($event)"
                 :edits="newEdits"
                 v-if="newEdits"
               />
@@ -40,6 +41,7 @@
               <ReportTable
                 @archiveReport="archiveReport($event)"
                 @deleteSuggestion="deleteSuggestion($event)"
+                @restoreReport="restoreReport($event)"
                 :showStatus="true"
                 :edits="archivedEdits"
                 v-if="archivedEdits"
@@ -102,9 +104,19 @@
           </v-card>
           <br />
           <!-- Export Content button -->
-          <v-btn block class="export-button" color="primary" @click="exportReports">
-            <v-icon>mdi-download</v-icon>
+          <v-btn block class="export-button mb-2" color="primary" @click="exportReports">
+            <v-icon small>mdi-download</v-icon>
             Export All Reports
+          </v-btn>
+          <v-btn
+            block
+            class="export-button mb-2"
+            color="yellow"
+            href="mailto:raa.dev.uoa@gmail.com"
+            target="_blank"
+          >
+            <v-icon small>mdi-email-outline</v-icon>
+            Get help
           </v-btn>
         </v-container>
       </v-col>
@@ -118,7 +130,7 @@ import ReportTable from "./components/ReportTable.vue";
 
 export default {
   data() {
-    return { edits: [] };
+    return { edits: [], openPanels: [] };
   },
   computed: {
     archivedEdits() {
@@ -130,6 +142,26 @@ export default {
   },
   mounted() {
     this.fetchData();
+  },
+  watch: {
+    newEdits(state) {
+      console.log(state.length);
+      if (state.length === 0) {
+        // Remove the panel if there are no archived edits
+        this.openPanels = this.openPanels.filter((f) => f !== 0);
+      } else if (this.openPanels.length === 0) {
+        this.openPanels.push(1);
+      }
+    },
+    archivedEdits(state) {
+      console.log(state.length);
+      if (state.length === 0) {
+        // Remove the panel if there are no archived edits
+        this.openPanels = this.openPanels.filter((f) => f !== 1);
+      } else if (this.openPanels.length === 0) {
+        this.openPanels.push(0);
+      }
+    },
   },
   methods: {
     async fetchData() {
@@ -157,7 +189,6 @@ export default {
         // Store the edit in the list of edits
         edits[report.Edit.id] = edit;
       });
-      console.log(edits);
       this.edits = Object.values(edits);
 
       // Generate exportable version of the report list
@@ -196,6 +227,9 @@ export default {
       });
       csvExporter.generateCsv(this.rawReports);
     },
+    getEdit(editID) {
+      return this.edits.find((edit) => edit.id === editID);
+    },
     async archiveReport(editID) {
       await fetch(`${this.$backendHost}/api/approvals`, {
         method: "POST",
@@ -210,10 +244,44 @@ export default {
         }),
       });
       // If the suggestion was previously deleted, unblock it
-      if (this.edits.find((edit) => edit.id === editID).blocked) {
+      if (this.getEdit(editID).blocked) {
         await fetch(`${this.$backendHost}/api/block`, {
           method: "POST",
           headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.$user.token}`,
+          },
+          body: JSON.stringify({
+            blocked: false,
+            id: editID,
+          }),
+        });
+      }
+      this.fetchData();
+    },
+    async restoreReport(editID) {
+      if (this.getEdit(editID).approved) {
+        await fetch(`${this.$backendHost}/api/approvals`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.$user.token}`,
+          },
+          body: JSON.stringify({
+            approved: false,
+            id: editID,
+          }),
+        });
+      }
+      // If the suggestion was previously deleted, unblock it
+      if (this.getEdit(editID).blocked) {
+        await fetch(`${this.$backendHost}/api/block`, {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
             Authorization: `Bearer ${this.$user.token}`,
           },
           body: JSON.stringify({
@@ -238,10 +306,12 @@ export default {
         }),
       });
       // If the suggestion was previously approved, unapprove it
-      if (this.edits.find((edit) => edit.id === editID).approved) {
+      if (this.getEdit(editID).approved) {
         await fetch(`${this.$backendHost}/api/approvals`, {
           method: "POST",
           headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
             Authorization: `Bearer ${this.$user.token}`,
           },
           body: JSON.stringify({

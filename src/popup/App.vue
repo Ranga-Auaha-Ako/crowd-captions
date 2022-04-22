@@ -8,7 +8,12 @@
         ></v-img>
       </template>
 
-      <v-toolbar-title>Crowd Captions</v-toolbar-title>
+      <v-toolbar-title>
+        Crowd Captions
+        <v-btn>
+          <v-icon>mdi-bell</v-icon>
+        </v-btn>
+      </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-menu left bottom>
         <template v-slot:activator="{ on, attrs }">
