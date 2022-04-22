@@ -211,9 +211,9 @@
             </v-col>
           </v-row>
           <!-- Original JSON for reference -->
-          <pre>
+          <!-- <pre>
           {{ JSON.stringify(selectedReport, null, 2) }}
-          </pre>
+          </pre> -->
         </v-card-text>
       </v-card>
     </v-dialog>
