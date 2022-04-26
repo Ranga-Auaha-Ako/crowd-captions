@@ -1,6 +1,6 @@
 {
   "name": "panopto-crowd-captions",
-  "version": "1.4.0",
+  "version": "1.6.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service build --mode development --watch",
@@ -12,6 +12,10 @@
     "@mdi/font": "^6.5.95",
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
+    "docx": "^7.3.0",
+    "export-to-csv": "^0.2.1",
+    "file-saver": "^2.0.5",
+    "javascript-time-ago": "^2.3.13",
     "patch-package": "^6.4.7",
     "postinstall-postinstall": "^2.1.0",
     "vue": "^2.6.11",

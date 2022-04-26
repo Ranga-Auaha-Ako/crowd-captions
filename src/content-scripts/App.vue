@@ -46,6 +46,8 @@
 </template>
 
 <script>
+import * as docx from "docx";
+import { saveAs } from "file-saver";
 import CaptionAlt from "../components/CaptionAlt.vue";
 
 export default {
@@ -74,6 +76,12 @@ export default {
     };
   },
   mounted() {
+    // Handle externally emmitted Captions Export event
+    this.$parent.$on("exportCaptions", () => {
+      console.log("1: Exporting captions...");
+      this.exportCaptions();
+    });
+
     setTimeout(() => {
       // eslint-disable-next-line func-names
       document.getElementById("primaryVideo").ontimeupdate = this.setTime;
@@ -102,7 +110,7 @@ export default {
         sizeElements[i].addEventListener("click", this.updateSize);
       }
     }, 3000);
-    this.$store.commit("loadCaptions", window.location.href.split("?id=")[1]);
+    this.$store.commit("loadCaptions", this.$captionData);
   },
   computed: {
     currentCaption() {
@@ -205,6 +213,78 @@ export default {
       const sizeValue = e.currentTarget.dataset.value;
       this.isLarge = sizeValue === "36";
     },
+    exportCaptions() {
+      console.log("Exporting captions...");
+      const sections = [];
+      // For each caption add three new sections
+      this.$store.state.Caption_file.forEach((caption) => {
+        //  - Table for caption contents
+        sections.push(
+          new docx.Table({
+            rows: [
+              new docx.TableRow({
+                children: [
+                  new docx.TableCell({
+                    children: [
+                      new docx.Paragraph({
+                        children: [
+                          // Hyperlink to lecture at specified time
+                          new docx.ExternalHyperlink({
+                            children: [
+                              new docx.TextRun({
+                                text: new Date(caption.start).toISOString().substr(14, 5),
+                                style: "Hyperlink",
+                              }),
+                            ],
+                            link: `https://${window.location.host}/Panopto/Pages/Viewer.aspx?id=${
+                              this.$store.state.source_data.Lecture_id
+                            }&start=${Math.floor(caption.start / 1000)}`,
+                          }),
+                        ],
+                      }),
+                    ],
+                    width: {
+                      size: 10,
+                      type: docx.WidthType.PERCENTAGE,
+                    },
+                  }),
+                  new docx.TableCell({
+                    children: [new docx.Paragraph(caption.body)],
+                    width: {
+                      size: 90,
+                      type: docx.WidthType.PERCENTAGE,
+                    },
+                  }),
+                ],
+                width: {
+                  size: 100,
+                  type: docx.WidthType.PERCENTAGE,
+                },
+              }),
+            ],
+            width: {
+              size: 100,
+              type: docx.WidthType.PERCENTAGE,
+            },
+          })
+        );
+        //  - 2x Paragraphs for notes
+        sections.push(new docx.Paragraph({ children: [] }), new docx.Paragraph({ children: [] }));
+      });
+      const doc = new docx.Document({
+        sections: [
+          {
+            children: sections,
+          },
+        ],
+      });
+
+      docx.Packer.toBlob(doc).then((blob) => {
+        console.log(blob);
+        saveAs(blob, `${this.$store.state.source_data.Video_name}.docx`);
+        console.log("Document created successfully");
+      });
+    },
   },
   updated() {
     this.$nextTick(() => {
@@ -229,6 +309,10 @@ export default {
   position: relative;
   z-index: 10;
   background-color: black !important;
+}
+
+.viewer #viewerContent #rightPane #dockedCaption #dockedCaptionTextWrapper {
+  display: none !important;
 }
 
 .theme--dark.v-input--is-disabled input {

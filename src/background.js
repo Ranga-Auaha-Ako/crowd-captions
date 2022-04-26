@@ -67,7 +67,7 @@ const getUser = () => {
             },
           });
           const userData = await userDataReq.json();
-          console.log(userData, token);
+          // console.log(userData, token);
           resolve({ token, userData });
         }
       }
@@ -79,8 +79,7 @@ const getUser = () => {
 // Takes message, sender, sendResponse
 chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
   (async () => {
-    console.log("Hello from the background");
-    console.log(message);
+    // console.log(message);
     if (message?.content === "getUser") {
       const response = await getUser();
       sendResponse(response);

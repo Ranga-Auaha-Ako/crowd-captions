@@ -9,6 +9,7 @@ export default new Vuex.Store({
   state: {
     // used string for object names due to working with json
     // (how it will be presented from db)
+    noCaptions: false, // Set to true if Crowd Captions should not load
     Caption_file: [
       {
         id: 72456,
@@ -19,6 +20,7 @@ export default new Vuex.Store({
     ],
     captionIndex: 0,
     nextStart: 0,
+    source_data: {}, // Additional Metadata provided by API
   },
   getters: {
     currentCaption(state) {
@@ -133,20 +135,9 @@ export default new Vuex.Store({
       state.captionIndex = i;
       state.nextStart = state.Caption_file[i + 1].start;
     },
-    async loadCaptions(state, url) {
-      function setCaptions(captionFile) {
-        state.Caption_file = captionFile.Caption_file;
-      }
-      // eslint-disable-next-line no-undef,no-underscore-dangle
-      await fetch(`${backendHost}/api/captions/${url}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${window.PanoptoUser.token}`,
-        },
-        mode: "cors",
-      })
-        .then((response) => response.json())
-        .then((data) => setCaptions(data));
+    async loadCaptions(state, captionData) {
+      state.Caption_file = captionData.Caption_file;
+      state.source_data = captionData.meta;
     },
   },
   actions: {},

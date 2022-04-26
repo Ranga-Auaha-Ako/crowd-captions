@@ -14,11 +14,63 @@ module.exports = {
     ],
     devtool: "source-map",
   },
+  chainWebpack: (config) => {
+    const styleOptions = (options) => {
+      const patchedOptions = {
+        ...options,
+        // This is required rather than setting a custom attribute (which would be preferred) due to limitations of vue-style-loader
+        // Potential conflict if Panopto or another extension loaded onto the page uses Vue and has this enabled.
+        // All style tags with the SSRID for Vue set are deleted if the extension is disabled
+        ssrId: true,
+        // attributes: { id: "crowdcaptions-styles" },
+      };
+      // console.log(patchedOptions);
+      return patchedOptions;
+    };
+    config.module.rule("css").oneOf("vue").use("vue-style-loader").tap(styleOptions);
+    config.module.rule("css").oneOf("vue-modules").use("vue-style-loader").tap(styleOptions);
+    config.module.rule("css").oneOf("normal-modules").use("vue-style-loader").tap(styleOptions);
+    config.module.rule("css").oneOf("normal").use("vue-style-loader").tap(styleOptions);
+    // PostCSS
+    config.module.rule("postcss").oneOf("vue").use("vue-style-loader").tap(styleOptions);
+    config.module.rule("postcss").oneOf("vue-modules").use("vue-style-loader").tap(styleOptions);
+    config.module.rule("postcss").oneOf("normal-modules").use("vue-style-loader").tap(styleOptions);
+    config.module.rule("postcss").oneOf("normal").use("vue-style-loader").tap(styleOptions);
+    // SCSS
+    config.module.rule("scss").oneOf("vue").use("vue-style-loader").tap(styleOptions);
+    config.module.rule("scss").oneOf("vue-modules").use("vue-style-loader").tap(styleOptions);
+    config.module.rule("scss").oneOf("normal-modules").use("vue-style-loader").tap(styleOptions);
+    config.module.rule("scss").oneOf("normal").use("vue-style-loader").tap(styleOptions);
+    // sass
+    config.module.rule("sass").oneOf("vue").use("vue-style-loader").tap(styleOptions);
+    config.module.rule("sass").oneOf("vue-modules").use("vue-style-loader").tap(styleOptions);
+    config.module.rule("sass").oneOf("normal-modules").use("vue-style-loader").tap(styleOptions);
+    config.module.rule("sass").oneOf("normal").use("vue-style-loader").tap(styleOptions);
+    // less
+    config.module.rule("less").oneOf("vue").use("vue-style-loader").tap(styleOptions);
+    config.module.rule("less").oneOf("vue-modules").use("vue-style-loader").tap(styleOptions);
+    config.module.rule("less").oneOf("normal-modules").use("vue-style-loader").tap(styleOptions);
+    config.module.rule("less").oneOf("normal").use("vue-style-loader").tap(styleOptions);
+    // stylus
+    config.module.rule("stylus").oneOf("vue").use("vue-style-loader").tap(styleOptions);
+    config.module.rule("stylus").oneOf("vue-modules").use("vue-style-loader").tap(styleOptions);
+    config.module.rule("stylus").oneOf("normal-modules").use("vue-style-loader").tap(styleOptions);
+    config.module.rule("stylus").oneOf("normal").use("vue-style-loader").tap(styleOptions);
+  },
+  css: {
+    extract: false,
+  },
   pages: {
     popup: {
       template: "public/browser-extension.html",
       entry: "./src/popup/main.js",
       title: "Popup",
+    },
+    standalone: {
+      template: "public/browser-extension.html",
+      entry: "./src/standalone/main.js",
+      title: "Standalone",
+      filename: "index.html",
     },
   },
   filenameHashing: false,
