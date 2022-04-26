@@ -73,7 +73,7 @@
           <div>
             <v-card>
               <v-card-title>
-                <div class="d-flex align-center usercard">
+                <div class="d-flex align-start usercard">
                   <div class="flex-grow-1">
                     <span> {{ $user.userData.name }} </span><br />
                     <v-chip small>
@@ -104,6 +104,12 @@
                   </div>
                 </div>
               </v-card-title>
+              <v-card-text>
+                <h6 class="text-overline black--text">Owned Folders</h6>
+                <p class="text-body-2">
+                  {{ ownedFolders.join(",") }}
+                </p>
+              </v-card-text>
             </v-card>
             <br />
             <!-- Export Content button -->
@@ -134,7 +140,7 @@ import ReportTable from "./components/ReportTable.vue";
 
 export default {
   data() {
-    return { edits: [], openPanels: [] };
+    return { edits: [], openPanels: [], ownedCourses: [], ownedFolders: [] };
   },
   computed: {
     archivedEdits() {
@@ -176,6 +182,18 @@ export default {
         },
         mode: "cors",
       }).then((response) => response.json());
+      const ownedCourseData = await fetch(`${this.$backendHost}/api/getOwned`, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.$user.token}`,
+        },
+        mode: "cors",
+      }).then((response) => response.json());
+      this.ownedCourses = ownedCourseData.courses.map((course) => course.lecture_name);
+      this.ownedFolders = ownedCourseData.folders.map((folder) => folder.name);
+
       // Transform list of reports JSON into list of reports per suggestion
       const edits = {};
       reportData.forEach((report) => {
