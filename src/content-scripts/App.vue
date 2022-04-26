@@ -74,6 +74,12 @@ export default {
     };
   },
   mounted() {
+    // Handle externally emmitted Captions Export event
+    this.$parent.$on("exportCaptions", () => {
+      console.log("1: Exporting captions...");
+      this.exportCaptions();
+    });
+
     setTimeout(() => {
       // eslint-disable-next-line func-names
       document.getElementById("primaryVideo").ontimeupdate = this.setTime;
@@ -204,6 +210,9 @@ export default {
     updateSize(e) {
       const sizeValue = e.currentTarget.dataset.value;
       this.isLarge = sizeValue === "36";
+    },
+    exportCaptions() {
+      console.log("Exporting captions...");
     },
   },
   updated() {

@@ -48,6 +48,16 @@ const launchCrowdCaptions = async () => {
     store,
     render: (h) => h(App),
   });
+
+  // Listener for exporting captions
+  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if (request.content === "exportCaptions") {
+      // Export the captions!
+      console.log("2: Exporting captions...");
+      window.CrowdCaptions.$root.$emit("exportCaptions", true);
+      sendResponse({ result: "success" });
+    }
+  });
 };
 
 function getPanoptoUser() {

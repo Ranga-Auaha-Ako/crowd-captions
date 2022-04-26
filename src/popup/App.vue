@@ -70,6 +70,7 @@
           When you notice a mistake, suggest a change or vote on a better option. These suggestions
           will be shared with others in the class who are using this tool.
         </div>
+        <v-btn color="primary" block class="mb-2" @click="exportCaptions"> Export Captions </v-btn>
       </v-container>
     </v-main>
     <v-footer app class="d-flex justify-space-around text--secondary text-center">
@@ -101,6 +102,15 @@ export default {
       },
       version: process.env.PACKAGE_VERSION || "0",
     };
+  },
+  methods: {
+    exportCaptions() {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        chrome.tabs.sendMessage(tabs[0].id, { content: "exportCaptions" }, (response) => {
+          console.log(response);
+        });
+      });
+    },
   },
 };
 </script>
