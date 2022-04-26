@@ -32,7 +32,7 @@ const launchCrowdCaptions = async () => {
   // Launch Crowd Captions
   Vue.use(Vuex);
   Vue.prototype.$user = window.PanoptoUser;
-  Vue.prototype.$captionData = captions.Caption_file;
+  Vue.prototype.$captionData = captions;
 
   // Create element to host our vue app
   const appContainer = document.createElement("div");

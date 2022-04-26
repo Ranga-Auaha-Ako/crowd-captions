@@ -20,6 +20,7 @@ export default new Vuex.Store({
     ],
     captionIndex: 0,
     nextStart: 0,
+    source_data: {}, // Additional Metadata provided by API
   },
   getters: {
     currentCaption(state) {
@@ -135,7 +136,8 @@ export default new Vuex.Store({
       state.nextStart = state.Caption_file[i + 1].start;
     },
     async loadCaptions(state, captionData) {
-      state.Caption_file = captionData;
+      state.Caption_file = captionData.Caption_file;
+      state.source_data = captionData.meta;
     },
   },
   actions: {},
