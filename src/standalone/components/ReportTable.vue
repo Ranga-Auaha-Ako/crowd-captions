@@ -115,10 +115,18 @@
                 ></v-progress-linear>
                 <v-row>
                   <v-col>
-                    <span>{{ selectedReport.upvotes }} Upvotes</span>
+                    <span
+                      >{{ selectedReport.upvotes }} Upvote{{
+                        selectedReport.upvotes.length == 1 ? "" : "s"
+                      }}</span
+                    >
                   </v-col>
                   <v-col cols="auto">
-                    <span>{{ selectedReport.downvotes }} Downvotes.</span>
+                    <span
+                      >{{ selectedReport.downvotes }} Downvote{{
+                        selectedReport.downvotes.length == 1 ? "" : "s"
+                      }}.</span
+                    >
                   </v-col>
                 </v-row>
               </p>
