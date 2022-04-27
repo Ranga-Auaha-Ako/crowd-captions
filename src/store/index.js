@@ -117,9 +117,6 @@ export default new Vuex.Store({
       }).then((response) => console.log(response));
     },
     async loadEdits(state, id) {
-      function loadEdits(edits) {
-        Vue.set(state.Caption_file[state.captionIndex], "edits", edits);
-      }
       // eslint-disable-next-line no-undef,no-underscore-dangle
       await fetch(`${backendHost}/api/edits/${id}`, {
         method: "GET",
@@ -129,7 +126,9 @@ export default new Vuex.Store({
         mode: "cors",
       })
         .then((response) => response.json())
-        .then((data) => loadEdits(data));
+        .then((data) => {
+          Vue.set(state.Caption_file[state.captionIndex], "edits", data);
+        });
     },
     setCaptionIndex(state, i) {
       state.captionIndex = i;

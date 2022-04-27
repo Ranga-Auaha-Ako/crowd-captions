@@ -120,9 +120,7 @@ export default {
       let allCaptions = [];
       // AllCaptions will be the full array of edits if we have that
       if (this.currentCaption.edits) {
-        if (this.currentCaption.edits.sort !== []) {
-          allCaptions = this.currentCaption.edits;
-        }
+        allCaptions = [...this.currentCaption.edits];
       } else if (this.currentCaption.bestEdit.body) {
         // Otherwise, it will be just the best edit if we have that
         allCaptions = [this.currentCaption.bestEdit];
@@ -130,20 +128,20 @@ export default {
       // Append default caption as fake "edit" to end of list of all captions. This will show up by default if there's no best edit or full list of edits
       allCaptions.push({
         body: this.currentCaption.body,
-        id: this.currentCaption.id,
+        id: `${this.currentCaption.id}-default`,
         votes: 0,
         voted: 0,
         reported: false,
       });
       // Sort the list to place Caption element
-      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-      allCaptions.sort((a, b) => b.votes - a.votes).slice();
+      allCaptions.sort((a, b) => b.votes - a.votes);
       if (this.showEdits) {
         // Show all edits, with a limit
         return allCaptions.length > this.maxAlternatives
           ? allCaptions.slice(0, this.maxAlternatives)
           : allCaptions;
       }
+      console.log(allCaptions);
       // Only show most liked
       return [allCaptions[0]];
     },

@@ -23,11 +23,29 @@ const launchCrowdCaptions = async () => {
     console.error(`Error loading captions: ${captions.error || "No error given"}`);
     // Disable Crowd Captions for this video
     //  - Delete injected styles
-    document.querySelectorAll("style[data-vue-ssr-id]").forEach((e) => e.remove());
+    if (process.env.NODE_ENV === "development") {
+      document.querySelectorAll("style[data-vue-ssr-id]").forEach((e) => e.remove());
+      document.querySelectorAll("style[data-vue-ssr-id]").forEach((e) => e.remove());
+    } else {
+      document.querySelectorAll("style#crowd-captions-css").forEach((e) => e.remove());
+      document.querySelectorAll("style#vuetify-theme-stylesheet").forEach((e) => e.remove());
+    }
     //  - Return without initializing Vue
     return;
   }
   console.log("Found Crowd Captions, loading caption player");
+
+  // Embed CSS
+  if (process.env.NODE_ENV !== "development") {
+    chrome.runtime.sendMessage({ content: "getCSS" }, ({ url }) => {
+      const link = document.createElement("link");
+      link.href = url;
+      link.type = "text/css";
+      link.rel = "stylesheet";
+      link.id = "crowd-captions-css";
+      document.getElementsByTagName("head")[0].appendChild(link);
+    });
+  }
 
   // Launch Crowd Captions
   Vue.use(Vuex);
