@@ -8,7 +8,9 @@
   "host_permissions": [
     "https://aucklandtest.au.panopto.com/Panopto/Pages/Viewer.aspx",
     "https://auckland.au.panopto.com/Panopto/Pages/Viewer.aspx",
-    "*://crowdcaptions.test.raa.amazon.auckland.ac.nz/*"
+    "*://crowdcaptions.test.raa.amazon.auckland.ac.nz/*",
+    "*://crowdcaptions.staging.raa.amazon.auckland.ac.nz/*",
+    "*://crowdcaptions.prod.raa.amazon.auckland.ac.nz/*"
   ],
   "optional_permissions": [],
   "icons": {
@@ -19,6 +21,15 @@
   "background": {
     "service_worker": "js/background.js"
   },
+  "web_accessible_resources": [
+    {
+      "resources": ["css/content-script.css"],
+      "matches": [
+        "https://aucklandtest.au.panopto.com/*",
+        "https://auckland.au.panopto.com/*"
+      ]
+    }
+  ],
   "content_security_policy": {
     "extension_pages": "default-src 'self'; style-src 'self' 'unsafe-inline'; frame-src https://auckland.au1.qualtrics.com/ https://aucklandtest.au.panopto.com/ https://auckland.au.panopto.com/"
   },
@@ -36,8 +47,7 @@
         "https://aucklandtest.au.panopto.com/Panopto/Pages/Viewer.aspx*",
         "https://auckland.au.panopto.com/Panopto/Pages/Viewer.aspx*"
       ],
-      "js": ["js/content-script.js"],
-      "css": ["css/content-script.css"]
+      "js": ["js/content-script.js"]
     }
   ]
 }

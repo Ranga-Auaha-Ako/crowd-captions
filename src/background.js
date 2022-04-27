@@ -84,6 +84,10 @@ chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
       const response = await getUser();
       sendResponse(response);
     }
+    if (message?.content === "getCSS") {
+      // Load CSS file and send url to content script
+      sendResponse({ url: chrome.runtime.getURL("css/content-script.css") });
+    }
   })();
   return true;
 });
