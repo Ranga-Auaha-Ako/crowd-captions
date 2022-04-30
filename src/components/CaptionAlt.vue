@@ -37,7 +37,7 @@
           :class="{ largeFont: isLarge }"
           :rows="edited.length > 110 ? 2 : 1"
           :no-resize="true"
-          :auto-grow="true"
+          :auto-grow="false"
         >
         </v-textarea>
         <div class="submitHint" v-if="isEditing">
