@@ -64,7 +64,7 @@
         </v-btn>
         <v-btn
           title="Suggest Changes"
-          v-else
+          v-else-if="!edit.isAuthor"
           fab
           small
           @click="toggleEditState()"
@@ -73,7 +73,10 @@
           <v-icon class="material-icons" v-if="isEdited"> save </v-icon>
           <v-icon class="material-icons" v-else> create </v-icon>
         </v-btn>
-        <v-btn title="Report" icon small @click="report()">
+        <v-btn v-if="edit.isAuthor" title="Delete" icon small @click="report()">
+          <v-icon class="material-icons"> delete </v-icon>
+        </v-btn>
+        <v-btn v-else title="Report" icon small @click="report()">
           <v-icon class="material-icons" v-bind:class="{ iconHighlight: edit.reported }">
             flag
           </v-icon>
