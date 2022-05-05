@@ -3,12 +3,12 @@
     <v-row>
       <v-col>
         <v-row>
-          <v-btn>
+          <v-btn :disabled="edit.panoptoGenerated">
             <v-icon left class="material-icons"> arrow_upward </v-icon>
           </v-btn>
         </v-row>
         <v-row>
-          <v-btn>
+          <v-btn :disabled="edit.panoptoGenerated">
             <v-icon left class="material-icons"> arrow_downward </v-icon>
           </v-btn>
         </v-row>
@@ -27,16 +27,14 @@
           </v-btn>
         </v-row>
         <v-row>
-          <v-btn>
+          <v-btn :disabled="edit.panoptoGenerated">
             <v-icon right class="material-icons"> flag </v-icon>
           </v-btn>
         </v-row>
         <v-row>
           <v-btn>
             <!-- index used here; if first Cap - display the dropdown -->
-            <v-icon right class="material-icons" v-if="index == 0">
-              view_list
-            </v-icon>
+            <v-icon right class="material-icons" v-if="index == 0"> view_list </v-icon>
           </v-btn>
         </v-row>
       </v-col>

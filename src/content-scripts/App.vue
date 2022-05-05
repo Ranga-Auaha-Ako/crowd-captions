@@ -132,6 +132,7 @@ export default {
         votes: 0,
         voted: 0,
         reported: false,
+        panoptoGenerated: true,
       });
       // Sort the list to place Caption element
       allCaptions.sort((a, b) => b.votes - a.votes);
