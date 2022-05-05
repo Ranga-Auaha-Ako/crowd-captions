@@ -6,6 +6,47 @@ import store from "../store/index";
 
 const backendHost = process.env.VUE_APP_BACKEND_HOST ?? "http://localhost:8000";
 
+const loadUIAdditions = () => {
+  const captionsButtonInsertion = `<div style="display: grid; column-gap: 0.5rem; grid-template-columns: 1fr 1fr; margin-bottom: 0.5rem;">
+    <a href="javascript:;" id="CrowdCaptions-showPopup" class="standard-button branded-button" role="button" tabindex="0" style="justify-content: center; column-gap: 0.5rem; display: flex; font-size: 0.9em;">
+      <i class="material-icons button-icon-left">closed_captions</i>
+      <div>Crowd Captions</div>
+    </a>
+    <a href="javascript:;" id="CrowdCaptions-exportCaptions" class="standard-button branded-button" role="button" tabindex="0" style="justify-content: center; column-gap: 0.5rem; display: flex; font-size: 0.9em;">
+      <i class="material-icons button-icon-left">file_download</i>
+      <div>Export Captions</div>
+    </a>
+  </div>
+  <p style="padding: 0.5rem; background: #f0f0f0; border-radius: 3px; font-style: italic;">
+    Note: The captions below are as presented in the original transcription, and
+    do not include Crowd Captions edits
+  </p>`;
+  document.getElementById("transcriptPaneHeader").innerHTML += captionsButtonInsertion;
+
+  const iconAddition = `<i class="material-icons text" style="font-size: 1.1em;vertical-align: middle;">closed_captions</i>`;
+  document.getElementById("transcriptTabHeader").innerHTML =
+    iconAddition + document.getElementById("transcriptTabHeader").innerHTML;
+
+  document.getElementById("CrowdCaptions-exportCaptions").addEventListener(
+    "click",
+    () => {
+      window.CrowdCaptions.$root.$emit("exportCaptions", true);
+    },
+    false
+  );
+  document.getElementById("CrowdCaptions-showPopup").addEventListener(
+    "click",
+    () => {
+      chrome.runtime.sendMessage({ content: "showPopup" });
+    },
+    false
+  );
+};
+
+// window.exportCaptions = () => {};
+
+// window.showPopup = () => {};
+
 // eslint-disable-next-line no-unused-vars
 const launchCrowdCaptions = async () => {
   // Fetch initial session data and determine if we need to launch Crowd Captions
@@ -59,7 +100,6 @@ const launchCrowdCaptions = async () => {
   // Inject into application to replace captions
   document.getElementById("dockedCaption").appendChild(appContainer);
 
-  /* eslint-disable no-new */
   window.CrowdCaptions = new Vue({
     vuetify,
     el: appContainer,
@@ -76,15 +116,24 @@ const launchCrowdCaptions = async () => {
       sendResponse({ result: "success" });
     }
   });
+
+  // Load UI additions
+  loadUIAdditions();
 };
 
-function getPanoptoUser() {
-  chrome.runtime.sendMessage({ content: "getUser" }, (userData) => {
-    window.PanoptoUser = userData;
-    launchCrowdCaptions();
+window.getPanoptoUser = () => {
+  const user = new Promise((resolve) => {
+    chrome.runtime.sendMessage({ content: "getUser" }, (userData) => {
+      resolve(userData);
+    });
   });
-}
+  return user;
+};
 
 // Check if we are logged in
 // eslint-disable-next-line no-undef
-window.PanoptoUser = getPanoptoUser();
+const initialLoad = async () => {
+  window.PanoptoUser = await window.getPanoptoUser();
+  launchCrowdCaptions();
+};
+initialLoad();

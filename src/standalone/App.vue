@@ -200,12 +200,10 @@ export default {
         // If the edit has not already been reported, create it
         let edit;
         if (!edits[report.Edit.id]) {
-          // Calculate upvotes & downvotes
           edit = report.Edit;
-          edit.upvotes =
-            parseInt(report.Edit.Votes.find((vote) => vote.upvoted === true)?.votes, 10) || 0;
-          edit.downvotes =
-            parseInt(report.Edit.Votes.find((vote) => vote.upvoted === false)?.votes, 10) || 0;
+          // Calculate upvotes & downvotes
+          edit.upvotes = edit.Votes.filter((i) => i.upvoted).length;
+          edit.downvotes = edit.Votes.filter((i) => !i.upvoted).length;
         } else {
           edit = edits[report.Edit.id];
         }

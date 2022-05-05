@@ -76,7 +76,6 @@ export default new Vuex.Store({
           "Content-Type": "application/json",
           Authorization: `Bearer ${window.PanoptoUser.token}`,
         },
-        mode: "cors",
         body: JSON.stringify(editObject),
       }).then((response) => console.log(response));
     },

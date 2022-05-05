@@ -18,10 +18,14 @@
         </template>
 
         <v-list>
-          <v-list-item href="https://docs.crowdcaptions.raa.amazon.auckland.ac.nz/" target="_blank"
+          <v-list-item
+            @click="closeIfPermissionless"
+            href="https://docs.crowdcaptions.raa.amazon.auckland.ac.nz/"
+            target="_blank"
             ><v-list-item-title>Get help</v-list-item-title></v-list-item
           >
           <v-list-item
+            @click="closeIfPermissionless"
             :href="`https://auckland.au1.qualtrics.com/jfe/form/SV_eCJsZ80IJVxD0to?upi=${user.upi}`"
             target="_blank"
             ><v-list-item-title>Give feedback</v-list-item-title></v-list-item
@@ -40,6 +44,7 @@
             v-if="user.moderator"
             href="/index.html"
             target="_blank"
+            @click="closeIfPermissionless"
           >
             Moderation Dashboard
           </v-btn>
@@ -53,6 +58,7 @@
             target="_blank"
             color="primary"
             class=""
+            @click="closeIfPermissionless"
             >View the tutorial</v-btn
           >
           <v-dialog width="500">
@@ -70,7 +76,9 @@
           When you notice a mistake, suggest a change or vote on a better option. These suggestions
           will be shared with others in the class who are using this tool.
         </div>
-        <v-btn color="primary" block class="mb-2" @click="exportCaptions"> Export Captions </v-btn>
+        <v-btn v-if="withPermissions" color="primary" block class="mb-2" @click="exportCaptions">
+          Export Captions
+        </v-btn>
       </v-container>
     </v-main>
     <v-footer app class="d-flex justify-space-around text--secondary text-center">
@@ -92,6 +100,7 @@ export default {
   name: "App",
   data() {
     return {
+      withPermissions: new URL(document.location).searchParams.get("permissionless") !== "true",
       user: {
         // eslint-disable-next-line no-undef
         name: PanoptoUser.userData.name.split(/\s/)[0],
@@ -110,6 +119,11 @@ export default {
           console.log(response);
         });
       });
+    },
+    closeIfPermissionless() {
+      if (!this.withPermissions) {
+        window.close();
+      }
     },
   },
 };

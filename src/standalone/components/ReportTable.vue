@@ -93,7 +93,7 @@
                 block
                 color="primary"
                 target="_blank"
-                :href="`https://aucklandtest.au.panopto.com/Panopto/Pages/Viewer.aspx?id=${
+                :href="`https://auckland.au.panopto.com/Panopto/Pages/Viewer.aspx?id=${
                   selectedReport.detail.CaptionSentence.CaptionFile.lecture_id
                 }&start=${Math.floor(selectedReport.detail.CaptionSentence.start / 1000)}`"
                 >View Lecture</v-btn
@@ -133,7 +133,7 @@
 
               <!-- Can't embed iframe due to Panopto content security policy blocking iframes on chrome-extension urls -->
               <!-- <iframe
-                :src="`https://aucklandtest.au.panopto.com/Panopto/Pages/Embed.aspx?id=${selectedReport.detail.Edit.CaptionSentence.CaptionFile.lecture_id}&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&interactivity=all`"
+                :src="`https://auckland.au.panopto.com/Panopto/Pages/Embed.aspx?id=${selectedReport.detail.Edit.CaptionSentence.CaptionFile.lecture_id}&autoplay=false&offerviewer=true&showtitle=true&showbrand=true&captions=false&interactivity=all`"
                 height="405"
                 width="720"
                 style="border: 1px solid #464646"

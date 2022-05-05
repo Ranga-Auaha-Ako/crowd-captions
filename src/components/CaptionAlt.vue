@@ -35,7 +35,7 @@
           @keydown="handleBubble"
           @keydown.enter="toggleEditState()"
           :class="{ largeFont: isLarge }"
-          :rows="edited.length > 110 ? 2 : 1"
+          :rows="2"
           :no-resize="true"
           :auto-grow="false"
         >
