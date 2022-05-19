@@ -148,6 +148,17 @@ export default {
     },
   },
   methods: {
+    bestEdit(caption) {
+      if (caption.edits) {
+        if (!caption.edits.length) return caption.body;
+        // Calculate fresh if we can
+        const bestEdit = caption.edits.reduce((a, b) => (a.votes > b.votes ? a : b));
+        // debugger;
+        return bestEdit?.votes > 0 ? bestEdit.body : caption.body;
+      }
+      // debugger;
+      return caption.bestEdit?.votes > 0 ? caption.bestEdit.body : caption.body;
+    },
     toggleEdits() {
       // Pause video if it's not already paused
       const playButton = document.querySelector("#playButton[title=Pause]");
@@ -214,6 +225,8 @@ export default {
     },
     exportCaptions() {
       console.log("Exporting captions...");
+      // Could potentially get the sections from the DOM, but that's a bit more complicated
+      // const deliveryState = document.querySelector("#viewerBridge")._reactRootContainer._internalRoot.current.child.child.memoizedState.delivery;
       const sections = [];
       // For each caption add three new sections
       this.$store.state.Caption_file.forEach((caption) => {
@@ -248,7 +261,7 @@ export default {
                     },
                   }),
                   new docx.TableCell({
-                    children: [new docx.Paragraph(caption.body)],
+                    children: [new docx.Paragraph(this.bestEdit(caption))],
                     width: {
                       size: 90,
                       type: docx.WidthType.PERCENTAGE,
