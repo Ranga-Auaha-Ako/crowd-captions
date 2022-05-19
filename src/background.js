@@ -74,7 +74,7 @@ const getUser = () => {
           // Found the JWT token! We can get details and launch the extention
           const token = cookie.value;
           try {
-            const userDataReq = await fetch(`${backendHost}/api/status`, {
+            const userDataReq = await fetch(`${backendHost}/api/status?supportRefresh=true`, {
               headers: {
                 "Content-type": "application/json",
                 Authorization: `Bearer ${token}`, // notice the Bearer before your token

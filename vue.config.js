@@ -108,7 +108,7 @@ module.exports = {
           // );
           // eslint-disable-next-line no-param-reassign
           manifest.content_security_policy.extension_pages +=
-            "; connect-src ws://localhost:9090/ http://localhost:8000/ crowdcaptions.test.raa.amazon.auckland.ac.nz";
+            "; connect-src ws://localhost:9090/ http://localhost:8000/ https://crowdcaptions.test.raa.amazon.auckland.ac.nz/";
         } else {
           // eslint-disable-next-line no-param-reassign
           manifest.content_security_policy.extension_pages +=

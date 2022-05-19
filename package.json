@@ -1,6 +1,6 @@
 {
   "name": "panopto-crowd-captions",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service build --mode development --watch",
