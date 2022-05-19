@@ -28,7 +28,7 @@
           </v-btn>
         </v-row>
       </v-col>
-      <v-col class="captionText" @click="!open && toggleShowEdits()">
+      <v-col class="captionText" @click="toggleShowEdits">
         <v-textarea
           id="captionField"
           ref="captionField"
@@ -127,6 +127,11 @@ export default {
     edit(val) {
       this.edited = val.body;
     },
+    open(val, old) {
+      if (val && !old && this.index === 0) {
+        this.$refs.captionField.focus();
+      }
+    },
   },
 
   methods: {
@@ -139,9 +144,22 @@ export default {
     getFontSize() {
       return this.textSize;
     },
-    toggleShowEdits() {
+    toggleShowEdits(event) {
+      if (this.open) {
+        return false;
+      }
+      // this.$refs.captionField.focus();
       // camelcasing doesn't work with events: https://vuejs.org/v2/guide/components-custom-events.html?fbclid=IwAR2IBgB858gqdXbRwSwGpVTtSdAO9obkiJxSz1E31jHZSl6abIjLRrP2YPQ
       this.$emit("show-edits");
+      // debugger;
+      if (event.target.classList.contains("captionText")) {
+        // this.open = true;
+        // event.target.focus();
+        this.$nextTick(() => {
+          this.$refs.captionField.focus();
+        });
+      }
+      return true;
     },
     toggleEditState() {
       if (this.isEdited) {
