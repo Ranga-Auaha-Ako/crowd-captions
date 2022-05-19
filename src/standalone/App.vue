@@ -121,11 +121,11 @@
               block
               class="export-button mb-2"
               color="yellow"
-              href="mailto:raa.dev.uoa@gmail.com"
+              href="mailto:mailto:crowdcaptions@auckland.ac.nz"
               target="_blank"
             >
               <v-icon small>mdi-email-outline</v-icon>
-              Get help
+              Get help (mailto:crowdcaptions@auckland.ac.nz)
             </v-btn>
           </div>
         </v-container>
