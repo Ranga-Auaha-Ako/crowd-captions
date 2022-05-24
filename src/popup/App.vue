@@ -107,7 +107,7 @@ export default {
         // eslint-disable-next-line no-undef
         upi: PanoptoUser.userData.username,
         // eslint-disable-next-line no-undef
-        moderator: PanoptoUser.userData.access > 1,
+        moderator: PanoptoUser.userData.access >= 1,
       },
       version: process.env.PACKAGE_VERSION || "0",
     };
