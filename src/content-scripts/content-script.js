@@ -6,21 +6,35 @@ import store from "../store/index";
 
 const backendHost = process.env.VUE_APP_BACKEND_HOST ?? "http://localhost:8000";
 
-const loadUIAdditions = () => {
-  const captionsButtonInsertion = `<div style="display: grid; column-gap: 0.5rem; grid-template-columns: 1fr 1fr; margin-bottom: 0.5rem;">
-    <a href="javascript:;" id="CrowdCaptions-showPopup" class="standard-button branded-button" role="button" tabindex="0" style="justify-content: center; column-gap: 0.5rem; display: flex; font-size: 0.9em;">
-      <i class="material-icons button-icon-left">closed_captions</i>
-      <div>Crowd Captions</div>
-    </a>
-    <a href="javascript:;" id="CrowdCaptions-exportCaptions" class="standard-button branded-button" role="button" tabindex="0" style="justify-content: center; column-gap: 0.5rem; display: flex; font-size: 0.9em;">
-      <i class="material-icons button-icon-left">file_download</i>
-      <div>Export Captions</div>
-    </a>
-  </div>
-  <p style="padding: 0.5rem; background: #f0f0f0; border-radius: 3px; font-style: italic;">
-    Note: The captions below are as presented in the original transcription, and
-    do not include Crowd Captions edits
-  </p>`;
+const loadUIAdditions = (enabled = true, error = "") => {
+  const captionsButtonInsertion = `
+  ${
+    enabled
+      ? `
+    <div style="display: grid; column-gap: 0.5rem; grid-template-columns: 1fr 1fr; margin-bottom: 0.5rem;">
+      <a href="javascript:;" id="CrowdCaptions-showPopup" class="standard-button branded-button" role="button" tabindex="0" style="justify-content: center; column-gap: 0.5rem; display: flex; font-size: 0.9em;">
+        <i class="material-icons button-icon-left">closed_captions</i>
+        <div>Crowd Captions</div>
+      </a>
+      <a href="javascript:;" id="CrowdCaptions-exportCaptions" class="standard-button branded-button" role="button" tabindex="0" style="justify-content: center; column-gap: 0.5rem; display: flex; font-size: 0.9em;">
+        <i class="material-icons button-icon-left">file_download</i>
+        <div>Export Captions</div>
+      </a>
+    </div>`
+      : ``
+  }
+  ${
+    enabled
+      ? `
+    <p style="padding: 0.5rem; background: #f0f0f0; border-radius: 3px; font-style: italic;">
+      Note: The captions below are as presented in the original transcription, and
+      do not include Crowd Captions edits
+    </p>`
+      : `
+      <p style="padding: 0.5rem; background: #f0f0f0; border-radius: 3px; font-style: italic;">
+        Crowd Captions is not enabled for this video either because it is not in a folder which is a part of the pilot, or because captions are loaded from an external tool such as Zoom. The specific error given was: "${error}"
+      </p>`
+  }`;
   document.getElementById("transcriptPaneHeader").innerHTML += captionsButtonInsertion;
 
   const iconAddition = `<i class="material-icons text" style="font-size: 1.1em;vertical-align: middle;">closed_captions</i>`;
@@ -71,6 +85,8 @@ const launchCrowdCaptions = async () => {
       document.querySelectorAll("style#crowd-captions-css").forEach((e) => e.remove());
       document.querySelectorAll("style#vuetify-theme-stylesheet").forEach((e) => e.remove());
     }
+    //  - Add indicator informing that Crowd Captions is disabled
+    loadUIAdditions(false, captions.error);
     //  - Return without initializing Vue
     return;
   }
