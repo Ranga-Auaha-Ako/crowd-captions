@@ -125,7 +125,7 @@
               target="_blank"
             >
               <v-icon small>mdi-email-outline</v-icon>
-              Get help (crowdcaptions@auckland.ac.nz)
+              Get help
             </v-btn>
           </div>
         </v-container>
