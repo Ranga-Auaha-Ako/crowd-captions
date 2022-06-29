@@ -16,7 +16,7 @@
         <div>
           <v-row id="closeButton" no-gutters align="center">
             <v-col>
-              <v-btn @click="showEdits = false">Close</v-btn>
+              <v-btn @click="showEdits = false" :tabindex="showEdits ? 0 : -1">Close</v-btn>
             </v-col>
           </v-row>
           <div v-for="(edit, index) in visibleEdits" :key="edit.id">
@@ -79,6 +79,14 @@ export default {
     this.$parent.$on("exportCaptions", () => {
       console.log("1: Exporting captions...");
       this.exportCaptions();
+    });
+    // Handle externally emmitted Captions event to open up the editor
+    this.$parent.$on("expandInterface", (callback) => {
+      console.log("Expanding interface...");
+      this.showEdits = true;
+      this.$nextTick(() => {
+        callback();
+      });
     });
 
     setTimeout(() => {
@@ -314,5 +322,9 @@ export default {
 .showEdits #closeButton {
   height: calc(5.8rem * 0.5);
   opacity: 1;
+}
+
+*:focus {
+  outline: 1px solid #00bcd4;
 }
 </style>

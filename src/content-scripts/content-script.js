@@ -57,6 +57,56 @@ const loadUIAdditions = (enabled = true, error = "") => {
   );
 };
 
+const loadAccessibility = () => {
+  // Some screen readers or people using tab to navigate might not be able to get to the Crowd Captions interface, so this provides a jump link for them.
+  const accessibleTag = `
+  <div id="captionsJumpButton" class="transport-button safety-text" title="Jump to Crowd Captions" aria-label="Jump to Crowd Captions" tabindex="0" role="button" onclick="">
+                                    <i class="material-icons"></i>Jump to Crowd Captions</div>
+  `;
+  const accessibleStyle = `
+  <style>
+  div#captionsJumpButton {
+    background: #add;
+    color: #001d26 !important;
+    position: absolute;
+    right: 10px;
+    bottom: -20em;
+    z-index: 10;
+    padding: 10px;
+    display: flex !important;
+    width: 8em;
+    height: 8em;
+    border-radius: 3px;
+    box-shadow: 0 5px 20px #00000029;
+    outline: 2px white solid;
+    flex-direction: column;
+    align-content: center;
+    align-items: center;
+}
+
+div#captionsJumpButton:focus {
+    bottom: 10px;
+}</style>
+  `;
+  document.querySelector("#captionsButton").insertAdjacentHTML("afterend", accessibleTag);
+  document.head.insertAdjacentHTML("beforeend", accessibleStyle);
+  const handleOpen = (e) => {
+    console.log("Clicked jump button");
+    window.CrowdCaptions.$root.$emit("expandInterface", () => {
+      document.querySelector("#crowdcaptions-app #captionField").focus();
+    });
+    e.preventDefault();
+    e.stopPropagation();
+  };
+  document.getElementById("captionsJumpButton").addEventListener("click", handleOpen);
+  document.getElementById("captionsJumpButton").addEventListener("keypress", (e) => {
+    if (e.code === "Enter" || e.code === "Space") {
+      handleOpen(e);
+      return false;
+    }
+    return true;
+  });
+};
 // window.exportCaptions = () => {};
 
 // window.showPopup = () => {};
@@ -151,5 +201,6 @@ window.getPanoptoUser = () => {
 const initialLoad = async () => {
   window.PanoptoUser = await window.getPanoptoUser();
   launchCrowdCaptions();
+  loadAccessibility();
 };
 initialLoad();
