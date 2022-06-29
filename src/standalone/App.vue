@@ -110,6 +110,64 @@
                   {{ ownedFolders.join(",") }}
                 </p>
               </v-card-text>
+              <v-card-text>
+                <h6 class="text-overline black--text">Owned Lectures</h6>
+                <v-list-item v-for="lecture in ownedLectures" :key="lecture.id">
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      <a
+                        :href="`https://auckland.au.panopto.com/Panopto/Pages/Viewer.aspx?id=${lecture.id}`"
+                      >
+                        {{ lecture.name }}
+                      </a>
+                    </v-list-item-title>
+                  </v-list-item-content>
+                  <v-list-item-action>
+                    <!-- Confirmation Dialog for deleting lecture -->
+                    <v-dialog
+                      v-model="lecture.open"
+                      persistent
+                      max-width="500px"
+                      v-if="$user.userData.access == 2"
+                    >
+                      <template v-slot:activator="{ on, attrs }">
+                        <v-btn icon v-bind="attrs" v-on="on">
+                          <v-icon color="grey lighten-1">mdi-delete</v-icon>
+                        </v-btn>
+                      </template>
+                      <v-card>
+                        <v-card-title class="headline">
+                          <span class="title">Delete Lecture</span>
+                        </v-card-title>
+                        <v-card-text>
+                          <p>
+                            Are you sure you want to delete <i>"{{ lecture.name }}"</i>? This will
+                            delete all of the reports associated with this lecture, as well as all
+                            student-created edits and votes.
+                          </p>
+                          <!-- Button linking to Panopto Video -->
+                          <v-btn
+                            block
+                            color="primary"
+                            target="_blank"
+                            :href="`https://auckland.au.panopto.com/Panopto/Pages/Viewer.aspx?id=${lecture.id}`"
+                            >View lecture on Panopto</v-btn
+                          >
+                        </v-card-text>
+                        <v-card-actions>
+                          <v-spacer />
+                          <v-btn color="blue darken-1" text @click="lecture.open = false">
+                            Cancel
+                          </v-btn>
+                          <v-btn color="blue darken-1" text @click="deleteLecture(lecture)">
+                            Delete
+                          </v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
+                  </v-list-item-action>
+                </v-list-item>
+              </v-card-text>
             </v-card>
             <br />
             <!-- Export Content button -->
@@ -140,7 +198,13 @@ import ReportTable from "./components/ReportTable.vue";
 
 export default {
   data() {
-    return { edits: [], openPanels: [], ownedCourses: [], ownedFolders: [] };
+    return {
+      edits: [],
+      openPanels: [],
+      ownedLectures: [],
+      ownedFolders: [],
+      deleteLectureDialog: false,
+    };
   },
   computed: {
     archivedEdits() {
@@ -191,7 +255,10 @@ export default {
         },
         mode: "cors",
       }).then((response) => response.json());
-      this.ownedCourses = ownedCourseData.courses.map((course) => course.lecture_name);
+      this.ownedLectures = ownedCourseData.courses.map((course) => ({
+        name: course.lecture_name,
+        id: course.lecture_id,
+      }));
       this.ownedFolders = ownedCourseData.folders.map((folder) => folder.name);
 
       // Transform list of reports JSON into list of reports per suggestion
@@ -353,6 +420,23 @@ export default {
           }),
         });
       }
+      this.fetchData();
+    },
+    async deleteLecture(lecture) {
+      await fetch(`${this.$backendHost}/api/deleteSession`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${this.$user.token}`,
+        },
+        body: JSON.stringify({
+          id: lecture.id,
+        }),
+      });
+      // this.ownedLectures.find((l) => l.id === lectureId).open = false;
+      // eslint-disable-next-line no-alert,no-restricted-globals
+      if (!confirm(`Please confirm you wish to delete "${lecture.name}"`)) return;
       this.fetchData();
     },
   },
