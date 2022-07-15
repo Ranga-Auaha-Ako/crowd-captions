@@ -49,6 +49,18 @@
             Moderation Dashboard
           </v-btn>
 
+          <v-btn
+            color="orange"
+            block
+            class="mb-2"
+            v-if="user.admin"
+            href="/admin.html"
+            target="_blank"
+            @click="closeIfPermissionless"
+          >
+            Administration Dashboard
+          </v-btn>
+
           Kia ora {{ user.name }}! Welcome to the beta for Crowd Captions. This tool will let you
           quickly jump in and suggest changes to the captions on lecture recordings.
         </div>
@@ -108,6 +120,8 @@ export default {
         upi: PanoptoUser.userData.username,
         // eslint-disable-next-line no-undef
         moderator: PanoptoUser.userData.access >= 1,
+        // eslint-disable-next-line no-undef
+        admin: PanoptoUser.userData.access >= 2,
       },
       version: process.env.PACKAGE_VERSION || "0",
     };

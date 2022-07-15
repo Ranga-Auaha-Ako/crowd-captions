@@ -44,85 +44,86 @@ const showLogin = ({ focus = true }) => {
   return loginResult;
 };
 
-let attempts = 0;
-
-const getUser = () => {
-  const user = new Promise((resolve) => {
-    // Get JWT
+const getJWt = () =>
+  new Promise((cookieResolve) => {
     chrome.cookies.get(
       {
         name: "jwt-auth",
         url: `${backendHost}/auth/jwt`,
       },
-      async (cookie) => {
-        if (!cookie?.value) {
-          console.log("Cookie not found!");
-          // No JWT token! We need to get the user to log in. Focus on the tab so that they can action if needed!
-          attempts += 1;
-          if (attempts <= 3) {
-            await showLogin({ focus: true });
-            resolve(await getUser());
-          }
-        } else if (
-          !/(^[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*$)/.test(cookie.value) ||
-          JSON.parse(atob(cookie.value.split(".")[1]))?.exp <= Date.now() / 1000
-        ) {
-          // JWT token is invalid! Either because it's incorrectly formatted or expired
-          await showLogin({ focus: false });
-          resolve(await getUser());
-        } else {
-          // Found the JWT token! We can get details and launch the extention
-          const token = cookie.value;
-          try {
-            const userDataReq = await fetch(`${backendHost}/api/status?supportRefresh=true`, {
-              headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`, // notice the Bearer before your token
-              },
-            });
-            const userData = await userDataReq.json();
-            // console.log(userData, token);
-            console.log("User data found!");
-            console.log(userData);
-            if (userData.updated && userData.newJWT) {
-              console.log("User data updated! Setting new access tokens");
-              chrome.cookies.set(
-                {
-                  httpOnly: cookie.httpOnly,
-                  name: "jwt-auth",
-                  url: `${backendHost}/auth/jwt`,
-                  sameSite: cookie.sameSite,
-                  secure: cookie.secure,
-                  storeId: cookie.storeId,
-                  value: userData.newJWT,
-                },
-                () => {
-                  resolve({ token: userData.newJWT, userData });
-                }
-              );
-            } else {
-              resolve({ token, userData });
-            }
-          } catch (err) {
-            console.error(err);
-            // Delete cookies and try again
-            chrome.cookies.remove(
-              {
-                name: "jwt-auth",
-                url: `${backendHost}/auth/jwt`,
-              },
-              async () => {
-                console.log("Cookie removed!");
-                attempts += 1;
-                resolve(await getUser());
-              }
-            );
-          }
-        }
-      }
+      (cookie) => cookieResolve(cookie)
     );
   });
-  return user;
+
+const getUser = async () => {
+  // Get JWT
+  let cookie = await getJWt();
+  if (!cookie?.value) {
+    console.log("Cookie not found!");
+    await showLogin({ focus: true });
+    cookie = await getJWt();
+    console.log(cookie);
+  } else if (
+    !/(^[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*$)/.test(cookie.value) ||
+    JSON.parse(atob(cookie.value.split(".")[1]))?.exp <= Date.now() / 1000
+  ) {
+    // JWT token is invalid! Either because it's incorrectly formatted or expired
+    await showLogin({ focus: false });
+    cookie = await getJWt();
+  }
+  // Try one more time to get the cookie
+  if (cookie?.value) {
+    // Found the JWT token! We can get details and launch the extention
+    const token = cookie.value;
+    try {
+      const userDataReq = await fetch(`${backendHost}/api/status?supportRefresh=true`, {
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`, // notice the Bearer before your token
+        },
+      });
+      const userData = await userDataReq.json();
+      // console.log(userData, token);
+      console.log("User data found!");
+      console.log(userData);
+      if (userData.updated && userData.newJWT) {
+        console.log("User data updated! Setting new access tokens");
+        return await new Promise((cookieResolve) =>
+          chrome.cookies.set(
+            {
+              httpOnly: cookie.httpOnly,
+              name: "jwt-auth",
+              url: `${backendHost}/auth/jwt`,
+              sameSite: cookie.sameSite,
+              secure: cookie.secure,
+              storeId: cookie.storeId,
+              value: userData.newJWT,
+            },
+            () => {
+              cookieResolve({ token: userData.newJWT, userData });
+            }
+          )
+        );
+      }
+      return { token, userData };
+    } catch (err) {
+      console.error(err);
+      // Delete cookies and try again
+      chrome.cookies.remove(
+        {
+          name: "jwt-auth",
+          url: `${backendHost}/auth/jwt`,
+        },
+        async () => {
+          console.log("Cookie removed!");
+        }
+      );
+    }
+  } else {
+    console.log("Something went wrong while fetching the cookie.");
+  }
+  // Failure! No cookie found.
+  return {};
 };
 
 // Takes message, sender, sendResponse

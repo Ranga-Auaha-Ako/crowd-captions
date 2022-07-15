@@ -76,11 +76,17 @@ module.exports = {
       entry: "./src/popup/main.js",
       title: "Popup",
     },
-    standalone: {
+    userPage: {
       template: "public/browser-extension.html",
-      entry: "./src/standalone/main.js",
-      title: "Standalone",
+      entry: "./src/user-page/main.js",
+      title: "Crowd Captions",
       filename: "index.html",
+    },
+    adminPage: {
+      template: "public/browser-extension.html",
+      entry: "./src/admin-page/main.js",
+      title: "Crowd Captions - Admin",
+      filename: "admin.html",
     },
   },
   filenameHashing: false,
