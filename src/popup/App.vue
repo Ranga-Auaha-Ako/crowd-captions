@@ -94,7 +94,7 @@
       </v-container>
     </v-main>
     <v-footer app class="d-flex justify-space-around text--secondary text-center">
-      <div>Crowd Captions v{{ version }}</div>
+      <div>v{{ version }}/v{{ server_version }}</div>
       <div>
         <a
           href="https://www.auckland.ac.nz/en/copyright.html"
@@ -124,6 +124,8 @@ export default {
         admin: PanoptoUser.userData.access >= 2,
       },
       version: process.env.PACKAGE_VERSION || "0",
+      // eslint-disable-next-line no-undef
+      server_version: PanoptoUser.userData.app_version,
     };
   },
   methods: {
