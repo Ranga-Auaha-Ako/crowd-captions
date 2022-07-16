@@ -70,7 +70,7 @@ const loadAccessibility = () => {
     color: #001d26 !important;
     position: absolute;
     right: 10px;
-    bottom: -20em;
+    bottom: -999em;
     z-index: 10;
     padding: 10px;
     display: flex !important;

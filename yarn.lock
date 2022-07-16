@@ -8753,6 +8753,11 @@ timsort@^0.3.0:
   resolved "https://registry.npmjs.org/timsort/-/timsort-0.3.0.tgz"
   integrity sha1-QFQRqOfmM5/mTbmiNN4R3DHgK9Q=
 
+tiny-relative-date@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/tiny-relative-date/-/tiny-relative-date-1.3.0.tgz#fa08aad501ed730f31cc043181d995c39a935e07"
+  integrity sha512-MOQHpzllWxDCHHaDno30hhLfbouoYlOI8YlMNtvKe1zXbjEVhbcEovQxvZrPvtiYW630GQDoMMarCnjfyfHA+A==
+
 tmp@0.0.x, tmp@^0.0.33:
   version "0.0.33"
   resolved "https://registry.npmjs.org/tmp/-/tmp-0.0.33.tgz"
@@ -9149,6 +9154,11 @@ vm-browserify@^1.0.1:
   resolved "https://registry.npmjs.org/vm-browserify/-/vm-browserify-1.1.2.tgz"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
+vue-async-computed@^3.9.0:
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/vue-async-computed/-/vue-async-computed-3.9.0.tgz#af3181c25168bfe9d86d8ffbc7033bf9e484fe84"
+  integrity sha512-ac6m/9zxHHNGGKNOU1en8qNk+fAmEbJLuWL7qyQTFuH3vjv3V4urv//QHcVzCobROM6btnaDG2b+XYMncF/ETA==
+
 vue-cli-plugin-browser-extension@latest:
   version "0.25.2"
   resolved "https://registry.npmjs.org/vue-cli-plugin-browser-extension/-/vue-cli-plugin-browser-extension-0.25.2.tgz"
@@ -9162,14 +9172,19 @@ vue-cli-plugin-browser-extension@latest:
     webpack-extension-reloader "^1.1.0"
     zip-webpack-plugin "^3.0.0"
 
-vue-cli-plugin-vuetify@~2.4.2:
-  version "2.4.6"
-  resolved "https://registry.npmjs.org/vue-cli-plugin-vuetify/-/vue-cli-plugin-vuetify-2.4.6.tgz"
-  integrity sha512-rM4ORStIIHlivDVJ5o0e/YQzkShHyKnituq6OLhnGGZdRRWF5USxlUPtAHZOrhw3o6dUnoj74LlL4kOuR5D+fg==
+vue-cli-plugin-vuetify@^2.5.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/vue-cli-plugin-vuetify/-/vue-cli-plugin-vuetify-2.5.1.tgz#6a3ee80c6e8d09b634ec7705422573f2ee0bc7e7"
+  integrity sha512-OcZ8/bqf84yTbQN+PyRf+8Wvr8czg+u5J4JGVx+Lq5ytsBxTgIUIZ/oMO7j+bd9WCjiKid2l9gZbQYjZABw2+g==
   dependencies:
     null-loader "^4.0.1"
     semver "^7.1.2"
     shelljs "^0.8.3"
+
+vue-debounce@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/vue-debounce/-/vue-debounce-4.0.0.tgz#3f584dabc08a841a0182ab68d19f77f70a416fcc"
+  integrity sha512-+BrcKfLpyDpUJ58ZrAvI35irRCgYHFpnF3NJZwwaz8/kkKmEq6TWPXBIhLh2HQAsUZNwo52K/vQyiEFsJ/1RYA==
 
 vue-eslint-parser@^7.0.0:
   version "7.11.0"
@@ -9240,6 +9255,11 @@ vue@^2.6.11:
   resolved "https://registry.npmjs.org/vue/-/vue-2.6.14.tgz"
   integrity sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==
 
+vuetify-dialog@^2.0.17:
+  version "2.0.17"
+  resolved "https://registry.yarnpkg.com/vuetify-dialog/-/vuetify-dialog-2.0.17.tgz#be198c1879329a73d78917080ea597d01692773d"
+  integrity sha512-MKrSx2kXNXdQK5zzjNodoCfuT315HJFyEnon+KzHMu9BLOFZ4R+iEbwsE5UL2uEnfOI116jUEuoU2/y6a3KxHw==
+
 vuetify-loader@^1.7.3:
   version "1.7.3"
   resolved "https://registry.npmjs.org/vuetify-loader/-/vuetify-loader-1.7.3.tgz"
@@ -9248,6 +9268,11 @@ vuetify-loader@^1.7.3:
     decache "^4.6.0"
     file-loader "^6.2.0"
     loader-utils "^2.0.0"
+
+vuetify-toast-snackbar-ng@^0.7.5:
+  version "0.7.5"
+  resolved "https://registry.yarnpkg.com/vuetify-toast-snackbar-ng/-/vuetify-toast-snackbar-ng-0.7.5.tgz#f3866d992d54908e3b04fcc304b1f5527a516d4d"
+  integrity sha512-Az4Y9NWQErOjzS7v1kyQKJvYZqumTOArNN354bqicDTPyrYTe/DCTSC8ZxV3D2Jaoe1/Yj+xs5UUK3iq3kLjOA==
 
 vuetify@^2.5.8:
   version "2.6.3"

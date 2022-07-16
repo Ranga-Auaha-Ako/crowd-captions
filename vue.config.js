@@ -76,11 +76,17 @@ module.exports = {
       entry: "./src/popup/main.js",
       title: "Popup",
     },
-    standalone: {
+    userPage: {
       template: "public/browser-extension.html",
-      entry: "./src/standalone/main.js",
-      title: "Standalone",
+      entry: "./src/user-page/main.js",
+      title: "Crowd Captions",
       filename: "index.html",
+    },
+    adminPage: {
+      template: "public/browser-extension.html",
+      entry: "./src/admin-page/main.js",
+      title: "Crowd Captions - Admin",
+      filename: "admin.html",
     },
   },
   filenameHashing: false,
@@ -111,8 +117,7 @@ module.exports = {
             "; connect-src ws://localhost:9090/ http://localhost:8000/ https://crowdcaptions.test.raa.amazon.auckland.ac.nz/";
         } else {
           // eslint-disable-next-line no-param-reassign
-          manifest.content_security_policy.extension_pages +=
-            "; connect-src https://crowdcaptions.prod.raa.amazon.auckland.ac.nz/";
+          manifest.content_security_policy.extension_pages += `; connect-src ${process.env.VUE_APP_BACKEND_HOST}`;
         }
         console.log(manifest);
         return manifest;
