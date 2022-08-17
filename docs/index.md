@@ -1,20 +1,19 @@
 Welcome to Crowd Captions. This project was developed over the course of one semester during a Computer Science capstone project at the University of Auckland, New Zealand.
 
-# Quick Links
- - [Project management board](https://skrrt-skrrt.notion.site/85524848f7ba48efb8597a03217c0332?v=ef166ebcb83d4e4cadb663dfee409e9a)
- - [Backend API - Swagger Documentation](https://app.swaggerhub.com/apis-docs/Team-10-Skrtt-Skrtt/CrowdCaptions/)
- - [Documentation & Installation instructions](#documentation)
- - [Technology Stack](#technology)
-
 # Install the latest version
 
-If you'd just like to give this project a go, click the download button above, unzip the folder, and follow [these](https://webkul.com/blog/how-to-install-the-unpacked-extension-in-chrome/) instructions on how to install an unpacked Chrome Extention. **Note: This plugin from the download link above will only work on the following domain: [aucklandtest.au.panopto.com](https://aucklandtest.au.panopto.com/)**
+If you'd just like to give this project a go, you can install it from https://bit.ly/crowdcaptions. **Note: This plugin from the download link above will only work on whitelisted courses within the University of Auckland domain: [auckland.au.panopto.com](https://auckland.au.panopto.com/)**. Currently, the following courses are part of the pilot for this tool:
 
-----
+- MECHENG 222
+- ENGGEN 131
+- BIOSCI 106
+- BIOSCI 220
+
+---
 
 # Documentation
 
-This project is split up into two repositories. The frontend code, which is compiled down in to the chrome extention downloadable above, can be accessed [here](https://github.com/uoa-compsci399-s2-2021/crowd-captions). The backend code, which is hosted locally or on AWS, is available [here](https://github.com/uoa-compsci399-s2-2021/team10-backend). To learn more about the project, choose a codebase you would like to view documentation for.
+This project is split up into two repositories. The frontend code, which is compiled down in to the chrome extention downloadable above, can be accessed [here](https://github.com/Ranga-Auaha-Ako/crowd-captions). The backend code, which is hosted locally or on AWS, is available [here](https://github.com/Ranga-Auaha-Ako/team10-backend). To learn more about the project, choose a codebase you would like to view documentation for.
 
 <br/>
 
@@ -44,7 +43,6 @@ Backend uses [Express.js](http://expressjs.com) to connect the frontend with dat
 We also uses [Mocha.js](https://mochajs.org) for automation testing on both the program and the database.
 Backend is running on [AWS](https://aws.amazon.com) server with [Docker](https://www.docker.com) to allow easy deploy and upgrade, stable running environment and quick access.
 
-
 # Future work
 
 ### Moderation
@@ -54,17 +52,17 @@ Backend is running on [AWS](https://aws.amazon.com) server with [Docker](https:/
 - Allow for the moderators to endorse a caption they found most accurate and give this caption edit a unique badge
 
 ### Displaying all caption edits
- 
+
 - Implementation of a scroll bar to show all caption edits and their votes
 
 ### Expanded customisation of the caption's view components
 
-- Implement multiple views of the caption component 
+- Implement multiple views of the caption component
 - Allow for different caption size, caption colour and caption background colour for greater accessability and customisation
 
 ### Display differences in caption edits
 
-- Use a default colour scheme for the original captions 
+- Use a default colour scheme for the original captions
 - Alternate colours of components for each caption edit
 - Highlight words different from the original caption
 
@@ -76,7 +74,7 @@ Backend is running on [AWS](https://aws.amazon.com) server with [Docker](https:/
 
 The Skrrt Skrrt team would like to thank Ranga Auaha Ako's outstanding support, especially Steve Leichtweis for identifying the requirements for this project. Many thanks to Gemma Sinclair for her insight into Panopto's rollout within the university and Andrew Cho for helping us implement this project within the university's processes. Finally, thank you to Asma for an excellent semester and for all of her support despite the onslaught of challenges that COVID has provided.
 
-<!-- 
+<!--
 ## Welcome to GitHub Pages
 
 You can use the [editor on GitHub](https://github.com/uoa-compsci399-s2-2021/crowd-captions/edit/main/docs/index.md) to maintain and preview the content for your website in Markdown files.
