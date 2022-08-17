@@ -195,12 +195,7 @@
                   </v-list-item-content>
                   <v-list-item-action>
                     <!-- Confirmation Dialog for deleting lecture -->
-                    <v-dialog
-                      v-model="lecture.open"
-                      persistent
-                      max-width="500px"
-                      v-if="$user.userData.access == 2"
-                    >
+                    <v-dialog v-model="lecture.open" persistent max-width="500px">
                       <template v-slot:activator="{ on, attrs }">
                         <v-btn icon v-bind="attrs" v-on="on">
                           <v-icon color="grey lighten-1">mdi-delete</v-icon>
