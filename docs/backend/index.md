@@ -1,8 +1,10 @@
+[← Return to homepage](../)
+
 ## Getting Started
 
 ### Getting authenticated
 
-To use this tool on your Panopto instance, you'll need a client ID and Secret. To do that, follow the instructions here: https://support.panopto.com/s/article/support-panopto-com-s-article-oauth2-client-setup. You want to create an API Key with the type "Server-side Web Application".
+To use this tool on your Panopto instance, you'll need a client ID and Secret. To do that, follow the instructions here: [support.panopto.com/s/article/support-panopto-com-s-article-oauth2-client-setup](https://support.panopto.com/s/article/support-panopto-com-s-article-oauth2-client-setup). You want to create an API Key with the type "Server-side Web Application".
 
 Once you have the client ID and secret, create a `.env` file, and fill it with your credentials and the URL of your hosted Panopto server:
 
@@ -21,7 +23,7 @@ To start developing, grab your OS-specific version of [Docker](https://www.docke
 1. Open up a terminal in the root directory of the project
 2. Run `docker-compose up --build`
 
-Everything should download and configure automatically. Confirm things are working by visiting http://localhost:8000/health. If you see a JSON response telling you you're not authenticated but that the request was successful, you're good to go.
+Everything should download and configure automatically. Confirm things are working by visiting [http://localhost:8000/health](http://localhost:8000/health). If you see a JSON response telling you you're not authenticated but that the request was successful, you're good to go.
 
 If you'd like to run this detached from your current terminal, just use `docker-compose up -d` instead.
 
@@ -64,7 +66,7 @@ Crowd Captions runs on:
 
 First, install [Docker Desktop](https://www.docker.com/get-started).
 
-Run `docker compose -f .\docker-compose.prod.yml up`. A NodeJS server with the production build will start and be accessible at http://localhost:3000/.
+Run `docker compose -f .\docker-compose.prod.yml up`. A NodeJS server with the production build will start and be accessible at /8(http://localhost:3000/)[http://localhost:3000/].
 
 ## Running in production without Terraform
 
