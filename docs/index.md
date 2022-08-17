@@ -13,7 +13,7 @@ If you'd just like to give this project a go, you can install it from https://bi
 
 # Documentation
 
-This project is split up into two repositories. The frontend code, which is compiled down in to the chrome extention downloadable above, can be accessed [here](https://github.com/Ranga-Auaha-Ako/crowd-captions). The backend code, which is hosted locally or on AWS, is available [here](https://github.com/Ranga-Auaha-Ako/team10-backend). To learn more about the project, choose a codebase you would like to view documentation for.
+This project is split up into two repositories. The frontend code, which is compiled down in to the chrome extention downloadable above, can be accessed [here](https://github.com/Ranga-Auaha-Ako/crowd-captions). The backend code, which is hosted locally or on AWS, is available [here](https://github.com/Ranga-Auaha-Ako/crowd-captions-backend). To learn more about the project, choose a codebase you would like to view documentation for.
 
 <br/>
 
