@@ -1,8 +1,12 @@
-Welcome to Crowd Captions. This project was developed over the course of one semester during a Computer Science capstone project at the University of Auckland, New Zealand.
+Crowd Captions helps improve the accessibility of content for those who cannot listen to the audio, and provides valuable resources for revision. By having everything transcribed automatically, the goal is that students will learn to write notes which are not taken verbatim. This will help encourage better note-taking and information processing, providing a more efficient way to study.
+
+# Read the user documentation
+
+You can view the user-facing documenation and watch the introduction video here: [crowdcaptions.notion.site](https://crowdcaptions.notion.site/)
 
 # Install the latest version
 
-If you'd just like to give this project a go, you can install it from https://bit.ly/crowdcaptions. **Note: This plugin from the download link above will only work on whitelisted courses within the University of Auckland domain: [auckland.au.panopto.com](https://auckland.au.panopto.com/)**. Currently, the following courses are part of the pilot for this tool:
+If you'd just like to give this project a go, you can install it from [bit.ly/crowdcaptions](https://bit.ly/crowdcaptions). **Note: This plugin from the download link above will only work on whitelisted courses within the University of Auckland domain: [auckland.au.panopto.com](https://auckland.au.panopto.com/)**. Currently, the following courses are part of the pilot for this tool:
 
 - MECHENG 222
 - ENGGEN 131
