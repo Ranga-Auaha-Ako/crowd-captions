@@ -111,12 +111,28 @@ div#captionsJumpButton:focus {
 
 // window.showPopup = () => {};
 
+const removeStyles = () => {
+  if (process.env.NODE_ENV === "development") {
+    document.querySelectorAll("style[data-vue-ssr-id]").forEach((e) => e.remove());
+    document.querySelectorAll("style[data-vue-ssr-id]").forEach((e) => e.remove());
+  } else {
+    document.querySelectorAll("style#crowd-captions-css").forEach((e) => e.remove());
+    document.querySelectorAll("style#vuetify-theme-stylesheet").forEach((e) => e.remove());
+  }
+};
+
 // eslint-disable-next-line no-unused-vars
 const launchCrowdCaptions = async () => {
   // Fetch initial session data and determine if we need to launch Crowd Captions
   const sessionID = window.location.href.match(
     /(?:.+&|\?)id=([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/
   )[1];
+  // Exit early if the user is editing the page
+  if (new URL(document.location).searchParams.get("edit") === "true") {
+    console.log("Not launching Crowd Captions because the user is editing the page");
+    removeStyles();
+    return;
+  }
   const captions = await fetch(`${backendHost}/api/captions/${sessionID}`, {
     method: "GET",
     headers: {
@@ -128,13 +144,7 @@ const launchCrowdCaptions = async () => {
     console.error(`Error loading captions: ${captions.error || "No error given"}`);
     // Disable Crowd Captions for this video
     //  - Delete injected styles
-    if (process.env.NODE_ENV === "development") {
-      document.querySelectorAll("style[data-vue-ssr-id]").forEach((e) => e.remove());
-      document.querySelectorAll("style[data-vue-ssr-id]").forEach((e) => e.remove());
-    } else {
-      document.querySelectorAll("style#crowd-captions-css").forEach((e) => e.remove());
-      document.querySelectorAll("style#vuetify-theme-stylesheet").forEach((e) => e.remove());
-    }
+    removeStyles();
     //  - Add indicator informing that Crowd Captions is disabled
     loadUIAdditions(false, captions.error);
     //  - Return without initializing Vue
