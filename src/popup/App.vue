@@ -91,6 +91,13 @@
         <v-btn v-if="withPermissions" color="primary" block class="mb-2" @click="exportCaptions">
           Export Captions
         </v-btn>
+        <div class="text-body-2 mt-4 text-center" v-if="user.stats">
+          You have made <strong>{{ user.stats.edits }}</strong> edit{{
+            user.stats.edits !== 1 ? "s" : ""
+          }}
+          so far.<br />
+          {{ user.stats.edits > 5 ? "Awesome effort! Keep going ❤️." : "" }}
+        </div>
       </v-container>
     </v-main>
     <v-footer app class="d-flex justify-space-around text--secondary text-center">
@@ -122,6 +129,8 @@ export default {
         moderator: PanoptoUser.userData.access >= 1,
         // eslint-disable-next-line no-undef
         admin: PanoptoUser.userData.access >= 2,
+        // eslint-disable-next-line no-undef
+        stats: PanoptoUser.userData.stats,
       },
       version: process.env.PACKAGE_VERSION || "0",
       // eslint-disable-next-line no-undef
@@ -148,6 +157,5 @@ export default {
 <style>
 html {
   width: 400px;
-  height: 400px;
 }
 </style>
