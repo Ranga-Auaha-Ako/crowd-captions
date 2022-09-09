@@ -113,8 +113,7 @@ module.exports = {
           //   "; connect-src ws://localhost:9090/ http://localhost:8000/ crowdcaptions.test.raa.amazon.auckland.ac.nz"
           // );
           // eslint-disable-next-line no-param-reassign
-          manifest.content_security_policy.extension_pages +=
-            "; connect-src ws://localhost:9090/ http://localhost:8000/ https://crowdcaptions.test.raa.amazon.auckland.ac.nz/";
+          manifest.content_security_policy.extension_pages += `; connect-src ws://localhost:9090/ http://localhost:8000/ https://crowdcaptions.test.raa.amazon.auckland.ac.nz/ ${process.env.VUE_APP_BACKEND_HOST}`;
         } else {
           // eslint-disable-next-line no-param-reassign
           manifest.content_security_policy.extension_pages += `; connect-src ${process.env.VUE_APP_BACKEND_HOST}`;
