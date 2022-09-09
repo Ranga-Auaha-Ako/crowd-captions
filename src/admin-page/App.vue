@@ -394,6 +394,10 @@ export default {
             value: "username",
           },
           {
+            text: "Edits",
+            value: "EditCount",
+          },
+          {
             text: "Access Level",
             value: "access",
           },
