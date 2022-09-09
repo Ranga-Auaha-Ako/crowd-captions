@@ -52,9 +52,9 @@
           @keydown="handleBubble"
           @keydown.enter="toggleEditState()"
           :class="{ largeFont: isLarge }"
-          :rows="2"
+          :rows="1"
           :no-resize="true"
-          :auto-grow="false"
+          :auto-grow="true"
         >
         </v-textarea>
         <div class="submitHint" v-if="isEditing">
@@ -200,10 +200,6 @@ export default {
   margin-left: 0.6rem;
 }
 
-.largeFont {
-  font-size: 1.6em !important;
-}
-
 .captionText .theme--dark.v-input--is-disabled textarea {
   color: #fff !important;
 }
@@ -219,8 +215,12 @@ export default {
 
 textarea#captionField {
   text-align: center;
-  font-size: 1.3em;
+  font-size: 1.1em;
   margin-top: 0;
+}
+
+.largeFont {
+  font-size: 1.6em !important;
 }
 </style>
 
