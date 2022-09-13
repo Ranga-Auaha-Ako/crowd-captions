@@ -32,12 +32,10 @@
                 :disable-sort="true"
                 :headers="courseOwnershipsState.headers"
                 :items="courseOwnerships.data"
-                :items-per-page="10"
+                :items-per-page.sync="courseOwnershipsState.limit"
+                :footer-props="{ 'items-per-page-options': [5, 10, 25, 50] }"
                 :page.sync="courseOwnershipsState.page"
                 :server-items-length="courseOwnerships.count"
-                :footer-props="{
-                  'disable-items-per-page': true,
-                }"
               >
                 <template v-slot:item.actions="{ item }">
                   <v-icon small class="mr-2" @click="editCourseOwnership(item)">
@@ -74,12 +72,10 @@
                 :disable-sort="true"
                 :headers="allVideosState.headers"
                 :items="allVideos.data"
-                :items-per-page="10"
+                :items-per-page.sync="allVideosState.limit"
+                :footer-props="{ 'items-per-page-options': [5, 10, 25, 50] }"
                 :page.sync="allVideosState.page"
                 :server-items-length="allVideos.count"
-                :footer-props="{
-                  'disable-items-per-page': true,
-                }"
               >
                 <template v-slot:item.actions="{ item }">
                   <v-btn small icon fab color="red" @click="deleteVideo(item.lecture_id)">
@@ -115,12 +111,10 @@
                 :disable-sort="true"
                 :headers="allUsersState.headers"
                 :items="allUsers.data"
-                :items-per-page="10"
+                :items-per-page.sync="allUsersState.limit"
+                :footer-props="{ 'items-per-page-options': [5, 10, 25, 50] }"
                 :page.sync="allUsersState.page"
                 :server-items-length="allUsers.count"
-                :footer-props="{
-                  'disable-items-per-page': true,
-                }"
               >
                 <template v-slot:item.access="{ item }">
                   <v-select
@@ -162,12 +156,10 @@
                 :disable-sort="true"
                 :headers="recentEditsState.headers"
                 :items="recentEdits.data"
-                :items-per-page="10"
+                :items-per-page.sync="recentEditsState.limit"
+                :footer-props="{ 'items-per-page-options': [5, 10, 25, 50] }"
                 :page.sync="recentEditsState.page"
                 :server-items-length="recentEdits.count"
-                :footer-props="{
-                  'disable-items-per-page': true,
-                }"
               >
                 <template v-slot:item.actions="{ item }">
                   <div class="text-center">
@@ -251,10 +243,6 @@
             <v-btn block class="export-button mb-2" color="white" href="/index.html">
               <v-icon small>mdi-arrow-left</v-icon>
               Return to User Dashboard
-            </v-btn>
-            <v-btn block class="export-button mb-2" color="white" href="/analytics.html">
-              View Analytics
-              <v-icon small>mdi-arrow-right</v-icon>
             </v-btn>
           </div>
         </v-container>
@@ -357,6 +345,7 @@ export default {
       ownedFolders: [],
       courseOwnershipsState: {
         page: 1,
+        limit: 10,
         query: "",
         debounce: "",
         dialog: {
@@ -377,11 +366,16 @@ export default {
             text: "Id",
             value: "id",
           },
+          {
+            text: "Edits",
+            value: "EditCount",
+          },
           { text: "Actions", value: "actions", sortable: false },
         ],
       },
       allUsersState: {
         page: 1,
+        limit: 10,
         query: "",
         debounce: "",
         headers: [
@@ -405,6 +399,7 @@ export default {
       },
       allVideosState: {
         page: 1,
+        limit: 10,
         query: "",
         debounce: "",
         headers: [
@@ -421,6 +416,10 @@ export default {
             value: "lecture_folder",
           },
           {
+            text: "Edits",
+            value: "EditCount",
+          },
+          {
             text: "Date Ingested",
             value: "createdAtRelative",
           },
@@ -433,6 +432,7 @@ export default {
       },
       recentEditsState: {
         page: 1,
+        limit: 10,
         query: "",
         debounce: "",
         headers: [
@@ -497,12 +497,18 @@ export default {
       default: { data: [], count: 0 },
       async get() {
         if (this.courseOwnershipsState.debounce === "") {
-          return (await this.$AuthFetch.get(`admin/ownerships/${this.courseOwnershipsState.page}`))
-            .data;
+          return (
+            await this.$AuthFetch.get(`admin/ownerships/${this.courseOwnershipsState.page}`, {
+              params: { limit: this.courseOwnershipsState.limit },
+            })
+          ).data;
         }
         return (
           await this.$AuthFetch.get(`admin/ownerships/search/${this.courseOwnershipsState.page}`, {
-            params: { query: this.courseOwnershipsState.debounce },
+            params: {
+              query: this.courseOwnershipsState.debounce,
+              limit: this.courseOwnershipsState.limit,
+            },
           })
         ).data;
       },
@@ -512,11 +518,15 @@ export default {
       default: { data: [], count: 0 },
       async get() {
         if (this.allUsersState.debounce === "") {
-          return (await this.$AuthFetch.get(`admin/users/${this.allUsersState.page}`)).data;
+          return (
+            await this.$AuthFetch.get(`admin/users/${this.allUsersState.page}`, {
+              params: { limit: this.allUsersState.limit },
+            })
+          ).data;
         }
         return (
           await this.$AuthFetch.get(`admin/users/search/${this.allUsersState.page}`, {
-            params: { query: this.allUsersState.debounce },
+            params: { query: this.allUsersState.debounce, limit: this.allUsersState.limit },
           })
         ).data;
       },
@@ -528,7 +538,9 @@ export default {
         const res = (
           await this.$AuthFetch.get(`admin/videos/${this.allVideosState.page}`, {
             params:
-              this.allVideosState.debounce === "" ? {} : { query: this.allVideosState.debounce },
+              this.allVideosState.debounce === ""
+                ? { limit: this.allVideosState.limit }
+                : { query: this.allVideosState.debounce, limit: this.allVideosState.limit },
           })
         ).data;
         if (res.error) {
@@ -564,8 +576,8 @@ export default {
           await this.$AuthFetch.get(`admin/recent/${this.recentEditsState.page}`, {
             params:
               this.recentEditsState.debounce === ""
-                ? {}
-                : { query: this.recentEditsState.debounce },
+                ? { limit: this.recentEditsState.limit }
+                : { query: this.recentEditsState.debounce, limit: this.recentEditsState.limit },
           })
         ).data;
         if (res.error) {
