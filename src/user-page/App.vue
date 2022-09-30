@@ -445,7 +445,7 @@ export default {
         },
         body: JSON.stringify({
           approved: true,
-          id: edit.id,
+          id: foundEdit.id,
         }),
       });
       // If the suggestion was previously deleted, unblock it
@@ -459,7 +459,7 @@ export default {
           },
           body: JSON.stringify({
             blocked: false,
-            id: edit.id,
+            id: foundEdit.id,
           }),
         });
       }
@@ -484,7 +484,7 @@ export default {
           },
           body: JSON.stringify({
             approved: false,
-            id: edit.id,
+            id: foundEdit.id,
           }),
         });
       }
@@ -499,7 +499,7 @@ export default {
           },
           body: JSON.stringify({
             blocked: false,
-            id: edit.id,
+            id: foundEdit.id,
           }),
         });
       }
@@ -530,7 +530,7 @@ export default {
         },
         body: JSON.stringify({
           blocked: true,
-          id: edit.id,
+          id: foundEdit.id,
         }),
       });
       // If the suggestion was previously approved, unapprove it
@@ -544,7 +544,7 @@ export default {
           },
           body: JSON.stringify({
             approved: false,
-            id: edit.id,
+            id: foundEdit.id,
           }),
         });
       }
